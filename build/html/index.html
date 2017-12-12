@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to doczhao’s documentation! &mdash; doczhao 1.0.0 documentation</title>
+    <title>Keystone Installation Tutorial &mdash; doczhao 1.0.0 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -23,7 +23,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="doczhao 1.0.0 documentation" href="#" /> 
+    <link rel="top" title="doczhao 1.0.0 documentation" href="#" />
+    <link rel="next" title="Keystone Installation Tutorial for openSUSE and SUSE Linux Enterprise" href="index-obs.html" /> 
   </head>
   <body>
     <div class="related">
@@ -32,6 +33,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="index-obs.html" title="Keystone Installation Tutorial for openSUSE and SUSE Linux Enterprise"
+             accesskey="N">next</a> |</li>
         <li><a href="#">doczhao 1.0.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -41,26 +45,58 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="welcome-to-doczhao-s-documentation">
-<h1>Welcome to doczhao&#8217;s documentation!<a class="headerlink" href="#welcome-to-doczhao-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Contents:
-tell me that&#8217;s works
-.. toctree:</p>
-<div class="highlight-python"><div class="highlight"><pre>:maxdepth: 2
-:numbered:
-chapter1
-chapter2
-chapter3
-</pre></div>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+  <div class="section" id="keystone-installation-tutorial">
+<h1>Keystone Installation Tutorial<a class="headerlink" href="#keystone-installation-tutorial" title="Permalink to this headline">¶</a></h1>
+<p>The OpenStack system consists of several key services that are separately
+installed. These services work together depending on your cloud
+needs and include the Compute, Identity, Networking, Image, Block Storage,
+Object Storage, Telemetry, Orchestration, and Database services. You
+can install any of these projects separately and configure them stand-alone
+or as connected entities.</p>
+<p>This section describes how to install and configure the OpenStack
+Identity service, code-named keystone, on the controller node. For
+scalability purposes, this configuration deploys Fernet tokens and
+the Apache HTTP server to handle requests.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index-obs.html">Keystone Installation Tutorial for openSUSE and SUSE Linux Enterprise</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="index-obs.html#abstract">Abstract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-obs.html#contents">Contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="get-started-obs.html">Identity service overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="keystone-install-obs.html">Install and configure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="keystone-users-obs.html">Create a domain, projects, users, and roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="keystone-verify-obs.html">Verify operation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="keystone-openrc-obs.html">Create OpenStack client environment scripts</a></li>
 </ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index-rdo.html">Keystone Installation Tutorial for Red Hat Enterprise Linux and CentOS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="index-rdo.html#abstract">Abstract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-rdo.html#contents">Contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="get-started-rdo.html">Identity service overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="keystone-install-rdo.html">Install and configure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="keystone-users-rdo.html">Create a domain, projects, users, and roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="keystone-verify-rdo.html">Verify operation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="keystone-openrc-rdo.html">Create OpenStack client environment scripts</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index-ubuntu.html">Keystone Installation Tutorial for Ubuntu</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="index-ubuntu.html#abstract">Abstract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-ubuntu.html#contents">Contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="get-started-ubuntu.html">Identity service overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="keystone-install-ubuntu.html">Install and configure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="keystone-users-ubuntu.html">Create a domain, projects, users, and roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="keystone-verify-ubuntu.html">Verify operation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="keystone-openrc-ubuntu.html">Create OpenStack client environment scripts</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 
 
@@ -69,12 +105,9 @@ chapter3
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Welcome to doczhao&#8217;s documentation!</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-
+  <h4>Next topic</h4>
+  <p class="topless"><a href="index-obs.html"
+                        title="next chapter">Keystone Installation Tutorial for openSUSE and SUSE Linux Enterprise</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/index.txt"
@@ -103,6 +136,9 @@ chapter3
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="index-obs.html" title="Keystone Installation Tutorial for openSUSE and SUSE Linux Enterprise"
+             >next</a> |</li>
         <li><a href="#">doczhao 1.0.0 documentation</a> &raquo;</li> 
       </ul>
     </div>

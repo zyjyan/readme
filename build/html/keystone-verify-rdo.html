@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Verify operation &mdash; doczhao 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="doczhao 1.0.0 documentation" href="index.html" />
+    <link rel="up" title="Keystone Installation Tutorial for Red Hat Enterprise Linux and CentOS" href="index-rdo.html" />
+    <link rel="next" title="Create OpenStack client environment scripts" href="keystone-openrc-rdo.html" />
+    <link rel="prev" title="Create a domain, projects, users, and roles" href="keystone-users-rdo.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="keystone-openrc-rdo.html" title="Create OpenStack client environment scripts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="keystone-users-rdo.html" title="Create a domain, projects, users, and roles"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">doczhao 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="index-rdo.html" accesskey="U">Keystone Installation Tutorial for Red Hat Enterprise Linux and CentOS</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="verify-operation">
+<h1>Verify operation<a class="headerlink" href="#verify-operation" title="Permalink to this headline">¶</a></h1>
+<p>Verify operation of the Identity service before installing other
+services.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Perform these commands on the controller node.</p>
+</div>
+<ol class="arabic">
+<li><p class="first">For security reasons, disable the temporary authentication
+token mechanism:</p>
+<p>Edit the <tt class="docutils literal"><span class="pre">/etc/keystone/keystone-paste.ini</span></tt>
+file and remove <tt class="docutils literal"><span class="pre">admin_token_auth</span></tt> from the
+<tt class="docutils literal"><span class="pre">[pipeline:public_api]</span></tt>, <tt class="docutils literal"><span class="pre">[pipeline:admin_api]</span></tt>,
+and <tt class="docutils literal"><span class="pre">[pipeline:api_v3]</span></tt> sections.</p>
+</li>
+</ol>
+<ol class="arabic" start="2">
+<li><p class="first">Unset the temporary <tt class="docutils literal"><span class="pre">OS_AUTH_URL</span></tt> and <tt class="docutils literal"><span class="pre">OS_PASSWORD</span></tt>
+environment variable:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> <span class="nb">unset </span>OS_AUTH_URL OS_PASSWORD
+</pre></div>
+</div>
+</li>
+<li><p class="first">As the <tt class="docutils literal"><span class="pre">admin</span></tt> user, request an authentication token:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> openstack --os-auth-url http://controller:35357/v3 <span class="se">\</span>
+<span class="go">  --os-project-domain-name Default --os-user-domain-name Default \</span>
+<span class="go">  --os-project-name admin --os-username admin token issue</span>
+
+<span class="go">Password:</span>
+<span class="go">+------------+-----------------------------------------------------------------+</span>
+<span class="go">| Field      | Value                                                           |</span>
+<span class="go">+------------+-----------------------------------------------------------------+</span>
+<span class="go">| expires    | 2016-02-12T20:14:07.056119Z                                     |</span>
+<span class="go">| id         | gAAAAABWvi7_B8kKQD9wdXac8MoZiQldmjEO643d-e_j-XXq9AmIegIbA7UHGPv |</span>
+<span class="go">|            | atnN21qtOMjCFWX7BReJEQnVOAj3nclRQgAYRsfSU_MrsuWb4EDtnjU7HEpoBb4 |</span>
+<span class="go">|            | o6ozsA_NmFWEpLeKy0uNn_WeKbAhYygrsmQGA49dclHVnz-OMVLiyM9ws       |</span>
+<span class="go">| project_id | 343d245e850143a096806dfaefa9afdc                                |</span>
+<span class="go">| user_id    | ac3377633149401296f6c0d92d79dc16                                |</span>
+<span class="go">+------------+-----------------------------------------------------------------+</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This command uses the password for the <tt class="docutils literal"><span class="pre">admin</span></tt> user.</p>
+</div>
+</li>
+<li><p class="first">As the <tt class="docutils literal"><span class="pre">demo</span></tt> user, request an authentication token:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> openstack --os-auth-url http://controller:5000/v3 <span class="se">\</span>
+<span class="go">  --os-project-domain-name Default --os-user-domain-name Default \</span>
+<span class="go">  --os-project-name demo --os-username demo token issue</span>
+
+<span class="go">Password:</span>
+<span class="go">+------------+-----------------------------------------------------------------+</span>
+<span class="go">| Field      | Value                                                           |</span>
+<span class="go">+------------+-----------------------------------------------------------------+</span>
+<span class="go">| expires    | 2016-02-12T20:15:39.014479Z                                     |</span>
+<span class="go">| id         | gAAAAABWvi9bsh7vkiby5BpCCnc-JkbGhm9wH3fabS_cY7uabOubesi-Me6IGWW |</span>
+<span class="go">|            | yQqNegDDZ5jw7grI26vvgy1J5nCVwZ_zFRqPiz_qhbq29mgbQLglbkq6FQvzBRQ |</span>
+<span class="go">|            | JcOzq3uwhzNxszJWmzGC7rJE_H0A_a3UFhqv8M4zMRYSbS2YF0MyFmp_U       |</span>
+<span class="go">| project_id | ed0b60bf607743088218b0a533d5943f                                |</span>
+<span class="go">| user_id    | 58126687cbcc4888bfa9ab73a2256f27                                |</span>
+<span class="go">+------------+-----------------------------------------------------------------+</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This command uses the password for the <tt class="docutils literal"><span class="pre">demo</span></tt>
+user and API port 5000 which only allows regular (non-admin)
+access to the Identity service API.</p>
+</div>
+</li>
+</ol>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="keystone-users-rdo.html"
+                        title="previous chapter">Create a domain, projects, users, and roles</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="keystone-openrc-rdo.html"
+                        title="next chapter">Create OpenStack client environment scripts</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/keystone-verify-rdo.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="keystone-openrc-rdo.html" title="Create OpenStack client environment scripts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="keystone-users-rdo.html" title="Create a domain, projects, users, and roles"
+             >previous</a> |</li>
+        <li><a href="index.html">doczhao 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="index-rdo.html" >Keystone Installation Tutorial for Red Hat Enterprise Linux and CentOS</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, zhaoyuanjie.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

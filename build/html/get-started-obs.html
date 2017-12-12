@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Identity service overview &mdash; doczhao 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="doczhao 1.0.0 documentation" href="index.html" />
+    <link rel="up" title="Keystone Installation Tutorial for openSUSE and SUSE Linux Enterprise" href="index-obs.html" />
+    <link rel="next" title="Install and configure" href="keystone-install-obs.html" />
+    <link rel="prev" title="Keystone Installation Tutorial for openSUSE and SUSE Linux Enterprise" href="index-obs.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="keystone-install-obs.html" title="Install and configure"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index-obs.html" title="Keystone Installation Tutorial for openSUSE and SUSE Linux Enterprise"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">doczhao 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="index-obs.html" accesskey="U">Keystone Installation Tutorial for openSUSE and SUSE Linux Enterprise</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="identity-service-overview">
+<h1>Identity service overview<a class="headerlink" href="#identity-service-overview" title="Permalink to this headline">¶</a></h1>
+<p>The OpenStack Identity service provides a single point of integration for
+managing authentication, authorization, and a catalog of services.</p>
+<p>The Identity service is typically the first service a user interacts with. Once
+authenticated, an end user can use their identity to access other OpenStack
+services. Likewise, other OpenStack services leverage the Identity service to
+ensure users are who they say they are and discover where other services are
+within the deployment. The Identity service can also integrate with some
+external user management systems (such as LDAP).</p>
+<p>Users and services can locate other services by using the service catalog,
+which is managed by the Identity service. As the name implies, a service
+catalog is a collection of available services in an OpenStack deployment. Each
+service can have one or many endpoints and each endpoint can be one of three
+types: admin, internal, or public. In a production environment, different
+endpoint types might reside on separate networks exposed to different types of
+users for security reasons. For instance, the public API network might be
+visible from the Internet so customers can manage their clouds. The admin API
+network might be restricted to operators within the organization that manages
+cloud infrastructure. The internal API network might be restricted to the hosts
+that contain OpenStack services. Also, OpenStack supports multiple regions for
+scalability. For simplicity, this guide uses the management network for all
+endpoint types and the default <tt class="docutils literal"><span class="pre">RegionOne</span></tt> region. Together, regions,
+services, and endpoints created within the Identity service comprise the
+service catalog for a deployment. Each OpenStack service in your deployment
+needs a service entry with corresponding endpoints stored in the Identity
+service. This can all be done after the Identity service has been installed and
+configured.</p>
+<p>The Identity service contains these components:</p>
+<dl class="docutils">
+<dt>Server</dt>
+<dd>A centralized server provides authentication and authorization
+services using a RESTful interface.</dd>
+<dt>Drivers</dt>
+<dd>Drivers or a service back end are integrated to the centralized
+server. They are used for accessing identity information in
+repositories external to OpenStack, and may already exist in
+the infrastructure where OpenStack is deployed (for example, SQL
+databases or LDAP servers).</dd>
+<dt>Modules</dt>
+<dd>Middleware modules run in the address space of the OpenStack
+component that is using the Identity service. These modules
+intercept service requests, extract user credentials, and send them
+to the centralized server for authorization. The integration between
+the middleware modules and OpenStack components uses the Python Web
+Server Gateway Interface.</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index-obs.html"
+                        title="previous chapter">Keystone Installation Tutorial for openSUSE and SUSE Linux Enterprise</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="keystone-install-obs.html"
+                        title="next chapter">Install and configure</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/get-started-obs.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="keystone-install-obs.html" title="Install and configure"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index-obs.html" title="Keystone Installation Tutorial for openSUSE and SUSE Linux Enterprise"
+             >previous</a> |</li>
+        <li><a href="index.html">doczhao 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="index-obs.html" >Keystone Installation Tutorial for openSUSE and SUSE Linux Enterprise</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, zhaoyuanjie.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

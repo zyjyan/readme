@@ -1,26 +1,22 @@
-.. doczhao documentation master file, created by
-   sphinx-quickstart on Tue Dec 12 13:29:14 2017.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+=================================
+  Keystone Installation Tutorial
+=================================
 
-Welcome to doczhao's documentation!
-===================================
+The OpenStack system consists of several key services that are separately
+installed. These services work together depending on your cloud
+needs and include the Compute, Identity, Networking, Image, Block Storage,
+Object Storage, Telemetry, Orchestration, and Database services. You
+can install any of these projects separately and configure them stand-alone
+or as connected entities.
 
-Contents:
-tell me that's works
+This section describes how to install and configure the OpenStack
+Identity service, code-named keystone, on the controller node. For
+scalability purposes, this configuration deploys Fernet tokens and
+the Apache HTTP server to handle requests.
+
 .. toctree::
-   :maxdepth: 2
-   :numbered:
-   chapter1
-   chapter2
-   chapter3
- 
+   :maxdepth: 3
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+   index-obs
+   index-rdo
+   index-ubuntu
