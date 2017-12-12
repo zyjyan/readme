@@ -6,11 +6,8 @@
 Welcome to doczhao's documentation!
 ===================================
 
-Contents:
-
-.. toctree::
-   :maxdepth: 2
-
++++++++++++++++++++++++++++++++++++
+tell me works!
 
 
 Indices and tables
