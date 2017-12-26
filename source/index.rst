@@ -9,22 +9,20 @@
 希望能够对将来的一部分工作产生好的影响。工作四年有余，到明年4月即将5年，回顾过去的工作，有些亮点，也有些浪费时间
 的地方。
 
-从专业技术纬度上，大致经历了2013年底`nutch+hadoop+solr`平台搭建，
-2014-2015年，`openstack`云计算平台技术，2015年-2016年，自研聚合式云安全服务平台，阿里
-云计算平台数据对接，2016-2017年，主要忙于安全设备聚合，日志数据处理技术`Logstash+elasticresearch`等；
+从专业技术纬度上，大致经历了2013年底``nutch+hadoop+solr``平台搭建，
+2014-2015年，``openstack``云计算平台技术，2015年-2016年，自研聚合式云安全服务平台，阿里
+云计算平台数据对接，2016-2017年，主要忙于安全设备聚合，日志数据处理技术``Logstash+elasticresearch``等；
 其中，云计算平台技术最为深入，也对后续的工作帮助最大。也想借此文档，总结好openstack及其相关的
 技术(PS：云计算平台技术确实太过庞大，很难用一两句话讲清楚，这也是其入门门槛高的原因)。
-The OpenStack system consists of several key services that are separately
-installed. These services work together depending on your cloud
-needs and include the Compute, Identity, Networking, Image, Block Storage,
-Object Storage, Telemetry, Orchestration, and Database services. You
-can install any of these projects separately and configure them stand-alone
-or as connected entities.
 
-This section describes how to install and configure the OpenStack
-Identity service, code-named keystone, on the controller node. For
-scalability purposes, this configuration deploys Fernet tokens and
-the Apache HTTP server to handle requests.
+从项目经历的角度，从事过代码开发工作，组织团队进行过一次大的云计算平台版本更新；带队完成平台的测评工作，也帮助测评机构
+撰写过测评方案。参与了与阿里云计算平台数据接口的技术沟通工作。参与过态势感知平台技术设计及架构工作；主导了安全设备聚合数据的分析，设计，架构及团队开发工作。这些经历，给我带来了很多的帮助。当然，由于参与的事项过于庞杂，也导致在技术上的研究没有前期那么
+细致入微。
+
+4年的工作经验，让我对代码开发、技术架构、运维、测试、业务应用以及管理等方面都有了较为全面及清晰的认识。当然也对
+工作中扯皮（规避责任）的事情深感无奈。确实，满满的都是故事。呵呵。
+
+
 .. toctree::
    :maxdepth: 3
 
