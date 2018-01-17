@@ -28,9 +28,11 @@ Install Docker
 ==============================                 ============    =======================  ================  =================
 
 ===========================================================================================   ===== =====  ===== 
-容器引擎、编排、网络、安全Container engine and built in orchestration, networking, security    yes   yes    yes 
+容器引擎、编排、网络、安全Container engine \
+and built in orchestration, networking, security    yes   yes    yes 
 ===========================================================================================   ===== =====  ===== 
-==============================                 ============    =======================  ================  =================
+
+
 
 Docker Certified
 Infrastructure,
@@ -41,8 +43,8 @@ Docker认证的基础架构，插件，
 
 ==============================                 ============    =======================  ================  =================
 
-Image Management
-private registry, caching                         No                       No                   yes          yes
+Image Management \
+private registry, caching \                        No                       No                   yes          yes
  (Windows and Linux)
 
 
