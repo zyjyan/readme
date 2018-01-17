@@ -30,9 +30,6 @@
 .. toctree::
    :maxdepth: 3
 
-   index-obs
-   index-rdo
-   index-ubuntu
    index-docker
    index-opensatck
    index-docker
