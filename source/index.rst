@@ -26,10 +26,18 @@
 当然也对工作中扯皮（规避责任）的事情深感无奈。确实，满满的都是故事。
 的确，横看成岭侧成峰。
 
-
+.. test 
 .. toctree::
    :maxdepth: 3
 
    index-obs
    index-rdo
    index-ubuntu
+   index-opensatck
+   index-docker
+   index-logstash
+   index-hadoop
+   index-elasticrearch
+   index-kafka
+   index-TensorFlow
+   index-base
