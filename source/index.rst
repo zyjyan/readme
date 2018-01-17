@@ -31,11 +31,11 @@
    :maxdepth: 3
 
    index-docker
-   index-opensatck
-   index-docker
-   index-logstash
-   index-hadoop
-   index-elasticrearch
-   index-kafka
-   index-TensorFlow
-   index-base
+..   index-opensatck
+..   index-docker
+..   index-logstash
+..   index-hadoop
+..   index-elasticrearch
+..   index-kafka
+..   index-TensorFlow
+..   index-base
