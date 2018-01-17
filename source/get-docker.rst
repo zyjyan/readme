@@ -27,11 +27,7 @@ Install Docker
  支持内容                                        社区版本              企业基础版本        企业标准版本       企业高级版本
 ==============================                 ============    =======================  ================  =================
 
-容器引擎、编排、
-网络、安全
-Container engine                                  yes                      yes                   yes               yes
-and built in orchestration,
-networking, security
+容器引擎、编排、网络、安全Container engine and built in orchestration,networking,security    yes yes  yes 
 
 ==============================                 ============    =======================  ================  =================
 
