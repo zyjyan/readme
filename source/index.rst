@@ -33,6 +33,7 @@
    index-obs
    index-rdo
    index-ubuntu
+   index-docker
    index-opensatck
    index-docker
    index-logstash
