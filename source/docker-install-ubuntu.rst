@@ -65,8 +65,11 @@ deb包安装
 下载完成后，先安装相关的依赖，然后完成Docker相关的软件安装即可。我们查看系统用户组，`/etc/group`发现多出系统用户组docker，但查看`/etc/passwd`，并没有发现多出docker用户。
 
 下载完成后，我们可以使用如下命令验证Docker安装是否成功：
+
 .. code-block:: console
-       # docker run hello-world
+
+
+        docker run hello-world
 	Unable to find image 'hello-world:latest' locally
 	latest: Pulling from library/hello-world
 	ca4f61b1923c: Pull complete 
@@ -94,19 +97,23 @@ deb包安装
 	For more examples and ideas, visit:
 	 https://docs.docker.com/engine/userguide/
 .. end
+
 该命令，将下载一个测试镜像，并且启动容器；该测试容器将打印Hello from Docker. 并且退出，似乎我们已经运行了一个容器，但对于其原理及用途扔不是很清晰。带着疑问继续研究。
 具体到Docker自身，我们需要观察，Docker运行的一些基本元素，比如，是否只有root用户权限可操作？是否绑定系统端口？是否跟随系统自启动？等一系列的问题，这个将在随后的章节给出答案。
 
 卸载DOCKER CE
 -------------
 1. 卸载相关软件包:
-.. code-block::
+.. code-block:: console
+
   # sudo apt-get purge docker-ce
+
 .. end
 2. 删除相关的镜像，容器，卷：
-.. code-block::
-  # sudo rm -rf /var/lib/docker
 
+.. code-block:: console
+  # sudo rm -rf /var/lib/docker
+.. end
 
 		 
 
