@@ -121,10 +121,10 @@ deb包安装
 
 		 
 
-.. figure:: ./image/docker/docker-1.png
+.. figure:: image/docker/docker-1.png
    :width: 80%
    :align: center
-   :alt: Message substitution diagram
+   :alt: Docker-1
 
 end-21
 
