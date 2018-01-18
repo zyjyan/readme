@@ -16,6 +16,46 @@ ARM64，Ubuntu14.04LTS
    $ sudo apt-get remove docker docker-engine docker.io
 
 .. end
+在目录 `/var/log/docker/` 目录下，卸载后仍然保留原有的镜像，容器，以及网络的配置，现在Docker CE包已经改名为 `docker-ce`.
+
+安装Docker 
+----------
+安装方式包括两种，一种为APT安装，一种是通过DEB包安装。
+
+1、APT安装
+
+
+
+2、deb包安装；用户可以到 `Docker源选取合适的包下载安装<https://download.docker.com/linux/ubuntu/dists/trusty/>`_.
+下载后，使用如下命令进行安装：
+.. code-block:: console
+   root@cecgw:/home/cecgw# dpkg -i docker-ce_17.12.0~ce-0~ubuntu_amd64.deb
+.. end
+首次执行后，发现出现报错信息如下
+
+.. code-block:: console
+
+  root@cecgw:/home/cecgw#  dpkg -i docker-ce_17.12.0~ce-0~ubuntu_amd64.deb 
+  (Reading database ... 134914 files and directories currently installed.)
+  Preparing to unpack docker-ce_17.12.0~ce-0~ubuntu_amd64.deb ...
+  Unpacking docker-ce (17.12.0~ce-0~ubuntu) over (17.12.0~ce-0~ubuntu) ...
+  dpkg: dependency problems prevent configuration of docker-ce:
+  docker-ce depends on libsystemd-journal0 (>= 201); however:
+  Package libsystemd-journal0 is not installed.
+
+  dpkg: error processing package docker-ce (--install):
+  dependency problems - leaving unconfigured
+  Processing triggers for ureadahead (0.100.0-16) ...
+  Processing triggers for man-db (2.6.7.1-1ubuntu1) ...
+  Errors were encountered while processing:
+  docker-ce
+.. end
+发现
+
+
+
+
+		 
 
 # Stable 稳定版本每个季度一次更新；
 
