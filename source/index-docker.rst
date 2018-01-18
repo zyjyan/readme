@@ -27,7 +27,7 @@ Contents
    :maxdepth: 2
 
    get-docker
-   install-docker-ubuntu
+   docker-index-ubuntu
 
 .. Pseudo only directive for each distribution used by the build tool.
    This pseudo only directive for toctree only works fine with Tox.
