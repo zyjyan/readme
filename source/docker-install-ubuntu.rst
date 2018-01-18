@@ -122,7 +122,7 @@ deb包安装
 		 
 
 
-.. image:: /image/docker/docker-1.png
+.. figure:: image/docker/docker-1.png
 
 end-1
 
