@@ -121,7 +121,7 @@ deb包安装
 
 		 
 
-.. figure:: ./image/docker/docker.png
+.. figure:: ./image/docker/docker-1.png
    :width: 80%
    :align: center
    :alt: Message substitution diagram
