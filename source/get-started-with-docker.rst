@@ -192,6 +192,7 @@ app.py
 运行容器
 --------
 执行DOCKER运行命令，前台执行命令：
+
 .. code-block:: console
 
   docker run -p 4000:80 friendlyhello
@@ -243,12 +244,67 @@ curl命令进行查看。
        注册后，在本地终端进行登录：
 
 .. code-block:: console
+
 	root@cecgw:/home/cecgw/github/readme/source# docker login
 	Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
 	Username: oneandonly
 	Password: 
 	Login Succeeded
+
 .. end
+
+标注镜像
+        终端执行命令如下:
+
+.. code-block:: console
+
+ # docker tag friendlyhello oneandonly/friendlyhello-2018.1.25
+
+.. end
+
+
+终端查看标记过的镜像：
+
+.. code-block:: console
+
+	# docker image list
+	REPOSITORY                           TAG                 IMAGE ID            CREATED             SIZE
+	friendlyhello                        latest              e8aafca68713        2 hours ago         148MB
+	oneandonly/friendlyhello-2018.1.25   latest              e8aafca68713        2 hours ago         148MB
+	python                               2.7-slim            4fd30fc83117        6 weeks ago         138MB
+	hello-world                          latest              f2a91732366c        2 months ago        1.85kB
+
+.. end
+
+发布镜像
+        终端执行如下命令：
+
+.. code-block:: console
+
+	# docker push oneandonly/friendlyhello-2018.1.25
+	The push refers to repository [docker.io/oneandonly/friendlyhello-2018.1.25]
+	bf01cd042702: Pushed 
+	baa35828d3ce: Pushed 
+	63bfc4b63764: Pushed 
+	94b0b6f67798: Mounted from library/python 
+	e0c374004259: Mounted from library/python 
+	56ee7573ea0f: Mounted from library/python 
+	cfce7a8ae632: Mounted from library/python 
+	latest: digest: sha256:beb1aac4e2df9da53e89c0fc4deb90d7224464734f3ce1a1545b7d08af13b3fc size: 1787        
+.. end
+
+如果该映像在本地无法使用，那么Docker将从存储库中拉出它。
+执行命令为:
+
+.. code-block:: console
+
+ docker run -p 4000:80 oneandonly/friendlyhello-2018.1.25
+
+.. end
+
+无论 ``docker run`` 命令在哪里执行，它都会拉出镜像，并包含响应的python环境，以及requirements里的依赖。并运行的代码。它都是在一个整洁的小包裹里一起旅行的，而且主机不需要安装任何东西，而只是Docker来运行它。
+
+
 
 
 
