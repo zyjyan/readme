@@ -189,6 +189,44 @@ app.py
 	Successfully tagged friendlyhello:latest
 .. end
 
+执行DOCKER运行命令，前台执行命令：
+.. code-block:: console
+
+  docker run -p 4000:80 friendlyhello
+
+.. end
+
+后台执行命令：
+
+.. code-block:: console
+
+ docker run -d -p 4000:80 friendlyhello
+
+.. end
+
+查看容器运行状态：
+
+.. code-block:: console
+
+ # docker container ls
+ CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                  NAMES
+ 621fa271fc72        friendlyhello       "python app.py"     44 seconds ago      Up 43 seconds       0.0.0.0:4000->80/tcp   jovial_morse
+
+.. end
+
+结束容器运行命令：
+
+.. code-block:: console
+
+ # docker container stop 621fa271fc72
+   621fa271fc72
+
+.. end
+
+
+
+
+
 如果已经安装了Docker|docker-engine的，可以使用如下指令，完成旧版本的卸载：
 
 .. code-block:: console
