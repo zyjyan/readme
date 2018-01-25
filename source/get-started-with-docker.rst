@@ -124,6 +124,70 @@ app.py
 .. end
 现在可以运行docker命令，构建一个Docker镜像. 我们用-t命令标记该镜像。
 
+.. code-block:: console
+
+	docker build -t friendlyhello .
+	Sending build context to Docker daemon   5.12kB
+	Step 1/7 : FROM python:2.7-slim
+	2.7-slim: Pulling from library/python
+	c4bb02b17bb4: Pull complete 
+	c5c896dce5ee: Pull complete 
+	cf210b898cc6: Downloading [===>                                               ]    983kB/14.93MB
+	5117cef49bdb: Download complete 
+
+	cf210b898cc6: Pull complete 
+	5117cef49bdb: Pull complete 
+	Digest: sha256:22112f2295fe9ea84b72e5344af73a2580a47b1014a1f4c58eccf6095b7ea18f
+	Status: Downloaded newer image for python:2.7-slim
+	 ---> 4fd30fc83117
+	Step 2/7 : WORKDIR /app
+	Removing intermediate container 44556fde19fe
+	 ---> 8fa21018e0be
+	Step 3/7 : ADD . /app
+	 ---> f110d6b4a4ea
+	Step 4/7 : RUN pip install --trusted-host pypi.python.org -r requirements.txt
+	 ---> Running in 1d0e54fa8dfc
+	Collecting Flask (from -r requirements.txt (line 1))
+	  Downloading Flask-0.12.2-py2.py3-none-any.whl (83kB)
+	Collecting Redis (from -r requirements.txt (line 2))
+	  Downloading redis-2.10.6-py2.py3-none-any.whl (64kB)
+	Collecting itsdangerous>=0.21 (from Flask->-r requirements.txt (line 1))
+	  Downloading itsdangerous-0.24.tar.gz (46kB)
+	Collecting Jinja2>=2.4 (from Flask->-r requirements.txt (line 1))
+	  Downloading Jinja2-2.10-py2.py3-none-any.whl (126kB)
+	Collecting Werkzeug>=0.7 (from Flask->-r requirements.txt (line 1))
+	  Downloading Werkzeug-0.14.1-py2.py3-none-any.whl (322kB)
+	Collecting click>=2.0 (from Flask->-r requirements.txt (line 1))
+	  Downloading click-6.7-py2.py3-none-any.whl (71kB)
+	Collecting MarkupSafe>=0.23 (from Jinja2>=2.4->Flask->-r requirements.txt (line 1))
+	  Downloading MarkupSafe-1.0.tar.gz
+	Building wheels for collected packages: itsdangerous, MarkupSafe
+	  Running setup.py bdist_wheel for itsdangerous: started
+	  Running setup.py bdist_wheel for itsdangerous: finished with status 'done'
+	  Stored in directory: /root/.cache/pip/wheels/fc/a8/66/24d655233c757e178d45dea2de22a04c6d92766abfb741129a
+	  Running setup.py bdist_wheel for MarkupSafe: started
+	  Running setup.py bdist_wheel for MarkupSafe: finished with status 'done'
+	  Stored in directory: /root/.cache/pip/wheels/88/a7/30/e39a54a87bcbe25308fa3ca64e8ddc75d9b3e5afa21ee32d57
+	Successfully built itsdangerous MarkupSafe
+	Installing collected packages: itsdangerous, MarkupSafe, Jinja2, Werkzeug, click, Flask, Redis
+	Successfully installed Flask-0.12.2 Jinja2-2.10 MarkupSafe-1.0 Redis-2.10.6 Werkzeug-0.14.1 click-6.7 itsdangerous-0.24
+	Removing intermediate container 1d0e54fa8dfc
+	 ---> 964c9a2ff5ac
+	Step 5/7 : EXPOSE 80
+	 ---> Running in f136af4ed15f
+	Removing intermediate container f136af4ed15f
+	 ---> 9fe081fc05a0
+	Step 6/7 : ENV NAME World
+	 ---> Running in ae4dee9777e3
+	Removing intermediate container ae4dee9777e3
+	 ---> 9de5dff3a988
+	Step 7/7 : CMD ["python", "app.py"]
+	 ---> Running in 61a41aa26178
+	Removing intermediate container 61a41aa26178
+	 ---> e8aafca68713
+	Successfully built e8aafca68713
+	Successfully tagged friendlyhello:latest
+.. end
 
 如果已经安装了Docker|docker-engine的，可以使用如下指令，完成旧版本的卸载：
 
