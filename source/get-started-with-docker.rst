@@ -1,5 +1,5 @@
-Get-Start Part1 介绍
-~~~~~~~~~~~~~~~~~~~~~
+Get-Start Docker
+~~~~~~~~~~~~~~~~
 在接下来的分享中，重点分享六个方面的内容：
 1. 介绍Docker
 2. 构建并运行第一个Docker容器
@@ -189,6 +189,8 @@ app.py
 	Successfully tagged friendlyhello:latest
 .. end
 
+运行容器
+--------
 执行DOCKER运行命令，前台执行命令：
 .. code-block:: console
 
@@ -223,9 +225,37 @@ app.py
 
 .. end
 
+容器运行成功后，可以访问浏览器，http://ip:4000,可以查看浏览器响应。也可以在本地使用
+curl命令进行查看。
+
+.. code-block:: console
+
+	# curl http://localhost:4000
+	<h3>Hello World!</h3><b>Hostname:</b> 598cc14f4c28<br/><b>Visits:</b> <i>cannot connect to Redis, counter disabled</i>
+.. end
+分享镜像
+--------
+
+测试成功后，我们可以将我们制作的镜像上传至云端。前提是需要到官网上进行注册。
+`注册地址 <https://cloud.docker.com>`_.
+
+本地登录
+       注册后，在本地终端进行登录：
+
+.. code-block:: console
+	root@cecgw:/home/cecgw/github/readme/source# docker login
+	Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+	Username: oneandonly
+	Password: 
+	Login Succeeded
+.. end
 
 
 
+
+Docker 服务
+-----------
+前面已经介绍了容器的内容，现在介绍下Services. 
 
 如果已经安装了Docker|docker-engine的，可以使用如下指令，完成旧版本的卸载：
 
