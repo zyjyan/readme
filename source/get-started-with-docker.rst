@@ -82,7 +82,7 @@ requirements.txt
 
 app.py 
 
-.. code-block:: console
+.. code-block:: python
 
 	from flask import Flask
 	from redis import Redis, RedisError
