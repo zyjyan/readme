@@ -312,18 +312,97 @@ curl命令进行查看。
 Docker 服务
 -----------
 前面已经介绍了容器的内容，现在介绍下Services. 
+在分布式应用中，不同的组件提供不同的服务。服务实际上只是“生产中的容器”。“一个服务只运行一个镜像，但是它将图像的运行方式,如应该使用的端口、应该运行多少个容器的副本、以便服务具有它需要的容量等等进行了整理。扩展服务会改变运行该软件的容器实例的数量，在流程中为服务分配更多的计算资源
+。
+通过docker实现服务的定义、运行以及扩展非常便利。只需要编写一个 ``docker-compose.yml`` 文件即可。
 
-如果已经安装了Docker|docker-engine的，可以使用如下指令，完成旧版本的卸载：
+docker-compose.yml 文件定义了Docker容器的在生成中的行为。
+
+我们定义如下docker-compose.yml 文件.
+
+.. code-block:: yml
+
+	version: "3"
+	services:
+	  web:
+	    # replace username/repo:tag with your name and image details
+	    image: oneandonly/friendlyhello-2018.1.25
+	    deploy:
+	      replicas: 5
+	      resources:
+		limits:
+		  cpus: "0.1"
+		  memory: 50M
+	      restart_policy:
+		condition: on-failure
+	    ports:
+	      - "80:80"
+	    networks:
+	      - webnet
+	networks:
+	  webnet:
+
+.. end
+
+改文件在docker平台上执行后，会做出如下动作：
+
+1. 从Docker云端将image镜像进行下载;
+2. 运行5个镜像实例作为服务，服务名称为 ``web``. 规定每一个容器最多只能使用10% CPU, 50M内存.
+3. 如果出现故障，立即重启Docker；
+4. 映射host与服务 ``web`` 端口为 80:80.
+5. 将5个containers通过负载均衡网络webnet共享80端口。在容器内部，通过一个临时端口发布到web服务的80端口。
+6. 定义webnet网络，使用默认的设置.
+
+运行新的负载均衡APP
+------------------
+1. 终端执行 docker swarm init --advertise-addr br-ex
+.. code-block:: console
+
+	# docker swarm init --advertise-addr br-ex
+	Swarm initialized: current node (crn8foamx5e8io1ff5n22ofo2) is now a manager.
+
+	To add a worker to this swarm, run the following command:
+
+	    docker swarm join --token SWMTKN-1-3fhsrnwgs36nqgv4yce62rmqsmifbxcya4q0obllmwbvpuvznd-3d47jfab15ocbqea003ho6c7f 192.168.246.132:2377
+
+	To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+.. end
+
+2. 终端执行 docker stack deploy -c docker-compose.yml getstartedlab 需要给运行的APP一个名字，此名字定义为getstartedlab:
+
+.. code-block:: cosole
+	docker stack deploy -c docker-compose.yml getstartedlab
+	Creating network getstartedlab_webnet
+	Creating service getstartedlab_web
+.. end 
+这样，我们的一个服务栈已经运行了5个容器实例，在同一个物理服务器中.
+
+3. 查看服务.docker service ls
 
 .. code-block:: console
 
-   $ sudo apt-get remove docker docker-engine docker.io
+ root@cecgw:/home/cecgw/docker# docker service ls
+ ID                  NAME                MODE                REPLICAS            IMAGE                                       PORTS
+ lvk1pm89vphp        getstartedlab_web   replicated          5/5                 oneandonly/friendlyhello-2018.1.25:latest   *:80->80/tcp
 
 .. end
-在目录 ``/var/log/docker/`` 目录下，卸载后仍然保留原有的镜像，容器，以及网络的配置，现在Docker CE包已经改名为 ``docker-ce``.
 
-安装Docker 
-----------
+终端查看docker容器状态。 docker container list
+
+.. code-block:: console
+
+	root@cecgw:/home/cecgw/docker# docker container list
+	CONTAINER ID        IMAGE                                       COMMAND             CREATED             STATUS              PORTS               NAMES
+	36e0ee067b48        oneandonly/friendlyhello-2018.1.25:latest   "python app.py"     8 seconds ago       Up 2 seconds        80/tcp              getstartedlab_web.5.dknj99kg8z27tmcmr5d3stl37
+	571267336cfb        oneandonly/friendlyhello-2018.1.25:latest   "python app.py"     18 seconds ago      Up 7 seconds        80/tcp              getstartedlab_web.3.zt9nqi5u1tgu2kqcyytzh056c
+	8c2bb1d05b28        oneandonly/friendlyhello-2018.1.25:latest   "python app.py"     33 seconds ago      Up 17 seconds       80/tcp              getstartedlab_web.4.y5m10kvjhhybgi7ceephy70sv
+	d0d9cd2d925d        oneandonly/friendlyhello-2018.1.25:latest   "python app.py"     41 seconds ago      Up 32 seconds       80/tcp              getstartedlab_web.2.p7a0dwxjn4d4ans3yihnbugss
+	a94bea1c0879        oneandonly/friendlyhello-2018.1.25:latest   "python app.py"     52 seconds ago      Up 41 seconds       80/tcp    
+.. end
+
+
+
 安装方式包括两种，一种为APT安装，一种是通过DEB包安装。
 
 APT安装
