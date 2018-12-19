@@ -19,6 +19,9 @@ KAFKA一般应用于如下两种场景:
 同时，KAFKA自身提供4类主要的API接口。
 
 .. figure:: image/kafka/kafka-apis.png
+   :width: 80%
+   :align: center
+   :alt: kafka-apis
 
 1. `Producer API` 该API允许应用程序向一个或多个KAFKA主题发布流数据。
 2. `Consumer API` 该API允许应用程序订阅一个或者多个主题，并处理流数据。
