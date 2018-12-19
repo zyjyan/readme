@@ -42,7 +42,7 @@ KAFKA一般应用于如下两种场景:
 
 主题是发布记录的类别或提要名称。Kafka中的主题总是多订阅者;也就是说，主题可以有0个、1个或多个订阅写入主题的数据的使用者。
 对于每个主题，Kafka集群都维护一个分区日志。如下图所示:
-.. image::./kafka/log_anatomy.png
+
 .. figure:: image/kafka/log_anatomy.png
    :width: 80%
    :align: center
@@ -50,7 +50,7 @@ KAFKA一般应用于如下两种场景:
 
 每个分区都是一个有序的、不可变的记录序列，这些记录被不断添加到结构化提交日志中。分区中的记录被分配一个顺序的id号，称为惟一标识分区中的每个记录的偏移量。
 Kafka集群使用可配置的保留期可以持久地保存所有已发布的记录(不管它们是否已被消耗)。例如，如果保留策略被设置为两天，那么在发布记录后的两天内，记录是可用的，在这两天之后，记录将被丢弃以释放空间。Kafka的性能在数据大小方面实际上是恒定的，所以长时间存储数据不是问题。
-.. image::./kafka/log_consumer.png
+
 .. figure:: image/kafka/log_consumer.png
    :width: 80%
    :align: center
