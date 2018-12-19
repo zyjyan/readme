@@ -31,6 +31,7 @@
    :maxdepth: 3
 
    index-docker
+   index-kafka
 ..   index-opensatck
 ..   index-docker
 ..   index-logstash
