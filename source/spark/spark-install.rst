@@ -21,12 +21,15 @@ SPARK安装
 2.解压软件包到安装目录，设置的安装目录为/opt。
 
 .. code-block:: console
+
  # tar -xzvf scala-2.12.1.tgz -C /opt
  # mv scala-2.12.1.tgz scala
+
 .. end
 
 3. 给文件赋予访问权限.前提，已经创建hadoop用户。
 .. code-block:: console
+
   chown -R hadoop:hadoop scala
 
 .. end
