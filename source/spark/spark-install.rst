@@ -28,6 +28,7 @@ SPARK安装
 .. end
 
 3. 给文件赋予访问权限.前提，已经创建hadoop用户。
+
 .. code-block:: console
 
   chown -R hadoop:hadoop scala
@@ -61,6 +62,7 @@ SPARK安装
   Scala code runner version 2.12.1 -- Copyright 2002-2016, LAMP/EPFL and Lightbend, Inc.
 
 .. end
+
 至此，单机版完成安装。
 
 分布式安装
