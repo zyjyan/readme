@@ -4,7 +4,7 @@ Haking On Kafka（P-version）
 
 Abstract
 ~~~~~~~~
-KAFKA的官方网址为 `KAFKA.DOC <http://kafka.apache.org/>`_. 
+1-KAFKA的官方网址为 `KAFKA.DOC <http://kafka.apache.org/>`_. 
 
 KAFKA `A distributed streaming platform` 。Kafka是由Apache软件基金会开发的一个开源流处理平台，由Scala和Java编写。Kafka是一种高吞吐量的分布式发布订阅消息系统。
 
@@ -26,7 +26,7 @@ Contents
    :maxdepth: 2
 
    kafka/kafka-intrduction.rst
-   kafka kafka-quickstart.rst
+   kafka/kafka-quickstart.rst
 .. Pseudo only directive for each distribution used by the build tool.
    This pseudo only directive for toctree only works fine with Tox.
    When you directly build this guide with Sphinx,
