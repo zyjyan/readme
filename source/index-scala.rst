@@ -4,9 +4,8 @@ Haking On Scala（P-version）
 
 Abstract
 ~~~~~~~~
-KAFKA的官方网址为 `KAFKA.DOC <http://kafka.apache.org/>`_. 
+Scala的官方网址为 `SCALA.DOC <https://www.scala-lang.org/>`_. 
 
-KAFKA `A distributed streaming platform` 。Kafka是由Apache软件基金会开发的一个开源流处理平台，由Scala和Java编写。Kafka是一种高吞吐量的分布式发布订阅消息系统。
 
 本篇章，结合自己的实践，依据官网提供的素材，进行学习及验证。
 
@@ -17,7 +16,7 @@ KAFKA `A distributed streaming platform` 。Kafka是由Apache软件基金会开�
 
 .. warning::
 
-   搭建环境时KAFKA版本为kafka_2.12-1.1.0. 操作系统版本为ubuntu.16.04lts。
+   搭建环境时SCALA版本为SCALA 2.12.1. 操作系统版本为ubuntu.16.04lts。
 
 Contents
 ~~~~~~~~
