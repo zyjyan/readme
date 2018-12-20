@@ -7,7 +7,9 @@ SPARK安装
 前置条件：安装java hadoop scala
 单机版本安装步骤
 1.获取软件安装包。`点此获得软件包下载地址 <http://spark.apache.org/downloads.html>`_.
+
 .. note::
+
  官方网址提供了如下软件下载版本:
  Source code: Spark 源码，需要编译才能使用；
  Pre-build with user-provided Hadoop: 属于“Hadoop free”版，可应用到任意Hadoop 版本；
@@ -16,6 +18,7 @@ SPARK安装
  前面已经自己安装了Hadoop和scala，所以，在“Choose a package type”后面需要选择 "Pre-build with scala 2.12 and user-provide Apache Hadoop."，因为这个选项的Spark可以应用于任意Hadoop版本，所以，就可以应用到我们已经安装的Hadoop版本。然后，点击“Download Spark”后面的"spark-2.4.0-bin-without-hadoop-scala-2.12.tgz"下载即可。
  Spark部署模式主要有四种：Local模式（单机模式）、Standalone模式（使用Spark自带的简单集群管理器）、YARN模式（使用YARN作为集群管理器）和Mesos模式（使用Mesos作为集群管理器）。
  这里介绍Local模式（单机模式）的 Spark安装。我们选择Spark 1.6.2版本，并且假设当前使用用户名hadoop登录了Linux操作系统。
+
 .. end
 
 2.解压软件包到安装目录，设置的安装目录为/opt。
@@ -38,6 +41,7 @@ SPARK安装
 4. 修改spark 配置文件,并配置spark环境变量。
 
 .. code-block:: console
+
   root@ubuntu:/opt/spark# cp ./conf/spark-env.sh.template ./conf/spark-env.sh
   root@ubuntu:/opt/spark# vi ./conf/spark-env.sh
   export SPARK_DIST_CLASSPATH=$(/opt/hadoop-2.9.0/bin/hadoop classpath)
@@ -48,6 +52,7 @@ SPARK安装
   # set spark environment
   export SPARK_HOME=/opt/spark
   export PATH=$PATH:$SPARK_HOME/bin
+
 .. end
 
 有了上面的配置信息以后，Spark就可以把数据存储到Hadoop分布式文件系统HDFS中，也可以从HDFS中读取数据。如果没有配置上面信息，Spark就只能读写本地数据，无法读写HDFS数据。
@@ -57,6 +62,7 @@ SPARK安装
 5. 验证测试.
 
 .. code-block:: console
+
  验证1：
  root@ubuntu:/opt/spark# bin/run-example SparkPi 2>&1 | grep "Pi is"
  Pi is roughly 3.13639568197841
