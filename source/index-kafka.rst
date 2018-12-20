@@ -26,7 +26,7 @@ Contents
    :maxdepth: 2
 
    kafka/kafka-intrduction.rst
-   kafka-quickstart.rst
+   kafka kafka-quickstart.rst
 .. Pseudo only directive for each distribution used by the build tool.
    This pseudo only directive for toctree only works fine with Tox.
    When you directly build this guide with Sphinx,
