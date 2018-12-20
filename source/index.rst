@@ -32,6 +32,7 @@
 
    index-docker
    index-kafka
+   index-scala
 ..   index-opensatck
 ..   index-docker
 ..   index-logstash
