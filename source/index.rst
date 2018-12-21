@@ -31,6 +31,7 @@
    :maxdepth: 3
 
    index-docker
+   index-hadoop
    index-kafka
    index-scala
    index-spark
