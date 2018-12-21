@@ -23,7 +23,7 @@ hadoop版本：2.7.7
 
 java安装
 ========
-1. 下载jdk软件包。jdk下载地址为：https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+1. 下载jdk软件包。jdk下载地址为：(https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 选择所需要的软件包，本次安装环境为ubuntu1604，选择软件包版本为：jdk-8u191-linux-x64.tar.gz
 
 .. figure:: image/jdk-choose.png
@@ -75,7 +75,7 @@ hadoop 单机伪分布式安装
 
 1. 软件包下载.
 
-软件包下载：软件下载地址为http://mirrors.shu.edu.cn/apache/hadoop/common/hadoop-2.7.7/hadoop-2.7.7.tar.gz
+软件包下载：软件下载地址为 (http://mirrors.shu.edu.cn/apache/hadoop/common/hadoop-2.7.7/hadoop-2.7.7.tar.gz)
 
 2. 解压缩文件.
 
