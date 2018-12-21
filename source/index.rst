@@ -34,6 +34,7 @@
    index-kafka
    index-scala
    index-spark
+   index-hbase
 ..   index-opensatck
 ..   index-docker
 ..   index-logstash
