@@ -44,7 +44,7 @@ SPARK安装
 
   root@ubuntu:/opt/spark# cp ./conf/spark-env.sh.template ./conf/spark-env.sh
   root@ubuntu:/opt/spark# vi ./conf/spark-env.sh
-  export SPARK_DIST_CLASSPATH=$(/opt/hadoop-2.9.0/bin/hadoop classpath)
+  export SPARK_DIST_CLASSPATH=$(/opt/hadoop-2.7.7/bin/hadoop classpath)
 
   ################################
   配置环境变量：
