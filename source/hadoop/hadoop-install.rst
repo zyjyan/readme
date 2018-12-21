@@ -249,6 +249,6 @@ Hadoop 的配置文件位于 /opt/hadoop-2.7.7/etc/hadoop/ 中，伪分布式需
 
 .. end
 
-启动 YARN 之后，运行实例的方法还是一样的，仅仅是资源管理方式、任务调度不同。观察日志信息可以发现，不启用 YARN 时，是 "mapred.LocalJobRunner"在跑任务，启用 YARN 之后，是"mapred.YARNRunner"在跑任务。启动 YARN 有个好处是可以通过 Web 界面查看任务的运行情况：http://ip:8088/cluster，。
+启动 YARN 之后，运行实例的方法还是一样的，仅仅是资源管理方式、任务调度不同。观察日志信息可以发现，不启用 YARN 时，是 "mapred.LocalJobRunner"在跑任务，启用 YARN 之后，是"mapred.YARNRunner"在跑任务。启动 YARN 有个好处是可以通过 Web 界面查看任务的运行情况：http://ip:8088/cluster
 
 
