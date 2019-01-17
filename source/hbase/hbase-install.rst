@@ -18,6 +18,7 @@ HBase单机伪分布式模式配置安装步骤,以hadoop为存储底层。
 .. end
 
 3. 给文件赋予访问权限.前提，已经创建hadoop用户。
+
 .. code-block:: console
  
  chown -R hadoop:hadoop hbase
@@ -33,6 +34,7 @@ HBase单机伪分布式模式配置安装步骤,以hadoop为存储底层。
   # source /home/hadoop/.bashrc
 
 .. end
+
 查看HBase版本，确定HBase是否安装成功，命令如下：
 
 .. code-block:: console
@@ -76,6 +78,7 @@ HBASE_CLASSPATH设置为本机Hadoop安装目录下的conf目录（即/opt/hadoo
                 <value>true</value>
         </property>
  </configuration>
+
 .. end
 
 
@@ -101,6 +104,7 @@ HBASE_CLASSPATH设置为本机Hadoop安装目录下的conf目录（即/opt/hadoo
 	drwxr-xr-x   - hadoop supergroup          0 2018-12-21 15:39 /user
 	hadoop@ubuntu:/opt/hbase$
   # 可以看出，已经在hadoop下创建了hbase目录。权限为hadoop。
+
 .. end
 
 至此，单机版完成安装。
