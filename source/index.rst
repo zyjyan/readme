@@ -36,6 +36,7 @@
    index-scala
    index-spark
    index-hbase
+   index-elasticsearch
 ..   index-opensatck
 ..   index-docker
 ..   index-logstash
