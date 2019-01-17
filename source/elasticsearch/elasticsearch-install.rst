@@ -54,8 +54,14 @@ elasticsearch.yml主要配置项如下：
 jvm的配置建议，可点此查看。 `<https://www.elastic.co/guide/en/elasticsearch/reference/6.6/heap-size.html>`_.
 默认情况下，Elasticsearch告诉JVM使用最小和最大大小为1 GB的堆。在转移到生产环境时，重要的是配置堆大小，以确保Elasticsearch有足够的堆可用。
 ES主要通过Xms (minimum heap size) 和 Xmx (maximum heap size) 配置ES堆设置。这些设置的值取决于服务器上可用RAM的数量。好的经验法则是:
+
+
 1) 设置最小堆大小(Xms)和最大堆大小(Xmx)相等。
+
+
 2) Elasticsearch可用的堆越多，用于缓存的内存就越多。但是请注意，过多的堆会导致长时间的垃圾收集暂停。
+
+
 3) 将Xmx设置为不超过物理RAM的50%，以确保有足够的物理RAM留给内核文件系统缓存。
 
 jvm配置项说明可点此查看详情 `<https://www.elastic.co/guide/en/elasticsearch/reference/6.6/jvm-options.html>`_.
