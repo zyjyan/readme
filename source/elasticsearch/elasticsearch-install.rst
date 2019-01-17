@@ -65,6 +65,7 @@ ES主要通过Xms (minimum heap size) 和 Xmx (maximum heap size) 配置ES堆设
 3) 将Xmx设置为不超过物理RAM的50%，以确保有足够的物理RAM留给内核文件系统缓存。
 
 jvm配置项说明可点此查看详情 `<https://www.elastic.co/guide/en/elasticsearch/reference/6.6/jvm-options.html>`_.
+
 .. note::
 
   点此查看详情 `<https://www.elastic.co/guide/en/elasticsearch/reference/6.6/jvm-options.html>`_.
@@ -74,13 +75,9 @@ jvm配置项说明可点此查看详情 `<https://www.elastic.co/guide/en/elasti
   以数字开头、后跟-、再跟数字、再跟:的行被视为只有当JVM的版本在两个数字的范围内时才适用的JVM选项，如 8-9:-Xmx2g。
 
 .. end  
+
 建议根据硬件配置，以及该服务器上安装软件的情况，合理配置ES,测试电脑为6G, 设置jvm -Xms3g,-Xmx3g.
 
-.. code-block:: console
-
-  chown -R hadoop:hadoop spark
-
-.. end
 
 5. 调整操作系统参数。详情可查看`<https://www.elastic.co/guide/en/elasticsearch/reference/6.6/setting-system-settings.html>`_.
 主要的参数为ulimit参数。在Linux系统上，可以使用ulimit临时更改资源限制。
