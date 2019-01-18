@@ -120,7 +120,7 @@ Hadoop 的配置文件位于 /opt/hadoop-2.7.7/etc/hadoop/ 中，伪分布式需
 	<configuration>
 	<property>
 	<name>hadoop.tmp.dir</name>
-	<value>file:/usr/local/hadoop/tmp</value>
+	<value>file:/opt/hadoop-2.7.7/tmp</value>
 	<description>Abase for other temporary directories.</description>
 	</property>
 	<property>
@@ -137,11 +137,11 @@ Hadoop 的配置文件位于 /opt/hadoop-2.7.7/etc/hadoop/ 中，伪分布式需
 	</property>
 	<property>
 	<name>dfs.namenode.name.dir</name>
-	<value>file:/usr/local/hadoop/tmp/dfs/name</value>
+	<value>file:/opt/hadoop-2.7.7/tmp/dfs/name</value>
 	</property>
 	<property>
 	<name>dfs.datanode.data.dir</name>
-	<value>file:/usr/local/hadoop/tmp/dfs/data</value>
+	<value>file:/opt/hadoop-2.7.7/tmp/dfs/data</value>
 	</property>
 	</configuration>
 	修改
