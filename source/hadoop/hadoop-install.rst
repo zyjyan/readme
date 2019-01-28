@@ -746,9 +746,10 @@ Shell 命令
 扩展hadoop集群
 ^^^^^^^^^^^^^^
 
-操作系统安装-->修改主机名-->配置host.dns-->创建hadoop组-->安装NTP并配置-->安装java并配置-->配置slaver-3->slaver-3，master->slaver-3免密登录-->
+操作系统安装-->修改主机名-->配置host.dns-->创建hadoop组-->安装NTP并配置-->安装java并配置-->配置slaver-3->slaver-3，master->slaver-3免密登录-->安装hadoop-->配置slaver环境变量-->master节点修改配置-->安装时钟同步软件-->master节点重启服务并验证。
 
 1、安装操作系统。
+
 2、修改host主机名，也可在安装操作系统时进行设定。建议安装集群前统一规划规范主机名命名规范。
 
 .. code-block:: console
@@ -833,6 +834,7 @@ Shell 命令
 至此，java安装完毕。
 
 6、配置slaver-3->slaver-3，master->slaver-3免密码登录。
+
 6.1 配置本机免密码登录。
 
 .. code-block:: console
