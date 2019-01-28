@@ -710,8 +710,9 @@ slaver节点安装hadoop
 
 4. 验证。
 
+.. code-block:: console
 
-要使用 HDFS，首先需要在 HDFS 中创建用户目录：
+ HDFS，首先需要在 HDFS 中创建用户目录：
 	./bin/hdfs dfs -mkdir -p  /user/hadoop
 	接着将 ./etc/hadoop 中的 xml 文件作为输入文件复制到分布式文件系统中，即将 /usr/local/hadoop/etc/hadoop 复制到分布式文件系统中的 /user/hadoop/input 中。我们使用的是 hadoop 用户，并且已创建相应的用户目录 /user/hadoop ，因此在命令中就可以使用相对路径如 input，其对应的绝对路径就是 /user/hadoop/input:
 	./bin/hdfs dfs -mkdir input
@@ -726,6 +727,8 @@ Shell 命令
 	Shell 命令
 	查看运行结果的命令（查看的是位于 HDFS 中的输出结果）：
 	./bin/hdfs dfs -cat output/*
+
+.. end
 
 .. code-block:: console
 
