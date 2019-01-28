@@ -373,6 +373,7 @@ slaver节点同步时钟。
 
 配置master-slaver hadoop用户免密码登录
 ======================================
+
 1. 在各个节点上，配置本机hadoop用户免密码登录。
  
 .. code-block:: console
@@ -383,12 +384,11 @@ slaver节点同步时钟。
   cat .ssh/id_rsa.pub >> .ssh/authorized_keys
   hadoop@master:~$ ssh localhost #不需要输入密码即免密码登录设置成功。
 
-.. end
+  .. end
   
 2. 配置master-> slaver之间的免密码登录。
 
 .. code-block:: console
-
     # 将master 公钥拷贝到各个slaver节点。
 	hadoop@master:~$ scp -r .ssh/id_rsa.pub hadoop@slaver-1:/home/hadoop/
 	The authenticity of host 'slaver-1 (17.17.17.4)' can't be established.
@@ -673,7 +673,6 @@ slaver节点安装hadoop
 
 .. end 
 	
-
 2. 启动集群。
 
 .. code-block:: console
@@ -713,16 +712,20 @@ slaver节点安装hadoop
 
 
 要使用 HDFS，首先需要在 HDFS 中创建用户目录：
-./bin/hdfs dfs -mkdir -p  /user/hadoop
-接着将 ./etc/hadoop 中的 xml 文件作为输入文件复制到分布式文件系统中，即将 /usr/local/hadoop/etc/hadoop 复制到分布式文件系统中的 /user/hadoop/input 中。我们使用的是 hadoop 用户，并且已创建相应的用户目录 /user/hadoop ，因此在命令中就可以使用相对路径如 input，其对应的绝对路径就是 /user/hadoop/input:
-./bin/hdfs dfs -mkdir input
-./bin/hdfs dfs -put ./etc/hadoop/*.xml input
-复制完成后，可以通过如下命令查看文件列表：
-./bin/hdfs dfs -ls input
-./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar grep input output 'dfs[a-z.]+'
+	./bin/hdfs dfs -mkdir -p  /user/hadoop
+	接着将 ./etc/hadoop 中的 xml 文件作为输入文件复制到分布式文件系统中，即将 /usr/local/hadoop/etc/hadoop 复制到分布式文件系统中的 /user/hadoop/input 中。我们使用的是 hadoop 用户，并且已创建相应的用户目录 /user/hadoop ，因此在命令中就可以使用相对路径如 input，其对应的绝对路径就是 /user/hadoop/input:
+	./bin/hdfs dfs -mkdir input
+	./bin/hdfs dfs -put ./etc/hadoop/*.xml input
+	Shell 命令
+	复制完成后，可以通过如下命令查看文件列表：
+	./bin/hdfs dfs -ls input
+
 Shell 命令
-查看运行结果的命令（查看的是位于 HDFS 中的输出结果）：
-./bin/hdfs dfs -cat output/*
+
+	./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar grep input output 'dfs[a-z.]+'
+	Shell 命令
+	查看运行结果的命令（查看的是位于 HDFS 中的输出结果）：
+	./bin/hdfs dfs -cat output/*
 
 .. code-block:: console
 
@@ -740,4 +743,183 @@ Shell 命令
 扩展hadoop集群
 ^^^^^^^^^^^^^^
 
+操作系统安装-->修改主机名-->配置host.dns-->创建hadoop组-->安装NTP并配置-->安装java并配置-->配置slaver-3->slaver-3，master->slaver-3免密登录-->
+
+1、安装操作系统。
+2、修改host主机名，也可在安装操作系统时进行设定。建议安装集群前统一规划规范主机名命名规范。
+
+.. code-block:: console
+
+ root@ubuntu:/home/ubuntu# vi /etc/hostname  #修改为 slaver-3,重启生效。
+	
+.. end
+
+3、修改host域名解析。
+
+.. code-block:: console
+
+	# 在slaver-3上添加域名解析.
+	root@ubuntu:/home/ubuntu# vi /etc/hosts # 仅添加master及本机域名解析即可。  
+
+		17.17.17.2      master
+		17.17.17.6      slaver-3
+	# 在master上添加域名解析。
+	root@master:/home/ubuntu# vi /etc/hosts # 添加slaver-3域名解析。  
+	# 
+.. end
+
+4、创建hadoop 用户和组。
+
+使用root登陆系统，创建用户组：hadoop，然后在此用户组下创建hadoop用户。可在安装系统的时候创建，也可以在安装好之后用如下命令创建：
+
+.. code-block:: console
+
+ 添加用户：# sudo useradd -m hadoop -s /bin/bash
+ 设置密码：# passwd hadoop 
+ 设置root权限：# sudo adduser hadoop sudo。
+
+.. end
+
+5、java安装
+
+5.1. 下载jdk软件包。jdk下载地址为：(https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+选择所需要的软件包，本次安装环境为ubuntu1604，选择软件包版本为：jdk-8u191-linux-x64.tar.gz
+
+.. figure:: image/jdk-choose.png
+   :width: 80%
+   :align: center
+   :alt: jdk-choose
+
+5.2. 将下载的压缩包，传输至安装环境。解压。
+
+.. code-block:: console
+
+ # tar -xzvf jdk-8u191-linux-x64.tar.gz 解压
+ # mv jdk1.8.0_191/ /usr/lib/jdk 将解压文件移动至/usr/lib/jdk，作为jdk安装目录。
+ 
+.. end
+
+5.3. 配置环境变量。
+
+.. code-block:: console
+
+ # vi /etc/profile 配置全局环境变量
+ 写入：
+ # set java environment 
+ export JAVA_HOME=/usr/lib/jdk
+ export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/jre/lib
+ export PATH=.:$JAVA_HOME/bin:$PATH
+
+.. end
+
+5.4. 测试验证。
+
+.. code-block:: console
+
+ # java -version 测试
+ java version "1.8.0_191"
+ Java(TM) SE Runtime Environment (build 1.8.0_191-b12)
+ Java HotSpot(TM) 64-Bit Server VM (build 25.191-b12, mixed mode)
+
+ NOTE: 切换到hadoop 用户，测试java是否正常，直接执行java -version 提示需要安装java，需要执行 source /etc/profile 即可。
+ 在不执行 /etc/profile 情况下，hadoop不能读取环境变量，该情况下，修改/home/hadoop/.bashrc文件，追加上述环境变量，source /home/hadoop/.bashrc 即可在hadoop用户下永久生效。
+ 如果只允许某个用户使用java，则只需要在该用户的主目录下，修改.bashrc，在文件末尾追加上述环境变量即可。
+ 
+.. end
+
+至此，java安装完毕。
+
+6、配置slaver-3->slaver-3，master->slaver-3免密码登录。
+6.1 配置本机免密码登录。
+
+.. code-block:: console
+
+  # 配置本机免密码登录。
+  hadoop@slaver-3:~$ ssh-keygen -t rsa #过程中直接Enter即可。注意使用hadoop用户执行。
+  cd /home/hadoop/ 
+  hadoop@master:~$ cat .ssh/id_rsa.pub >> .ssh/authorized_keys
+  
+  hadoop@master:~$ ssh localhost #首次登录需要输入密码，第二次登录不需要输入密码即免密码登录设置成功。
+
+.. end
+
+6.2 配置master->slaver-3免密码登录。
+
+.. code-block:: console
+  
+  # 将主机master 上hadoop 用户 id_rsa.pub传输至slaver-3。
+  hadoop@master:~$ scp id_rsa.pub  ubuntu@17.17.17.6:/home/ubuntu
+  ubuntu@17.17.17.6's password: 
+  id_rsa.pub            100%  395     0.4KB/s   00:00 
+  #将 id_rsa.pub 写入 slaver-3 hadoop用户授权key.
+  hadoop@slaver-3:~$ cat id_rsa.pub >> .ssh/authorized_keys 
+  # 验证。
+  # hadoop@master:~$ ssh hadoop@slaver-3 # 注意是使用hadoop验证。首次需要输入，第二次后免密登录生效。
+  
+.. end
+
+7、复制hadoop至新节点.
+
+将master hadoop 目录拷贝到slaver-3,注意，不要将 logs文件及数据文件拷贝到slaver-3，同时注意文件权限.
+
+.. code-block:: console
+
+	root@slaver-3:/opt# chown -R hadoop:hadoop hadoop-2.7.7/
+
+.. end
+
+8、slaver-3节点配置hadoop环境变量。
+
+.. code-block:: console
+
+	export JAVA_HOME=/usr/lib/jdk
+	export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/jre/lib
+	export PATH=.:$JAVA_HOME/bin:$PATH
+
+	# set hadoop environment
+	export PATH=$PATH:/opt/hadoop-2.7.7/sbin:/opt/hadoop-2.7.7/bin
+
+.. end
+
+9、在master节点修改slaver配置文件。
+
+.. code-block:: console
+
+	hadoop@master:/opt/hadoop-2.7.7/etc/hadoop$ vi slaves 
+	slaver-1
+	slaver-2
+	slaver-3
+
+.. end
+
+10、安装并配置时钟。
+
+.. code-block:: console
+
+	root@slaver-3:/home/ubuntu# apt-get install  ntp ntpdate 
+	
+	root@slaver-3:/home/ubuntu# /etc/init.d/ntp stop
+	[ ok ] Stopping ntp (via systemctl): ntp.service.
+	root@slaver-3:/home/ubuntu# ntpdate master
+	28 Jan 13:30:15 ntpdate[2923]: adjust time server 17.17.17.2 offset 0.021848 sec
+	root@slaver-3:/home/ubuntu# /etc/init.d/start
+	bash: /etc/init.d/start: No such file or directory
+	root@slaver-3:/home/ubuntu# /etc/init.d/ntp start
+	[ ok ] Starting ntp (via systemctl): ntp.service.
+	
+.. end
+
+11、master节点重启服务。
+
+.. code-block:: console
+
+	hadoop@master:/opt/hadoop-2.7.7$ ./sbin/start-all.sh 
+	# 查看slaver-3节点服务状态。
+	hadoop@master:/opt/hadoop-2.7.7$ jps
+	13444 NameNode
+	13670 SecondaryNameNode
+	3501 Jps
+	13837 ResourceManager
+	
+.. end
 
