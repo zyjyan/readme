@@ -928,3 +928,31 @@ Shell 命令
 	
 .. end
 
+hadoop HA完全分布式安装
+=======================
+
+部署情况如下，master，master-0节点做HA。
+
+.. code-block:: console
+
+	17.17.17.2      master    # namenode master节点
+	17.17.17.7      master-0  # namenode master节点
+	17.17.17.4      slaver-1  # DataNode slaver节点
+	17.17.17.5      slaver-2  # Datanode slaver节点
+	17.17.17.6      slaver-3  # DataNode slaver节点 
+
+.. end
+
+前置条件：
+
+1、所有的机器上增加hadoop用户；
+
+2、安装java；
+
+3、配置master->slaver-*，master-0-->slaver-*节点及各自节点hadoop用户的密码登录；
+
+4、同步ntp时钟；
+
+5、修改ip域名解析；
+
+
