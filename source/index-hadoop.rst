@@ -26,7 +26,7 @@ Contents
 ~~~~~~~~
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 5
 
    hadoop/hadoop-install.rst
 .. Pseudo only directive for each distribution used by the build tool.
