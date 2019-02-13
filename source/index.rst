@@ -28,7 +28,7 @@
 
 .. test 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 5
 
    index-docker
    index-hadoop
