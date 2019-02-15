@@ -971,7 +971,7 @@ slaver-1,slaver-2,slaver-3节点上安装zookeeper（下载地址为https://zook
  root@slaver-1:/home/hadoop# mv zookeeper-3.4.12 /opt/
 
 
- .. end
+.. end
 
 2、配置slaver-1 zookeeper 环境变量
 
@@ -983,7 +983,7 @@ slaver-1,slaver-2,slaver-3节点上安装zookeeper（下载地址为https://zook
 	export ZOOKEEPER_HOME=/opt/zookeeper-3.4.12
 	export PATH=$PATH:$ZOOKEEPER_HOME/bin
 	
- .. end
+.. end
  
 3、 配置slaver-1 zookeeper配置文件。
 
@@ -1020,7 +1020,7 @@ slaver-1,slaver-2,slaver-3节点上安装zookeeper（下载地址为https://zook
  root@slaver-3:/home/hadoop# mv /home/ubuntu/zookeeper-3.4.12 /opt/	# 安装到指定目录。
  root@slaver-3:/opt/zookeeper-3.4.12/zookeeperdata# echo 3 > myid 
  
- .. end
+.. end
 
 5、验证zookeeper是否安装及配置成功，启动和关闭zookeeper服务。分别在slaver-1,slaver-2,slaver-3节点执行：
 
@@ -1034,11 +1034,11 @@ slaver-1,slaver-2,slaver-3节点上安装zookeeper（下载地址为https://zook
 	25235 Jps
 	23444 QuorumPeerMain #启动成功 可通过/opt/zookeeper-3.4.12/bin/zookeeper.out 文件查看启动日志。
 	  
- .. end
+.. end
 
  在各个节点上检查zookeeper状态。
  
- .. code-block:: console
+.. code-block:: console
      
 	# slaver-1 
 	root@slaver-1:/opt/zookeeper-3.4.12/bin# ./zkServer.sh status
@@ -1056,7 +1056,7 @@ slaver-1,slaver-2,slaver-3节点上安装zookeeper（下载地址为https://zook
 	Using config: /opt/zookeeper-3.4.12/bin/../conf/zoo.cfg
 	Mode: follower
 	
- .. end
+.. end
 
 6、注意事项。zookeeper没有限制系统用户，但如果使用root用户执行该脚本，需要让root用户拥有java执行权限，即需要在root用户bashrc文件下配置java环境变量。
 
@@ -1066,7 +1066,7 @@ slaver-1,slaver-2,slaver-3节点上安装zookeeper（下载地址为https://zook
 
 6.1 首先需要在各个节点上先创建相关文件：
 
- .. code-block:: console
+.. code-block:: console
     
 	root@master:/opt/hadoop-2.7.7# mkdir -p ./data/dfs/name
 	root@master:/opt/hadoop-2.7.7# mkdir -p ./data/dfs/name
@@ -1077,11 +1077,11 @@ slaver-1,slaver-2,slaver-3节点上安装zookeeper（下载地址为https://zook
     root@master:/opt/hadoop-2.7.7# chown -R hadoop:hadoop log
 	root@master:/opt/hadoop-2.7.7# chown -R hadoop:hadoop data	
 	
- .. end
+.. end
  
 6.2 core-site.xml 配置文件如下：
 
- .. code-block:: console
+.. code-block:: console
     
 	root@master:/opt/hadoop-2.7.7/etc/hadoop# vi core-site.xml
 	<configuration>
@@ -1100,7 +1100,7 @@ slaver-1,slaver-2,slaver-3节点上安装zookeeper（下载地址为https://zook
     </property>
   </configuration>
 	
- .. end
+.. end
 
 6.2 配置hdfs-site.xml文件。
 
