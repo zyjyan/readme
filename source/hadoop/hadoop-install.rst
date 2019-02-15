@@ -935,24 +935,482 @@ hadoop HA完全分布式安装
 
 .. code-block:: console
 
-	17.17.17.2      master    # namenode master节点
-	17.17.17.7      master-0  # namenode master节点
-	17.17.17.4      slaver-1  # DataNode slaver节点
-	17.17.17.5      slaver-2  # Datanode slaver节点
-	17.17.17.6      slaver-3  # DataNode slaver节点 
+	17.17.17.2      master    # namenode master节点     jdk1.8+hadoop2.7                  namenode+resourcemanager+DFSZKFailoverController(zkfc)
+	17.17.17.7      master-0  # namenode master节点     jdk1.8+hadoop2.7                  namenode+resourcemanager+DFSZKFailoverController(zkfc)
+	17.17.17.4      slaver-1  # DataNode slaver节点     jdk1.8+hadoop2.7+zookeeper3.4.12  DataNode+NodeManager+JournalNode+QuorumPeerMain
+	17.17.17.5      slaver-2  # Datanode slaver节点     jdk1.8+hadoop2.7+zookeeper3.4.12  DataNode+NodeManager+JournalNode+QuorumPeerMain
+	17.17.17.6      slaver-3  # DataNode slaver节点     jdk1.8+hadoop2.7+zookeeper3.4.12  DataNode+NodeManager+JournalNode+QuorumPeerMain
 
 .. end
 
-前置条件：
+前置条件（可根据上述章节完成配置）：
 
 1、所有的机器上增加hadoop用户；
 
 2、安装java；
 
-3、配置master->slaver-*，master-0-->slaver-*节点及各自节点hadoop用户的密码登录；
+3、配置master->slaver-*，master-0-->slaver-*，master<-->master-0节点及各自节点hadoop用户的免密码登录；
 
 4、同步ntp时钟；
 
 5、修改ip域名解析；
 
 
+slaver节点安装zookeeper
+^^^^^^^^^^^^^^^^^^^^^^^
+
+slaver-1,slaver-2,slaver-3节点上安装zookeeper（下载地址为https://zookeeper.apache.org/releases.html），版本兼容性较好，可选择最新版本。
+
+1、解压安装包
+
+在slaver-1节点上执行：
+
+.. code-block:: console
+
+ root@slaver-1:/home/hadoop# tar -xzvf zookeeper-3.4.12.tar.gz
+ root@slaver-1:/home/hadoop# mv zookeeper-3.4.12 /opt/
+
+
+ .. end
+
+2、配置slaver-1 zookeeper 环境变量
+
+.. code-block:: console
+
+    root@slaver-1:/opt/zookeeper-3.4.12/conf# vi /home/hadoop/.bashrc 
+	# 追加
+	# set zookeeper environment
+	export ZOOKEEPER_HOME=/opt/zookeeper-3.4.12
+	export PATH=$PATH:$ZOOKEEPER_HOME/bin
+	
+ .. end
+ 
+3、 配置slaver-1 zookeeper配置文件。
+
+.. code-block:: console
+
+  root@slaver-1:/opt/zookeeper-3.4.12/conf# cp zoo_sample.cfg  zoo.cfg
+  root@slaver-1:/opt/zookeeper-3.4.12/conf# vi zoo.cfg 
+  root@slaver-1:/opt/zookeeper-3.4.12/conf# grep -vE  '^#|^$'  zoo.cfg 
+	tickTime=2000 # 服务器与客户端之间交互的基本时间单元（ms）
+	initLimit=10  # zookeeper所能接受的客户端数量
+	syncLimit=5   # 服务器与客户端之间请求和应答的时间间隔
+	dataDir=/opt/zookeeper-3.4.12/zookeeperdata # 存放数据文件
+	LogDir=/opt/zookeeper-3.4.12/dataLogDir # 存放日志文件
+	clientPort=2181 # 客户端与zookeeper相互交互的端口
+	server.1=slaver-1:2888:3888
+	server.2=slaver-2:2888:3888
+	server.3=slaver-3:2888:3888
+	#server.A=B:C:D  其中A是一个数字，代表这是第几号服务器；B是服务器的IP地址或域名解析地址；C表示服务器与群集中的“领导者”交换信息的端口；当领导者失效后，D表示用来执行选举时服务器相互通信的端口。
+	root@slaver-1:/opt/zookeeper-3.4.12# mkdir zookeeperdata dataLogDir # 创建相应文件，验证环境，正式环境建议将数据文件目录与安装文件目录分离。
+
+.. end
+
+4、将slaver-1 zookeeper安装及配置文件复制到slaver-2和slaver-3节点上。
+
+.. code-block:: console
+ 
+ # slaver-1执行
+ root@slaver-1:/opt# scp -r zookeeper-3.4.12/ ubuntu@slaver-2:/home/ubuntu
+ root@slaver-1:/opt# scp -r zookeeper-3.4.12/ ubuntu@slaver-3:/home/ubuntu
+ # slaver-2执行
+ root@slaver-2:/home/hadoop# mv /home/ubuntu/zookeeper-3.4.12 /opt/	# 安装到指定目录。
+ root@slaver-2:/opt/zookeeper-3.4.12/zookeeperdata# echo 2 > myid 
+ # slaver-3执行
+ root@slaver-3:/home/hadoop# mv /home/ubuntu/zookeeper-3.4.12 /opt/	# 安装到指定目录。
+ root@slaver-3:/opt/zookeeper-3.4.12/zookeeperdata# echo 3 > myid 
+ 
+ .. end
+
+5、验证zookeeper是否安装及配置成功，启动和关闭zookeeper服务。分别在slaver-1,slaver-2,slaver-3节点执行：
+
+.. code-block:: console
+ 
+	root@slaver-1:/opt/zookeeper-3.4.12/bin# ./zkServer.sh start #执行启动脚本
+	ZooKeeper JMX enabled by default
+	Using config: /opt/zookeeper-3.4.12/bin/../conf/zoo.cfg
+	Starting zookeeper ... already running as process 23444.
+	root@slaver-1:/opt/zookeeper-3.4.12/bin# jps #检查是否启动成功
+	25235 Jps
+	23444 QuorumPeerMain #启动成功 可通过/opt/zookeeper-3.4.12/bin/zookeeper.out 文件查看启动日志。
+	  
+ .. end
+
+ 在各个节点上检查zookeeper状态。
+ 
+ .. code-block:: console
+     
+	# slaver-1 
+	root@slaver-1:/opt/zookeeper-3.4.12/bin# ./zkServer.sh status
+	ZooKeeper JMX enabled by default
+	Using config: /opt/zookeeper-3.4.12/bin/../conf/zoo.cfg
+	Mode: follower
+	# slaver-2 
+	root@slaver-2:/opt/zookeeper-3.4.12# ./bin/zkServer.sh status
+	ZooKeeper JMX enabled by default
+	Using config: /opt/zookeeper-3.4.12/bin/../conf/zoo.cfg
+	Mode: leader
+	# slaver-3
+	root@slaver-3:/opt/zookeeper-3.4.12# ./bin/zkServer.sh status
+	ZooKeeper JMX enabled by default
+	Using config: /opt/zookeeper-3.4.12/bin/../conf/zoo.cfg
+	Mode: follower
+	
+ .. end
+
+6、注意事项。zookeeper没有限制系统用户，但如果使用root用户执行该脚本，需要让root用户拥有java执行权限，即需要在root用户bashrc文件下配置java环境变量。
+
+各节点安装hadoop
+^^^^^^^^^^^^^^^^
+安装过程跟上述章节一致，不同的是需要修改相应的配置文件，各个具体配置如下：
+
+6.1 首先需要在各个节点上先创建相关文件：
+
+ .. code-block:: console
+    
+	root@master:/opt/hadoop-2.7.7# mkdir -p ./data/dfs/name
+	root@master:/opt/hadoop-2.7.7# mkdir -p ./data/dfs/name
+	root@master:/opt/hadoop-2.7.7# mkdir -p ./data/dfs/data
+	root@master:/opt/hadoop-2.7.7# mkdir -p ./data/yarn/local
+	root@master:/opt/hadoop-2.7.7# mkdir -p ./log/yarn
+    # 修改创建文件权限
+    root@master:/opt/hadoop-2.7.7# chown -R hadoop:hadoop log
+	root@master:/opt/hadoop-2.7.7# chown -R hadoop:hadoop data	
+	
+ .. end
+ 
+6.2 core-site.xml 配置文件如下：
+
+ .. code-block:: console
+    
+	root@master:/opt/hadoop-2.7.7/etc/hadoop# vi core-site.xml
+	<configuration>
+      <property>
+          <name>hadoop.tmp.dir</name>
+          <value>file:/opt/hadoop-2.7.7/tmp</value>
+          <description>Abase for other temporary directories.</description>
+      </property>
+      <property>
+          <name>fs.defaultFS</name>
+          <value>hdfs://cluster1</value>
+      </property>
+      <property>
+        <name>ha.zookeeper.quorum</name>
+        <value>slaver-1:2181,slaver-2:2181,slaver-3:2181</value>
+    </property>
+  </configuration>
+	
+ .. end
+
+6.2 配置hdfs-site.xml文件。
+
+.. code-block:: console
+
+	<configuration>
+		<property>
+			<name>dfs.nameservices</name>
+			<value>cluster1</value>
+		</property>
+		<property>
+			<name>dfs.ha.namenodes.cluster1</name>
+			<value>master,master-0</value>
+		</property>
+		<property>
+			<name>dfs.namenode.rpc-address.cluster1.master</name>
+			<value>master:9000</value>
+		</property>
+		<property>
+			<name>dfs.namenode.rpc-address.cluster1.master-0</name>
+			<value>master-0:9000</value>
+		</property>
+
+		<property>
+			<name>dfs.namenode.http-address.cluster1.master</name>
+			<value>master:50070</value>
+		</property>
+
+		<property>
+			<name>dfs.namenode.http-address.cluster1.master-0</name>
+			<value>master-0:50070</value>
+		</property>
+		<property>
+			<name>dfs.namenode.shared.edits.dir</name>
+			<value>qjournal://slaver-1:8485;slaver-2:8485;slaver-3:8485/cluster1</value>
+		</property>
+
+		<property>
+			<name>dfs.client.failover.proxy.provider.cluster1</name>
+			<value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+		</property>
+		<property>
+			<name>dfs.ha.fencing.methods</name>
+			<value>sshfence</value>
+		</property>
+		<property>
+			<name>dfs.ha.fencing.ssh.private-key-files</name>
+			<value>/home/hadoop/.ssh/id_rsa</value>
+		</property>
+		<property>
+			<name>dfs.journalnode.edits.dir</name>
+			<value>/opt/hadoop-2.7.7/data/tmp/journal</value>
+		</property>
+		<property>
+			<name>dfs.ha.automatic-failover.enabled</name>
+			<value>true</value>
+		</property>
+		<property>
+			<name>dfs.namenode.name.dir</name>
+			<value>/opt/hadoop-2.7.7/data/dfs/name</value>
+		</property>
+		<property>
+			<name>dfs.datanode.data.dir</name>
+			<value>/opt/hadoop-2.7.7/data/dfs/data</value>
+		</property>
+		<property>
+			<name>dfs.replication</name>
+			<value>3</value>
+		</property>
+		<property>
+			<name>dfs.webhdfs.enabled</name>
+			<value>true</value>
+		</property>
+
+		<property>
+			<name>dfs.journalnode.http-address</name>
+			<value>0.0.0.0:8480</value>
+		</property>
+		<property>
+			<name>dfs.journalnode.rpc-address</name>
+			<value>0.0.0.0:8485</value>
+		</property>
+		<property>
+			<name>ha.zookeeper.quorum</name>
+			<value>slaver-1:2181,slaver-2:2181,slaver-3:2181</value>
+		</property>
+
+	</configuration>
+
+.. end
+
+6.3 配置map-site.xml文件。
+
+.. code-block:: console
+
+	<configuration>
+		<property>
+			<name>mapreduce.framework.name</name>
+			<value>yarn</value>
+		</property>
+		<property>
+			<name>mapreduce.jobhistory.address</name>
+			<value>master:10020</value>
+		</property>
+		<property>
+			<name>mapreduce.jobhistory.webapp.address</name>
+			<value>master-0:19888</value>
+		</property>
+	</configuration>
+
+.. end
+
+6.4 配置yarn-site.xml文件。
+
+.. code-block:: console
+
+	<configuration>
+		<property>
+			<name>yarn.resourcemanager.connect.retry-interval.ms</name>
+			<value>2000</value>
+		</property>
+			<value>true</value>
+		</property>
+		<property>
+			<name>yarn.resourcemanager.ha.rm-ids</name>
+			<value>rm1,rm2</value>
+		</property>
+		<property>
+			<name>ha.zookeeper.quorum</name>
+			<value>slaver-1:2181,slaver-2:2181,slaver-3:2181</value>
+		</property>
+
+		<property>
+			<name>yarn.resourcemanager.ha.automatic-failover.enabled</name>
+			<value>true</value>
+		</property>
+		<property>
+			<name>yarn.resourcemanager.hostname.rm1</name>
+			<value>master</value>
+		</property>
+
+		<property>
+			<name>yarn.resourcemanager.hostname.rm2</name>
+			<value>master-0</value>
+		</property>
+		<property>
+			<name>yarn.resourcemanager.ha.id</name>
+			<value>rm1</value>
+		</property>
+		<!--开启自动恢复功能 -->
+		<property>
+			<name>yarn.resourcemanager.recovery.enabled</name>
+			<value>true</value>
+		</property>
+		<!--配置与zookeeper的连接地址 -->
+		<property>
+			<name>yarn.resourcemanager.zk-state-store.address</name>
+			<value>slaver-1:2181,slaver-2:2181,slaver-3:2181</value>
+		</property>
+		<property>
+			<name>yarn.resourcemanager.store.class</name>
+			<value>org.apache.hadoop.yarn.server.resourcemanager.recovery.ZKRMStateStore</value>
+		</property>
+		<property>
+			<name>yarn.resourcemanager.zk-address</name>
+			<value>slaver-1:2181,slaver-2:2181,slaver-3:2181</value>
+		</property>
+		<property>
+			<name>yarn.resourcemanager.cluster-id</name>
+			<value>cluster1-yarn</value>
+		</property>
+		<!--schelduler失联等待连接时间 -->
+		<property>
+			<name>yarn.app.mapreduce.am.scheduler.connection.wait.interval-ms</name>
+			<value>5000</value>
+		</property>
+		<!--配置rm1 -->
+		<property>
+			<name>yarn.resourcemanager.address.rm1</name>
+			<value>master:8132</value>
+		</property>
+		<property>
+			<name>yarn.resourcemanager.scheduler.address.rm1</name>
+			<value>master:8130</value>
+		</property>
+		<property>
+			<name>yarn.resourcemanager.webapp.address.rm1</name>
+			<value>master:8188</value>
+		</property>
+		<property>
+			<name>yarn.resourcemanager.resource-tracker.address.rm1</name>
+			<value>master:8131</value>
+		</property>
+		<property>
+			<name>yarn.resourcemanager.admin.address.rm1</name>
+			<value>master:8033</value>
+		</property>
+		<property>
+			<name>yarn.resourcemanager.ha.admin.address.rm1</name>
+			<value>master:23142</value>
+		</property>
+		<!--配置rm2 -->
+		<property>
+			<name>yarn.resourcemanager.address.rm2</name>
+			<value>master-0:8132</value>
+		</property>
+		<property>
+			<name>yarn.resourcemanager.scheduler.address.rm2</name>
+			<value>master-0:8130</value>
+		</property>
+		<property>
+			<name>yarn.resourcemanager.webapp.address.rm2</name>
+			<value>master-0:8188</value>
+		</property>
+		<property>
+			<name>yarn.resourcemanager.resource-tracker.address.rm2</name>
+			<value>master-0:8131</value>
+		</property>
+		<property>
+			<name>yarn.resourcemanager.admin.address.rm2</name>
+			<value>master-0:8033</value>
+		</property>
+		<property>
+			<name>yarn.resourcemanager.ha.admin.address.rm2</name>
+			<value>master-0:23142</value>
+		</property>
+		<property>
+			<name>yarn.nodemanager.aux-services</name>
+			<value>mapreduce_shuffle</value>
+		</property>
+		<property>
+			<name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+			<value>org.apache.hadoop.mapred.ShuffleHandler</value>
+		</property>
+		<property>
+			<name>yarn.nodemanager.local-dirs</name>
+			<value>/opt/hadoop-2.7.7/data/yarn/local</value>
+		</property>
+		<property>
+			<name>yarn.nodemanager.log-dirs</name>
+			<value>/opt/hadoop-2.7.7/log/yarn</value>
+		</property>
+		<property>
+			<name>mapreduce.shuffle.port</name>
+			<value>23080</value>
+		</property>
+		<!--故障处理类 -->
+		<property>
+			<name>yarn.client.failover-proxy-provider</name>
+			<value>org.apache.hadoop.yarn.client.ConfiguredRMFailoverProxyProvider</value>
+		</property>
+		<property>
+			<name>yarn.resourcemanager.ha.automatic-failover.zk-base-path</name>
+			<value>/yarn-leader-election</value>
+		</property>
+	</configuration>
+
+.. end
+
+6.5 按照原来章节配置hadoop-env.sh、yarn-env.sh以及slave。
+
+6.6 将配置文件复制到各个节点。
+
+6.7 启动命令。
+
+启动命令（hdfs和yarn的相关命令）
+
+6.7.1 在各个datanode节点上启动zk服务。启动命令为 zkServer.sh start,可以输入zkServer.sh status查看启动状态， 本次我们配置了三个DN节点，会出现一个leader和两个follower。输入jps，会显示启动进程：QuorumPeerMain
+
+6.7.2 在namenode节点，我们选在master节点，启动启动journalnode服务，命令如下：hadoop-daemons.sh start journalnode。或者单独进入到每个DN输入启动命令：hadoop-daemon.sh start journalnode。输入jps显示启动进程：JournalNode。
+
+6.7.3 在master节点格式化ZK，命令如下：hdfs zkfc -formatZK。
+
+6.7.4 在master节点格式化HDFS，命令如下：hadoop namenode -format。
+
+6.7.5 在master节点启动hdfs和yarn，命令如下：start-dfs.sh和start-yarn.sh，在master-0节点启动namenode和ResourceManager进程，命令如下：hadoop-daemon.sh start namenode和yarn-daemon.sh start resourcemanager。
+
+6.7.6 同步数据，在master-0节点同步命令，命令如下：hdfs namenode -bootstrapStandby，同步后master和master-1节点/opt/hadoop-2.7.7/data/dfs/name/current 下version数据应该一致。
+
+6.8 HA测试验证。直接将master节点断网处置，master-0状态由standby，变为active。
+
+6.9 hadoop 集群存储及计算验证。
+
+.. code-block:: console
+
+	要使用 HDFS，首先需要在 HDFS 中创建用户目录：
+	./bin/hdfs dfs -mkdir -p  /user/hadoop
+	Shell 命令
+	接着将 ./etc/hadoop 中的 xml 文件作为输入文件复制到分布式文件系统中，即将 /usr/local/hadoop/etc/hadoop 复制到分布式文件系统中的 /user/hadoop/input 中。我们使用的是 hadoop 用户，并且已创建相应的用户目录 /user/hadoop ，因此在命令中就可以使用相对路径如 input，其对应的绝对路径就是 /user/hadoop/input:
+	./bin/hdfs dfs -mkdir input
+	./bin/hdfs dfs -put ./etc/hadoop/*.xml input
+	Shell 命令
+	复制完成后，可以通过如下命令查看文件列表：
+	./bin/hdfs dfs -ls input
+	Shell 命令
+	伪分布式运行 MapReduce 作业的方式跟单机模式相同，区别在于伪分布式读取的是HDFS中的文件（可以将单机步骤中创建的本地 input 文件夹，输出结果 output 文件夹都删掉来验证这一点）。
+	./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar grep input output 'dfs[a-z.]+'
+	Shell 命令
+	查看运行结果的命令（查看的是位于 HDFS 中的输出结果）：
+	./bin/hdfs dfs -cat output/*
+
+.. end
+
+至此，hadoop HA 分布式环境搭建完毕。
+
+参考：
+
+https://www.cnblogs.com/smartloli/p/4298430.html
+
+   
+   
+   
+    
