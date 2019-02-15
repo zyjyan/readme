@@ -1068,14 +1068,14 @@ slaver-1,slaver-2,slaver-3节点上安装zookeeper（下载地址为https://zook
 
 .. code-block:: console
     
-	root@master:/opt/hadoop-2.7.7# mkdir -p ./data/dfs/name
-	root@master:/opt/hadoop-2.7.7# mkdir -p ./data/dfs/name
-	root@master:/opt/hadoop-2.7.7# mkdir -p ./data/dfs/data
-	root@master:/opt/hadoop-2.7.7# mkdir -p ./data/yarn/local
-	root@master:/opt/hadoop-2.7.7# mkdir -p ./log/yarn
-    # 修改创建文件权限
-    root@master:/opt/hadoop-2.7.7# chown -R hadoop:hadoop log
-	root@master:/opt/hadoop-2.7.7# chown -R hadoop:hadoop data	
+ root@master:/opt/hadoop-2.7.7# mkdir -p ./data/dfs/name
+ root@master:/opt/hadoop-2.7.7# mkdir -p ./data/dfs/name
+ root@master:/opt/hadoop-2.7.7# mkdir -p ./data/dfs/data
+ root@master:/opt/hadoop-2.7.7# mkdir -p ./data/yarn/local
+ root@master:/opt/hadoop-2.7.7# mkdir -p ./log/yarn
+ # 修改创建文件权限
+ root@master:/opt/hadoop-2.7.7# chown -R hadoop:hadoop log
+ root@master:/opt/hadoop-2.7.7# chown -R hadoop:hadoop data	
 	
 .. end
  
@@ -1083,7 +1083,7 @@ slaver-1,slaver-2,slaver-3节点上安装zookeeper（下载地址为https://zook
 
 .. code-block:: console
     
-	root@master:/opt/hadoop-2.7.7/etc/hadoop# vi core-site.xml
+ root@master:/opt/hadoop-2.7.7/etc/hadoop# vi core-site.xml
 	<configuration>
       <property>
           <name>hadoop.tmp.dir</name>
