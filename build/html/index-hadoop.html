@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Haking On Hadoop（P-version） &#8212; doczhao 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="HADOOP安装" href="hadoop/hadoop-install.html" />
+    <link rel="prev" title="Get-Start Docker" href="get-started-with-docker.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="hadoop/hadoop-install.html" title="HADOOP安装"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="get-started-with-docker.html" title="Get-Start Docker"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">doczhao 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="haking-on-hadoop-p-version">
+<h1>Haking On Hadoop（P-version）<a class="headerlink" href="#haking-on-hadoop-p-version" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="abstract">
+<h2>Abstract<a class="headerlink" href="#abstract" title="Permalink to this headline">¶</a></h2>
+<p>Hadoop的官方网址为 <a class="reference external" href="http://hadoop.apache.org/">HADOOP.DOC</a>.</p>
+<p>Hadoop <cite>Hadoop project develops open-source software for reliable, scalable, distributed computing.</cite></p>
+<p>The Apache Hadoop software library is a framework that allows for the distributed processing of large data sets across clusters of computers using simple programming models. It is designed to scale up from single servers to thousands of machines, each offering local computation and storage. Rather than rely on hardware to deliver high-availability, the library itself is designed to detect and handle failures at the application layer, so delivering a highly-available service on top of a cluster of computers, each of which may be prone to failures.</p>
+<p>本篇章，结合自己的实践，依据官网提供的素材，进行学习及验证。</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">文档版本属于探索版本，属于学习记录阶段，随着学习的深入，会定期对前期的内容进行修订。希望读者也可以提供提出建议，共同学习提高。</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">选择Hadoop版本为hadoop-2.7.7. 操作系统版本为ubuntu.16.04lts。
+关于版本的选择，请充分评估与基于hadoop相关的大数据软件的兼容性。</p>
+</div>
+</div>
+<div class="section" id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hadoop/hadoop-install.html">HADOOP安装</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hadoop/hadoop-install.html#id1">单机版本安装</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hadoop/hadoop-install.html#id2">创建hadoop用户</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hadoop/hadoop-install.html#java">java安装</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hadoop/hadoop-install.html#id3">hadoop 单机伪分布式安装</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hadoop/hadoop-install.html#id4">分布式版本安装</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hadoop/hadoop-install.html#id5">环境准备</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hadoop/hadoop-install.html#id6">服务器基本配置</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hadoop/hadoop-install.html#id7">创建hadoop用户</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hadoop/hadoop-install.html#master-slaver-hadoop">配置master-slaver hadoop用户免密码登录</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hadoop/hadoop-install.html#id8">java安装</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hadoop/hadoop-install.html#id9">hadoop 完全分布式安装</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hadoop/hadoop-install.html#id10">软件包下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hadoop/hadoop-install.html#masterhadoop">master节点安装hadoop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hadoop/hadoop-install.html#slaverhadoop">slaver节点安装hadoop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hadoop/hadoop-install.html#id11">启动hadoop集群</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hadoop/hadoop-install.html#id12">扩展hadoop集群</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hadoop/hadoop-install.html#hadoop-ha">hadoop HA完全分布式安装</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hadoop/hadoop-install.html#slaverzookeeper">slaver节点安装zookeeper</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hadoop/hadoop-install.html#id13">各节点安装hadoop</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Haking On Hadoop（P-version）</a><ul>
+<li><a class="reference internal" href="#abstract">Abstract</a></li>
+<li><a class="reference internal" href="#contents">Contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="get-started-with-docker.html"
+                        title="previous chapter">Get-Start Docker</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="hadoop/hadoop-install.html"
+                        title="next chapter">HADOOP安装</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index-hadoop.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="hadoop/hadoop-install.html" title="HADOOP安装"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="get-started-with-docker.html" title="Get-Start Docker"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">doczhao 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, zhaoyuanjie.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+    </div>
+  </body>
+</html>

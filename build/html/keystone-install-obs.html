@@ -6,9 +6,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Install and configure &mdash; doczhao 1.0.0 documentation</title>
+    <title>Install and configure &#8212; doczhao 1.0.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -17,39 +17,31 @@
         VERSION:     '1.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="doczhao 1.0.0 documentation" href="index.html" />
-    <link rel="up" title="Keystone Installation Tutorial for openSUSE and SUSE Linux Enterprise" href="index-obs.html" />
-    <link rel="next" title="Create a domain, projects, users, and roles" href="keystone-users-obs.html" />
-    <link rel="prev" title="Identity service overview" href="get-started-obs.html" /> 
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="keystone-users-obs.html" title="Create a domain, projects, users, and roles"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="get-started-obs.html" title="Identity service overview"
-             accesskey="P">previous</a> |</li>
-        <li><a href="index.html">doczhao 1.0.0 documentation</a> &raquo;</li>
-          <li><a href="index-obs.html" accesskey="U">Keystone Installation Tutorial for openSUSE and SUSE Linux Enterprise</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">doczhao 1.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="install-and-configure">
 <h1>Install and configure<a class="headerlink" href="#install-and-configure" title="Permalink to this headline">¶</a></h1>
@@ -64,30 +56,30 @@ create a database.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Before you begin, ensure you have the most recent version of
-<tt class="docutils literal"><span class="pre">python-pyasn1</span></tt> <a class="reference external" href="https://pypi.python.org/pypi/pyasn1">installed</a>.</p>
+<code class="docutils literal"><span class="pre">python-pyasn1</span></code> <a class="reference external" href="https://pypi.python.org/pypi/pyasn1">installed</a>.</p>
 </div>
 <ol class="arabic">
 <li><p class="first">Use the database access client to connect to the database
-server as the <tt class="docutils literal"><span class="pre">root</span></tt> user:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> mysql -u root -p
+server as the <code class="docutils literal"><span class="pre">root</span></code> user:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> mysql -u root -p
 </pre></div>
 </div>
 </li>
 </ol>
 <ol class="arabic" start="2">
-<li><p class="first">Create the <tt class="docutils literal"><span class="pre">keystone</span></tt> database:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="go">MariaDB [(none)]&gt; CREATE DATABASE keystone;</span>
+<li><p class="first">Create the <code class="docutils literal"><span class="pre">keystone</span></code> database:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">MariaDB [(none)]&gt; CREATE DATABASE keystone;</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Grant proper access to the <tt class="docutils literal"><span class="pre">keystone</span></tt> database:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="go">MariaDB [(none)]&gt; GRANT ALL PRIVILEGES ON keystone.* TO &#39;keystone&#39;@&#39;localhost&#39; \</span>
+<li><p class="first">Grant proper access to the <code class="docutils literal"><span class="pre">keystone</span></code> database:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">MariaDB [(none)]&gt; GRANT ALL PRIVILEGES ON keystone.* TO &#39;keystone&#39;@&#39;localhost&#39; \</span>
 <span class="go">IDENTIFIED BY &#39;KEYSTONE_DBPASS&#39;;</span>
 <span class="go">MariaDB [(none)]&gt; GRANT ALL PRIVILEGES ON keystone.* TO &#39;keystone&#39;@&#39;%&#39; \</span>
 <span class="go">IDENTIFIED BY &#39;KEYSTONE_DBPASS&#39;;</span>
 </pre></div>
 </div>
-<p>Replace <tt class="docutils literal"><span class="pre">KEYSTONE_DBPASS</span></tt> with a suitable password.</p>
+<p>Replace <code class="docutils literal"><span class="pre">KEYSTONE_DBPASS</span></code> with a suitable password.</p>
 </li>
 <li><p class="first">Exit the database access client.</p>
 </li>
@@ -99,13 +91,13 @@ server as the <tt class="docutils literal"><span class="pre">root</span></tt> us
 <p class="first admonition-title">Note</p>
 <p class="last">Default configuration files vary by distribution. You might need
 to add these sections and options rather than modifying existing
-sections and options. Also, an ellipsis (<tt class="docutils literal"><span class="pre">...</span></tt>) in the configuration
+sections and options. Also, an ellipsis (<code class="docutils literal"><span class="pre">...</span></code>) in the configuration
 snippets indicates potential default configuration options that you
 should retain.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This guide uses the Apache HTTP server with <tt class="docutils literal"><span class="pre">mod_wsgi</span></tt> to serve
+<p class="last">This guide uses the Apache HTTP server with <code class="docutils literal"><span class="pre">mod_wsgi</span></code> to serve
 Identity service requests on ports 5000 and 35357. By default, the
 keystone service still listens on these ports. Therefore, this guide
 manually disables the keystone service.</p>
@@ -114,38 +106,38 @@ manually disables the keystone service.</p>
 <p class="first admonition-title">Note</p>
 <p class="last">Starting with the Newton release, SUSE OpenStack packages are shipping
 with the upstream default configuration files. For example
-<tt class="docutils literal"><span class="pre">/etc/keystone/keystone.conf</span></tt>, with customizations in
-<tt class="docutils literal"><span class="pre">/etc/keystone/keystone.conf.d/010-keystone.conf</span></tt>. While the
+<code class="docutils literal"><span class="pre">/etc/keystone/keystone.conf</span></code>, with customizations in
+<code class="docutils literal"><span class="pre">/etc/keystone/keystone.conf.d/010-keystone.conf</span></code>. While the
 following instructions modify the default configuration file, adding a
-new file in <tt class="docutils literal"><span class="pre">/etc/keystone/keystone.conf.d</span></tt> achieves the same
+new file in <code class="docutils literal"><span class="pre">/etc/keystone/keystone.conf.d</span></code> achieves the same
 result.</p>
 </div>
 <ol class="arabic">
 <li><p class="first">Run the following command to install the packages:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">#</span> zypper install openstack-keystone apache2-mod_wsgi
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> zypper install openstack-keystone apache2-mod_wsgi
 </pre></div>
 </div>
 </li>
 </ol>
 <ol class="arabic" start="2">
-<li><p class="first">Edit the <tt class="docutils literal"><span class="pre">/etc/keystone/keystone.conf</span></tt> file and complete the following
+<li><p class="first">Edit the <code class="docutils literal"><span class="pre">/etc/keystone/keystone.conf</span></code> file and complete the following
 actions:</p>
 <ul>
-<li><p class="first">In the <tt class="docutils literal"><span class="pre">[database]</span></tt> section, configure database access:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span class="k">[database]</span>
+<li><p class="first">In the <code class="docutils literal"><span class="pre">[database]</span></code> section, configure database access:</p>
+<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[database]</span>
 <span class="c1"># ...</span>
 <span class="na">connection</span> <span class="o">=</span> <span class="s">mysql+pymysql://keystone:KEYSTONE_DBPASS@controller/keystone</span>
 </pre></div>
 </div>
-<p>Replace <tt class="docutils literal"><span class="pre">KEYSTONE_DBPASS</span></tt> with the password you chose for the database.</p>
+<p>Replace <code class="docutils literal"><span class="pre">KEYSTONE_DBPASS</span></code> with the password you chose for the database.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Comment out or remove any other <tt class="docutils literal"><span class="pre">connection</span></tt> options in the
-<tt class="docutils literal"><span class="pre">[database]</span></tt> section.</p>
+<p class="last">Comment out or remove any other <code class="docutils literal"><span class="pre">connection</span></code> options in the
+<code class="docutils literal"><span class="pre">[database]</span></code> section.</p>
 </div>
 </li>
-<li><p class="first">In the <tt class="docutils literal"><span class="pre">[token]</span></tt> section, configure the Fernet token provider:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span class="k">[token]</span>
+<li><p class="first">In the <code class="docutils literal"><span class="pre">[token]</span></code> section, configure the Fernet token provider:</p>
+<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[token]</span>
 <span class="c1"># ...</span>
 <span class="na">provider</span> <span class="o">=</span> <span class="s">fernet</span>
 </pre></div>
@@ -154,40 +146,40 @@ actions:</p>
 </ul>
 </li>
 <li><p class="first">Populate the Identity service database:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">#</span> su -s /bin/sh -c <span class="s2">&quot;keystone-manage db_sync&quot;</span> keystone
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> su -s /bin/sh -c <span class="s2">&quot;keystone-manage db_sync&quot;</span> keystone
 </pre></div>
 </div>
 </li>
 <li><p class="first">Initialize Fernet key repositories:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">#</span> keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
 <span class="gp">#</span> keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
 </pre></div>
 </div>
 </li>
 <li><p class="first">Bootstrap the Identity service:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">#</span> keystone-manage bootstrap --bootstrap-password ADMIN_PASS <span class="se">\</span>
-<span class="go">  --bootstrap-admin-url http://controller:35357/v3/ \</span>
-<span class="go">  --bootstrap-internal-url http://controller:5000/v3/ \</span>
-<span class="go">  --bootstrap-public-url http://controller:5000/v3/ \</span>
-<span class="go">  --bootstrap-region-id RegionOne</span>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> keystone-manage bootstrap --bootstrap-password ADMIN_PASS <span class="se">\</span>
+  --bootstrap-admin-url http://controller:35357/v3/ <span class="se">\</span>
+  --bootstrap-internal-url http://controller:5000/v3/ <span class="se">\</span>
+  --bootstrap-public-url http://controller:5000/v3/ <span class="se">\</span>
+  --bootstrap-region-id RegionOne
 </pre></div>
 </div>
-<p>Replace <tt class="docutils literal"><span class="pre">ADMIN_PASS</span></tt> with a suitable password for an administrative user.</p>
+<p>Replace <code class="docutils literal"><span class="pre">ADMIN_PASS</span></code> with a suitable password for an administrative user.</p>
 </li>
 </ol>
 </div>
 <div class="section" id="configure-the-apache-http-server">
 <h2>Configure the Apache HTTP server<a class="headerlink" href="#configure-the-apache-http-server" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
-<li><p class="first">Edit the <tt class="docutils literal"><span class="pre">/etc/sysconfig/apache2</span></tt> file and configure the
-<tt class="docutils literal"><span class="pre">APACHE_SERVERNAME</span></tt> option to reference the controller node:</p>
-<div class="highlight-shell"><div class="highlight"><pre>APACHE_SERVERNAME=&quot;controller&quot;
+<li><p class="first">Edit the <code class="docutils literal"><span class="pre">/etc/sysconfig/apache2</span></code> file and configure the
+<code class="docutils literal"><span class="pre">APACHE_SERVERNAME</span></code> option to reference the controller node:</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span><span class="nv">APACHE_SERVERNAME</span><span class="o">=</span><span class="s2">&quot;controller&quot;</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Create the <tt class="docutils literal"><span class="pre">/etc/apache2/conf.d/wsgi-keystone.conf</span></tt> file
+<li><p class="first">Create the <code class="docutils literal"><span class="pre">/etc/apache2/conf.d/wsgi-keystone.conf</span></code> file
 with the following content:</p>
-<div class="highlight-apache"><div class="highlight"><pre><span class="nb">Listen</span> <span class="m">5000</span>
+<div class="highlight-apache"><div class="highlight"><pre><span></span><span class="nb">Listen</span> <span class="m">5000</span>
 <span class="nb">Listen</span> <span class="m">35357</span>
 
 <span class="nt">&lt;VirtualHost</span> <span class="s">*:5000</span><span class="nt">&gt;</span>
@@ -222,8 +214,8 @@ with the following content:</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Recursively change the ownership of the <tt class="docutils literal"><span class="pre">/etc/keystone</span></tt> directory:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">#</span> chown -R keystone:keystone /etc/keystone
+<li><p class="first">Recursively change the ownership of the <code class="docutils literal"><span class="pre">/etc/keystone</span></code> directory:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> chown -R keystone:keystone /etc/keystone
 </pre></div>
 </div>
 </li>
@@ -234,7 +226,7 @@ with the following content:</p>
 <ol class="arabic">
 <li><p class="first">Start the Apache HTTP service and configure it to start when the system
 boots:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">#</span> systemctl <span class="nb">enable </span>apache2.service
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> systemctl <span class="nb">enable</span> apache2.service
 <span class="gp">#</span> systemctl start apache2.service
 </pre></div>
 </div>
@@ -242,17 +234,17 @@ boots:</p>
 </ol>
 <ol class="arabic" start="2">
 <li><p class="first">Configure the administrative account</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> <span class="nb">export </span><span class="nv">OS_USERNAME</span><span class="o">=</span>admin
-<span class="gp">$</span> <span class="nb">export </span><span class="nv">OS_PASSWORD</span><span class="o">=</span>ADMIN_PASS
-<span class="gp">$</span> <span class="nb">export </span><span class="nv">OS_PROJECT_NAME</span><span class="o">=</span>admin
-<span class="gp">$</span> <span class="nb">export </span><span class="nv">OS_USER_DOMAIN_NAME</span><span class="o">=</span>Default
-<span class="gp">$</span> <span class="nb">export </span><span class="nv">OS_PROJECT_DOMAIN_NAME</span><span class="o">=</span>Default
-<span class="gp">$</span> <span class="nb">export </span><span class="nv">OS_AUTH_URL</span><span class="o">=</span>http://controller:35357/v3
-<span class="gp">$</span> <span class="nb">export </span><span class="nv">OS_IDENTITY_API_VERSION</span><span class="o">=</span>3
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">export</span> <span class="nv">OS_USERNAME</span><span class="o">=</span>admin
+<span class="gp">$</span> <span class="nb">export</span> <span class="nv">OS_PASSWORD</span><span class="o">=</span>ADMIN_PASS
+<span class="gp">$</span> <span class="nb">export</span> <span class="nv">OS_PROJECT_NAME</span><span class="o">=</span>admin
+<span class="gp">$</span> <span class="nb">export</span> <span class="nv">OS_USER_DOMAIN_NAME</span><span class="o">=</span>Default
+<span class="gp">$</span> <span class="nb">export</span> <span class="nv">OS_PROJECT_DOMAIN_NAME</span><span class="o">=</span>Default
+<span class="gp">$</span> <span class="nb">export</span> <span class="nv">OS_AUTH_URL</span><span class="o">=</span>http://controller:35357/v3
+<span class="gp">$</span> <span class="nb">export</span> <span class="nv">OS_IDENTITY_API_VERSION</span><span class="o">=</span><span class="m">3</span>
 </pre></div>
 </div>
-<p>Replace <tt class="docutils literal"><span class="pre">ADMIN_PASS</span></tt> with the password used in the
-<tt class="docutils literal"><span class="pre">keystone-manage</span> <span class="pre">bootstrap</span></tt> command in <a class="reference internal" href="#keystone-install-configure-obs">keystone-install-configure-obs</a>.</p>
+<p>Replace <code class="docutils literal"><span class="pre">ADMIN_PASS</span></code> with the password used in the
+<code class="docutils literal"><span class="pre">keystone-manage</span> <span class="pre">bootstrap</span></code> command in <a class="reference internal" href="#keystone-install-configure-obs">keystone-install-configure-obs</a>.</p>
 </li>
 </ol>
 </div>
@@ -262,7 +254,7 @@ boots:</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
@@ -275,53 +267,39 @@ boots:</p>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="get-started-obs.html"
-                        title="previous chapter">Identity service overview</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="keystone-users-obs.html"
-                        title="next chapter">Create a domain, projects, users, and roles</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/keystone-install-obs.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/keystone-install-obs.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="keystone-users-obs.html" title="Create a domain, projects, users, and roles"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="get-started-obs.html" title="Identity service overview"
-             >previous</a> |</li>
-        <li><a href="index.html">doczhao 1.0.0 documentation</a> &raquo;</li>
-          <li><a href="index-obs.html" >Keystone Installation Tutorial for openSUSE and SUSE Linux Enterprise</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">doczhao 1.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2017, zhaoyuanjie.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, zhaoyuanjie.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>

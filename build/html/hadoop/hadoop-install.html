@@ -1,0 +1,1229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HADOOP安装 &#8212; doczhao 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Haking On Kafka（P-version）" href="../index-kafka.html" />
+    <link rel="prev" title="Haking On Hadoop（P-version）" href="../index-hadoop.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../index-kafka.html" title="Haking On Kafka（P-version）"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index-hadoop.html" title="Haking On Hadoop（P-version）"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">doczhao 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index-hadoop.html" accesskey="U">Haking On Hadoop（P-version）</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="hadoop">
+<h1>HADOOP安装<a class="headerlink" href="#hadoop" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>单机版本安装<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>操作系统：ubuntu-16.04
+jdk版本：jdk-8u191-linux-x64.tar.gz
+hadoop版本：2.7.7
+关于hadoop与jdk之间的关系，可以参考（<a class="reference external" href="https://wiki.apache.org/hadoop/HadoopJavaVersions">https://wiki.apache.org/hadoop/HadoopJavaVersions</a>）</p>
+<div class="section" id="id2">
+<h3>创建hadoop用户<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>使用root登陆系统，创建用户组：hadoop，然后在此用户组下创建hadoop用户。可在安装系统的时候创建，也可以在安装好之后用如下命令创建：</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">添加用户：# sudo useradd -m hadoop -s /bin/bash</span>
+<span class="go">设置密码：# passwd hadoop</span>
+<span class="go">设置root权限：# sudo adduser hadoop sudo。</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="java">
+<h3>java安装<a class="headerlink" href="#java" title="Permalink to this headline">¶</a></h3>
+<p>1. 下载jdk软件包。jdk下载地址为：(<a class="reference external" href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</a>)
+选择所需要的软件包，本次安装环境为ubuntu1604，选择软件包版本为：jdk-8u191-linux-x64.tar.gz</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/jdk-choose.png"><img alt="jdk-choose" src="../_images/jdk-choose.png" style="width: 80%;" /></a>
+</div>
+<ol class="arabic simple" start="2">
+<li>将下载的压缩包，传输至安装环境。解压。</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> tar -xzvf jdk-8u191-linux-x64.tar.gz 解压
+<span class="gp">#</span> mv jdk1.8.0_191/ /usr/lib/jdk 将解压文件移动至/usr/lib/jdk，作为jdk安装目录。
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>配置环境变量。</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> vi /etc/profile 配置全局环境变量
+<span class="go">写入：</span>
+<span class="gp">#</span> <span class="nb">set</span> java environment
+<span class="go">export JAVA_HOME=/usr/lib/jdk</span>
+<span class="go">export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/jre/lib</span>
+<span class="go">export PATH=.:$JAVA_HOME/bin:$PATH</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>测试验证。</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> java -version 测试
+<span class="go">java version &quot;1.8.0_191&quot;</span>
+<span class="go">Java(TM) SE Runtime Environment (build 1.8.0_191-b12)</span>
+<span class="go">Java HotSpot(TM) 64-Bit Server VM (build 25.191-b12, mixed mode)</span>
+
+<span class="go">NOTE: 切换到hadoop 用户，测试java是否正常，直接执行java -version 提示需要安装java，需要执行 source /etc/profile 即可。</span>
+<span class="go">在不执行 /etc/profile 情况下，hadoop不能读取环境变量，该情况下，修改/home/hadoop/.bashrc文件，追加上述环境变量，source /home/hadoop/.bashrc 即可在hadoop用户下永久生效。</span>
+<span class="go">如果只允许某个用户使用java，则只需要在该用户的主目录下，修改.bashrc，在文件末尾追加上述环境变量即可。</span>
+</pre></div>
+</div>
+<p>至此，java安装完毕。</p>
+</div>
+<div class="section" id="id3">
+<h3>hadoop 单机伪分布式安装<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>软件包下载.</li>
+</ol>
+<p>软件包下载：软件下载地址为 (<a class="reference external" href="http://mirrors.shu.edu.cn/apache/hadoop/common/hadoop-2.7.7/hadoop-2.7.7.tar.gz">http://mirrors.shu.edu.cn/apache/hadoop/common/hadoop-2.7.7/hadoop-2.7.7.tar.gz</a>)</p>
+<ol class="arabic simple" start="2">
+<li>解压缩文件.</li>
+</ol>
+<p>解压到安装目录(root 用户),安装软件。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> tar -xzvf hadoop-2.7.7.tar.gz -C /opt
+<span class="gp">#</span> <span class="nb">cd</span> /opt
+<span class="gp">#</span> chown -R hadoop:hadoop hadoop-2.7.7
+<span class="go">Hadoop 解压后即可使用。输入如下命令来检查 Hadoop 是否可用，成功则会显示 Hadoop 版本信息：</span>
+<span class="gp">#</span> <span class="nb">cd</span> /opt/hadoop-2.7.7
+<span class="gp">#</span> ./bin/hadoop version
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>配置hadoop环境变量</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">vi /home/hadoop/.bashrc</span>
+<span class="go">追加 export PATH=$PATH:/opt/hadoop-2.7.7/sbin:/opt/hadoop-2.7.7/bin</span>
+<span class="go">使配置生效：</span>
+<span class="gp">#</span> <span class="nb">source</span> /home/hadoop/.bashrc
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>配置hadoop 配置文件</li>
+</ol>
+<p>Hadoop 可以在单节点上以伪分布式的方式运行，Hadoop 进程以分离的 Java 进程来运行，节点既作为 NameNode 也作为 DataNode，同时，读取的是 HDFS 中的文件。</p>
+<p>Hadoop 的配置文件位于 /opt/hadoop-2.7.7/etc/hadoop/ 中，伪分布式需要修改2个配置文件 core-site.xml 和 hdfs-site.xml。Hadoop的配置文件是 xml 格式，每个配置以声明 property 的 name 和 value 的方式来实现。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">修改 core-site.xml</span>
+<span class="go">修改配置文件 core-site.xml (通过 vi 编辑会比较方便: vi ./etc/hadoop/core-site.xml)，将当中的</span>
+<span class="go">&lt;configuration&gt;</span>
+<span class="go">&lt;/configuration&gt;</span>
+<span class="go">XML</span>
+<span class="go">修改为下面配置：</span>
+<span class="go">&lt;configuration&gt;</span>
+<span class="go">&lt;property&gt;</span>
+<span class="go">&lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</span>
+<span class="go">&lt;value&gt;file:/opt/hadoop-2.7.7/tmp&lt;/value&gt;</span>
+<span class="go">&lt;description&gt;Abase for other temporary directories.&lt;/description&gt;</span>
+<span class="go">&lt;/property&gt;</span>
+<span class="go">&lt;property&gt;</span>
+<span class="go">&lt;name&gt;fs.defaultFS&lt;/name&gt;</span>
+<span class="go">&lt;value&gt;hdfs://localhost:9000&lt;/value&gt;</span>
+<span class="go">&lt;/property&gt;</span>
+<span class="go">&lt;/configuration&gt;</span>
+<span class="go">XML</span>
+<span class="go">同样的，修改配置文件 hdfs-site.xml：</span>
+<span class="go">&lt;configuration&gt;</span>
+<span class="go">&lt;property&gt;</span>
+<span class="go">&lt;name&gt;dfs.replication&lt;/name&gt;</span>
+<span class="go">&lt;value&gt;1&lt;/value&gt;</span>
+<span class="go">&lt;/property&gt;</span>
+<span class="go">&lt;property&gt;</span>
+<span class="go">&lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span>
+<span class="go">&lt;value&gt;file:/opt/hadoop-2.7.7/tmp/dfs/name&lt;/value&gt;</span>
+<span class="go">&lt;/property&gt;</span>
+<span class="go">&lt;property&gt;</span>
+<span class="go">&lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;</span>
+<span class="go">&lt;value&gt;file:/opt/hadoop-2.7.7/tmp/dfs/data&lt;/value&gt;</span>
+<span class="go">&lt;/property&gt;</span>
+<span class="go">&lt;/configuration&gt;</span>
+<span class="go">修改</span>
+<span class="go">./etc/hadoop/hadoop-env.sh 中设置 JAVA_HOME 变量，即在该文件中找到：</span>
+<span class="go">export JAVA_HOME=${JAVA_HOME}</span>
+<span class="go">将这一行改为JAVA安装位置：</span>
+<span class="go">export JAVA_HOME=/usr/lib/jdk</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li>测试验证。</li>
+</ol>
+<p>配置完成后，执行 NameNode 的格式化:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> ./bin/hdfs namenode -format
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/namenode-format.png"><img alt="jdk-choose" src="../_images/namenode-format.png" style="width: 80%;" /></a>
+</div>
+<p>启动NameNode和DataNode守护进程。启动时，提示输入密码，输入hadoop密码即可。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> ./sbin/start-dfs.sh
+<span class="gp">#</span> jsp
+<span class="gp">#</span> 可以看到 namenode datanode secondnamenode 均正常启动。
+</pre></div>
+</div>
+<p>成功启动后，可以访问 Web 界面 <a class="reference external" href="http://ip:50070">http://ip:50070</a> 查看 NameNode 和 Datanode 信息，还可以在线查看 HDFS 中的文件。</p>
+<ol class="arabic simple" start="6">
+<li>配置免密码登录。</li>
+</ol>
+<p>上述启动过程中，需要输入密码，可配置免密码登录，即可避免输入密码。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">以hadoop用户登录，</span>
+<span class="go">cd ~/.ssh/ # 若没有该目录，请先执行一次ssh localhost</span>
+<span class="go">ssh-keygen -t rsa # 会有提示，都按回车就可以</span>
+<span class="go">cat ./id_rsa.pub &gt;&gt; ./authorized_keys # 加入授权</span>
+<span class="go">这样下次启动时，则不需要再次输入密码启动hadoop.</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="7">
+<li>运行Hadoop伪分布式实例</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">要使用 HDFS，首先需要在 HDFS 中创建用户目录：</span>
+<span class="go">./bin/hdfs dfs -mkdir -p  /user/hadoop</span>
+<span class="go">Shell 命令</span>
+<span class="go">接着将 ./etc/hadoop 中的 xml 文件作为输入文件复制到分布式文件系统中，即将 /usr/local/hadoop/etc/hadoop 复制到分布式文件系统中的 /user/hadoop/input 中。我们使用的是 hadoop 用户，并且已创建相应的用户目录 /user/hadoop ，因此在命令中就可以使用相对路径如 input，其对应的绝对路径就是 /user/hadoop/input:</span>
+<span class="go">./bin/hdfs dfs -mkdir input</span>
+<span class="go">./bin/hdfs dfs -put ./etc/hadoop/*.xml input</span>
+<span class="go">Shell 命令</span>
+<span class="go">复制完成后，可以通过如下命令查看文件列表：</span>
+<span class="go">./bin/hdfs dfs -ls input</span>
+<span class="go">Shell 命令</span>
+<span class="go">伪分布式运行 MapReduce 作业的方式跟单机模式相同，区别在于伪分布式读取的是HDFS中的文件（可以将单机步骤中创建的本地 input 文件夹，输出结果 output 文件夹都删掉来验证这一点）。</span>
+<span class="go">./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar grep input output &#39;dfs[a-z.]+&#39;</span>
+<span class="go">Shell 命令</span>
+<span class="go">查看运行结果的命令（查看的是位于 HDFS 中的输出结果）：</span>
+<span class="go">./bin/hdfs dfs -cat output/*</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="8">
+<li>启动YARN</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">启动YARN</span>
+<span class="go">（伪分布式不启动 YARN 也可以，一般不会影响程序执行）</span>
+<span class="go">有的读者可能会疑惑，怎么启动 Hadoop 后，见不到书上所说的 JobTracker 和 TaskTracker，这是因为新版的 Hadoop 使用了新的 MapReduce 框架（MapReduce V2，也称为 YARN，Yet Another Resource Negotiator）。</span>
+<span class="go">YARN 是从 MapReduce 中分离出来的，负责资源管理与任务调度。YARN 运行于 MapReduce 之上，提供了高可用性、高扩展性，YARN 的更多介绍在此不展开，有兴趣的可查阅相关资料。</span>
+<span class="go">上述通过 ./sbin/start-dfs.sh 启动 Hadoop，仅仅是启动了 MapReduce 环境，我们可以启动 YARN ，让 YARN 来负责资源管理与任务调度。</span>
+<span class="go">首先修改配置文件 mapred-site.xml，这边需要先进行重命名：</span>
+<span class="go">mv ./etc/hadoop/mapred-site.xml.template ./etc/hadoop/mapred-site.xml</span>
+<span class="go">Shell 命令</span>
+<span class="go">然后再进行编辑，同样使用 gedit 编辑会比较方便些 gedit ./etc/hadoop/mapred-site.xml ：</span>
+<span class="go">&lt;configuration&gt;</span>
+<span class="go">&lt;property&gt;</span>
+<span class="go">&lt;name&gt;mapreduce.framework.name&lt;/name&gt;</span>
+<span class="go">&lt;value&gt;yarn&lt;/value&gt;</span>
+<span class="go">&lt;/property&gt;</span>
+<span class="go">&lt;/configuration&gt;</span>
+<span class="go">XML</span>
+<span class="go">接着修改配置文件 yarn-site.xml：</span>
+<span class="go">&lt;configuration&gt;</span>
+<span class="go">&lt;property&gt;</span>
+<span class="go">&lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span>
+<span class="go">&lt;value&gt;mapreduce_shuffle&lt;/value&gt;</span>
+<span class="go">&lt;/property&gt;</span>
+<span class="go">&lt;/configuration&gt;</span>
+<span class="go">XML</span>
+<span class="go">然后就可以启动 YARN 了（需要先执行过 ./sbin/start-dfs.sh）：</span>
+<span class="go">./sbin/start-yarn.sh      # 启动YARN</span>
+<span class="go">./sbin/mr-jobhistory-daemon.sh start historyserver  # 开启历史服务器，才能在Web中查看任务运行情况</span>
+<span class="go">Shell 命令</span>
+<span class="go">开启后通过 jps 查看，可以看到多了 NodeManager 和 ResourceManager 两个后台进程</span>
+</pre></div>
+</div>
+<p>启动 YARN 之后，运行实例的方法还是一样的，仅仅是资源管理方式、任务调度不同。观察日志信息可以发现，不启用 YARN 时，是 &#8220;mapred.LocalJobRunner&#8221;在跑任务，启用 YARN 之后，是&#8221;mapred.YARNRunner&#8221;在跑任务。启动 YARN 有个好处是可以通过 Web 界面查看任务的运行情况：<a class="reference external" href="http://ip:8088/cluster">http://ip:8088/cluster</a></p>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>分布式版本安装<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id5">
+<h3>环境准备<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>操作系统版本：ubuntu-16.04 （操作系统安装过程中默认安装sshserver）
+jdk版本：jdk-8u191-linux-x64.tar.gz
+hadoop版本：2.7.7
+关于hadoop与jdk之间的关系，可以参考（<a class="reference external" href="https://wiki.apache.org/hadoop/HadoopJavaVersions">https://wiki.apache.org/hadoop/HadoopJavaVersions</a>）
+物理主机3台，其中1台充当集群master角色,2台充当slaver角色。</p>
+<div class="section" id="id6">
+<h4>服务器基本配置<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<p>1、在各节点上配置网络。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">    #</span> vi  /etc/network/interface
+<span class="go">    auto eth0</span>
+<span class="go">  iface eth0 inet static</span>
+<span class="go">  address 17.17.17.2</span>
+<span class="go">  gateway 17.17.17.1</span>
+<span class="go">  netmask 255.255.255.0</span>
+<span class="go">  dns-nameservers 114.114.114.114</span>
+<span class="gp">#</span> ifup eth0 <span class="c1"># 使配置生效;</span>
+<span class="gp">    #</span> ping <span class="m">17</span>.17.17.2 <span class="c1"># 并检测网络配置；</span>
+</pre></div>
+</div>
+<p>同理，配置其他节点，满足如下IP配置。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">master    17.17.17.2</span>
+<span class="go">slaver-1  17.17.17.4</span>
+<span class="go">slaver-2  17.17.17.5</span>
+</pre></div>
+</div>
+<p>2、为方便使用，配置节点名称与IP对应关系,三台配置如下：</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">root@bignode1:/home/ubuntu#</span> vi /etc/hosts
+
+<span class="go">127.0.0.1       localhost</span>
+<span class="go">17.17.17.2      master</span>
+<span class="go">17.17.17.4      slaver-1</span>
+<span class="go">17.17.17.5      slaver-2</span>
+
+
+<span class="gp">root@bignode1:/home/ubuntu#</span> ping master
+<span class="go">PING master (17.17.17.2) 56(84) bytes of data.</span>
+<span class="go">64 bytes from master (17.17.17.2): icmp_seq=1 ttl=64 time=0.025 ms</span>
+<span class="gp">#</span> 说明映射成功。
+<span class="go">修改各个节点的主机名。</span>
+<span class="go">vi /etc/hostname</span>
+<span class="go">修改为与上述配置一致，后重启。</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>安装NTP时钟，并配置时钟同步。确保服务器之间的时钟同步。关于NTP同步的知识可以参考此链接。（<a class="reference external" href="http://linux.vbird.org/linux_server/0440ntp.php">http://linux.vbird.org/linux_server/0440ntp.php</a>）</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">apt-get install ntp ntpdate</span>
+</pre></div>
+</div>
+<p>配置ntp时钟，使slaver-1,slaver-2与 master 同步。master配置不变，修改slaver-1,slaver-2的配置如下：</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">vi /etc/ntp.conf # 删除原有配置，设置新配置如下：</span>
+
+<span class="go">     server 210.72.145.44</span>
+<span class="go">     server master</span>
+<span class="go">     server 127.127.1.0</span>
+<span class="go">     fudge 127.127.1.0 stratum 10</span>
+</pre></div>
+</div>
+<p>重启修改配置服务器的ntp服务。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go"> root@slaver-1:/home/ubuntu# /etc/init.d/ntp restart</span>
+<span class="go">[ ok ] Restarting ntp (via systemctl): ntp.service.</span>
+</pre></div>
+</div>
+<p>slaver节点同步时钟。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">root@slaver-1:/home/ubuntu#</span> /etc/init.d/ntp stop
+<span class="go">[ ok ] Stopping ntp (via systemctl): ntp.service.</span>
+<span class="gp">root@bignode3:/home/ubuntu#</span> ntpdate master
+<span class="go">24 Jan 16:37:51 ntpdate[25729]: adjust time server 17.17.17.2 offset -0.012206 sec</span>
+<span class="gp">root@bignode3:/home/ubuntu#</span> /etc/init.d/ntp start
+<span class="go">[ ok ] Starting ntp (via systemctl): ntp.service.</span>
+</pre></div>
+</div>
+<div class="highlight-console"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id7">
+<h3>创建hadoop用户<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<p>在各个节点上，使用root登陆系统，创建用户组：hadoop，然后在此用户组下创建hadoop用户。可在安装系统的时候创建，也可以在安装好之后用如下命令创建：</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">添加用户：# sudo useradd -m hadoop -s /bin/bash</span>
+<span class="go">设置密码：# passwd hadoop</span>
+<span class="go">设置root权限：# sudo adduser hadoop sudo。</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="master-slaver-hadoop">
+<h3>配置master-slaver hadoop用户免密码登录<a class="headerlink" href="#master-slaver-hadoop" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>在各个节点上，配置本机hadoop用户免密码登录。</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">hadoop@master:~$</span> ssh-keygen -t rsa <span class="c1">#过程中直接Enter即可。注意使用hadoop用户执行。</span>
+<span class="go">cd /home/hadoop/</span>
+<span class="gp">hadoop@master:~$</span> cat .ssh/id_rsa.pub &gt;&gt; .ssh/authorized_keys
+<span class="go">cat .ssh/id_rsa.pub &gt;&gt; .ssh/authorized_keys</span>
+<span class="gp">hadoop@master:~$</span> ssh localhost <span class="c1">#不需要输入密码即免密码登录设置成功。</span>
+
+<span class="go">.. end</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>配置master-&gt; slaver之间的免密码登录。</li>
+</ol>
+</div>
+<div class="section" id="id8">
+<h3>java安装<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<p>各个节点均需安如下步骤操作。
+1. 下载jdk软件包。jdk下载地址为：(<a class="reference external" href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</a>)
+选择所需要的软件包，本次安装环境为ubuntu1604，选择软件包版本为：jdk-8u191-linux-x64.tar.gz</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/jdk-choose.png"><img alt="jdk-choose" src="../_images/jdk-choose.png" style="width: 80%;" /></a>
+</div>
+<ol class="arabic simple" start="2">
+<li>将下载的压缩包，传输至安装环境。解压。</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> tar -xzvf jdk-8u191-linux-x64.tar.gz 解压
+<span class="gp">#</span> mv jdk1.8.0_191/ /usr/lib/jdk 将解压文件移动至/usr/lib/jdk，作为jdk安装目录。
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>配置环境变量。</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> vi /etc/profile 配置全局环境变量
+<span class="go">写入：</span>
+<span class="gp">#</span> <span class="nb">set</span> java environment
+<span class="go">export JAVA_HOME=/usr/lib/jdk</span>
+<span class="go">export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/jre/lib</span>
+<span class="go">export PATH=.:$JAVA_HOME/bin:$PATH</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>测试验证。</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> java -version 测试
+<span class="go">java version &quot;1.8.0_191&quot;</span>
+<span class="go">Java(TM) SE Runtime Environment (build 1.8.0_191-b12)</span>
+<span class="go">Java HotSpot(TM) 64-Bit Server VM (build 25.191-b12, mixed mode)</span>
+
+<span class="go">NOTE: 切换到hadoop 用户，测试java是否正常，直接执行java -version 提示需要安装java，需要执行 source /etc/profile 即可。</span>
+<span class="go">在不执行 /etc/profile 情况下，hadoop不能读取环境变量，该情况下，修改/home/hadoop/.bashrc文件，追加上述环境变量，source /home/hadoop/.bashrc 即可在hadoop用户下永久生效。</span>
+<span class="go">如果只允许某个用户使用java，则只需要在该用户的主目录下，修改.bashrc，在文件末尾追加上述环境变量即可。</span>
+</pre></div>
+</div>
+<p>至此，java安装完毕。</p>
+</div>
+<div class="section" id="id9">
+<h3>hadoop 完全分布式安装<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id10">
+<h4>软件包下载<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<p>软件包下载：软件下载地址为 (<a class="reference external" href="http://mirrors.shu.edu.cn/apache/hadoop/common/hadoop-2.7.7/hadoop-2.7.7.tar.gz">http://mirrors.shu.edu.cn/apache/hadoop/common/hadoop-2.7.7/hadoop-2.7.7.tar.gz</a>)</p>
+</div>
+<div class="section" id="masterhadoop">
+<h4>master节点安装hadoop<a class="headerlink" href="#masterhadoop" title="Permalink to this headline">¶</a></h4>
+<ol class="arabic simple">
+<li>解压缩文件.安装并解压到安装目录(root 用户),安装软件。</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> tar -xzvf hadoop-2.7.7.tar.gz -C /opt <span class="c1"># 解压到安装目录</span>
+<span class="gp">#</span> <span class="nb">cd</span> /opt
+<span class="gp">#</span> chown -R hadoop:hadoop hadoop-2.7.7 <span class="c1"># 调整文件权限</span>
+<span class="go">Hadoop 解压后即可使用。输入如下命令来检查 Hadoop 是否可用，成功则会显示 Hadoop 版本信息：</span>
+<span class="gp">#</span> <span class="nb">cd</span> /opt/hadoop-2.7.7
+<span class="gp">#</span> ./bin/hadoop version
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>配置master hadoop相关配置文件。</li>
+</ol>
+<p>2.1 配置slave信息。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> root@master:/opt/hadoop-2.7.7/etc/hadoop# vi slaves <span class="c1"># 将slaves 节点信息写入slaves文件</span>
+
+<span class="go">      root@master:/opt/hadoop-2.7.7/etc/hadoop# echo &quot;&quot; &gt; slaves</span>
+<span class="go">      root@master:/opt/hadoop-2.7.7/etc/hadoop# vi slaves</span>
+<span class="go">      root@master:/opt/hadoop-2.7.7/etc/hadoop# echo &quot;slaver-1&quot;  &gt;&gt; slaves</span>
+<span class="go">      root@master:/opt/hadoop-2.7.7/etc/hadoop# echo &quot;slaver-2&quot;  &gt;&gt; slaves</span>
+</pre></div>
+</div>
+<p>2.2 配置core-site.xml文件。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">root@master:/opt/hadoop-2.7.7/etc/hadoop#</span> vi core-site.xml
+<span class="go">&lt;configuration&gt;</span>
+<span class="go">          &lt;property&gt;</span>
+<span class="go">                  &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</span>
+<span class="go">                  &lt;value&gt;file:/opt/hadoop-2.7.7/tmp&lt;/value&gt;</span>
+<span class="go">                  &lt;description&gt;Abase for other temporary directories.&lt;/description&gt;</span>
+<span class="go">          &lt;/property&gt;</span>
+<span class="go">          &lt;property&gt;</span>
+<span class="go">                  &lt;name&gt;fs.defaultFS&lt;/name&gt;</span>
+<span class="go">                  &lt;value&gt;hdfs://master:9000&lt;/value&gt;</span>
+<span class="go">          &lt;/property&gt;</span>
+<span class="go">  &lt;/configuration&gt;</span>
+</pre></div>
+</div>
+<p>2.3 配置hdfs-site.xml文件。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">    root@master:/opt/hadoop-2.7.7/etc/hadoop# vi hdfs-site.xml</span>
+
+<span class="go">    &lt;configuration&gt;</span>
+<span class="go">&lt;property&gt;</span>
+<span class="go">    &lt;name&gt;dfs.replication&lt;/name&gt;</span>
+<span class="go">    &lt;value&gt;3&lt;/value&gt;</span>
+<span class="go">&lt;/property&gt;</span>
+<span class="go">    &lt;property&gt;</span>
+<span class="go">            &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span>
+<span class="go">            &lt;value&gt;file:/opt/hadoop-2.7.7/tmp/dfs/name&lt;/value&gt;</span>
+<span class="go">    &lt;/property&gt;</span>
+<span class="go">    &lt;property&gt;</span>
+<span class="go">            &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;</span>
+<span class="go">            &lt;value&gt;file:/opt/hadoop-2.7.7/tmp/dfs/data&lt;/value&gt;</span>
+<span class="go">    &lt;/property&gt;</span>
+<span class="go">    &lt;/configuration&gt;</span>
+</pre></div>
+</div>
+<p>2.4 配置mapred-site.xml文件。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">root@master:/opt/hadoop-2.7.7/etc/hadoop#</span> cp mapred-site.xml.template mapred-site.xml
+<span class="gp">root@master:/opt/hadoop-2.7.7/etc/hadoop#</span> vi mapred-site.xml
+
+<span class="go">      &lt;configuration&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;yarn&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">      &lt;/configuration&gt;</span>
+</pre></div>
+</div>
+<p>2.5 配置yarn-site.xml文件。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">root@master:/opt/hadoop-2.7.7/etc/hadoop#</span> vi yarn-site.xml
+
+<span class="go">&lt;configuration&gt;</span>
+<span class="go">  &lt;!-- Site specific YARN configuration properties --&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">&lt;/configuration&gt;</span>
+</pre></div>
+</div>
+<p>2.6 配置hadoop-env.sh、mapred-env.sh。在这两个文件中添加JAVA_HOME路径：</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">root@master:/opt/hadoop-2.7.7/etc/hadoop#</span> vi hadoop-env.sh
+<span class="gp">root@master:/opt/hadoop-2.7.7/etc/hadoop#</span> vi mapred-env.sh
+<span class="gp">#</span><span class="nb">export</span> <span class="nv">JAVA_HOME</span><span class="o">=</span><span class="si">${</span><span class="nv">JAVA_HOME</span><span class="si">}</span>
+<span class="go">export JAVA_HOME=/usr/lib/jdk</span>
+</pre></div>
+</div>
+<p>2.7 配置hadoop 环境变量。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">vi /home/hadoop/.bashrc</span>
+<span class="go">追加 export PATH=$PATH:/opt/hadoop-2.7.7/sbin:/opt/hadoop-2.7.7/bin</span>
+<span class="go">使配置生效：</span>
+<span class="gp">#</span> <span class="nb">source</span> /home/hadoop/.bashrc
+</pre></div>
+</div>
+</div>
+<div class="section" id="slaverhadoop">
+<h4>slaver节点安装hadoop<a class="headerlink" href="#slaverhadoop" title="Permalink to this headline">¶</a></h4>
+<ol class="arabic simple">
+<li>将master hadoop安装目录拷贝到slaver-1,slaver-2 与master同步安装目录下即可。</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">注意scp传输后，hadoop 安装目录的权限。</p>
+</div>
+</div>
+<div class="section" id="id11">
+<h4>启动hadoop集群<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
+<ol class="arabic simple">
+<li>在hadoop master节点，使用hadoop用户执行格式化命令。</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> hdfs namenode -format
+<span class="go">       19/01/25 14:34:55 INFO common.Storage: Storage directory /opt/hadoop-2.7.7/tmp/dfs/name has been successfully formatted.</span>
+<span class="go">       19/01/25 14:34:55 INFO namenode.FSImageFormatProtobuf: Saving image file /opt/hadoop-2.7.7/tmp/dfs/name/current/fsimage.ckpt_0000000000000000000 using no compression</span>
+<span class="go">       19/01/25 14:34:55 INFO namenode.FSImageFormatProtobuf: Image file /opt/hadoop-2.7.7/tmp/dfs/name/current/fsimage.ckpt_0000000000000000000 of size 322 bytes saved in 0 seconds.</span>
+<span class="go">       19/01/25 14:34:55 INFO namenode.NNStorageRetentionManager: Going to retain 1 images with txid &gt;= 0</span>
+<span class="go">       19/01/25 14:34:55 INFO util.ExitUtil: Exiting with status 0</span>
+<span class="go">       19/01/25 14:34:55 INFO namenode.NameNode: SHUTDOWN_MSG:</span>
+<span class="go">       /************************************************************</span>
+<span class="go">       SHUTDOWN_MSG: Shutting down NameNode at master/17.17.17.2</span>
+<span class="go">       ************************************************************/</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>启动集群。</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">hadoop@master:/opt/hadoop-2.7.7$</span> ./sbin/start-all.sh
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>查看集群状态。</li>
+</ol>
+<p># master 节点 hadoop 用户。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">hadoop@master:/opt/hadoop-2.7.7$</span> jps
+<span class="go">9681 Jps</span>
+<span class="go">9188 ResourceManager</span>
+<span class="go">8799 NameNode</span>
+<span class="go">9023 SecondaryNameNode</span>
+</pre></div>
+</div>
+<p># slaver 节点 hadoop 用户。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">hadoop@slaver-1:/opt/hadoop-2.7.7/etc/hadoop$</span> jps
+<span class="go">4036 DataNode</span>
+<span class="go">4329 Jps</span>
+<span class="go">4174 NodeManager</span>
+</pre></div>
+</div>
+<p>可以访问 <a class="reference external" href="http:masterip:50070">http:masterip:50070</a> 查看集群状态。</p>
+<ol class="arabic simple" start="4">
+<li>验证。</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">HDFS，首先需要在 HDFS 中创建用户目录：</span>
+<span class="go">       ./bin/hdfs dfs -mkdir -p  /user/hadoop</span>
+<span class="go">       接着将 ./etc/hadoop 中的 xml 文件作为输入文件复制到分布式文件系统中，即将 /usr/local/hadoop/etc/hadoop 复制到分布式文件系统中的 /user/hadoop/input 中。我们使用的是 hadoop 用户，并且已创建相应的用户目录 /user/hadoop ，因此在命令中就可以使用相对路径如 input，其对应的绝对路径就是 /user/hadoop/input:</span>
+<span class="go">       ./bin/hdfs dfs -mkdir input</span>
+<span class="go">       ./bin/hdfs dfs -put ./etc/hadoop/*.xml input</span>
+<span class="go">       Shell 命令</span>
+<span class="go">       复制完成后，可以通过如下命令查看文件列表：</span>
+<span class="go">       ./bin/hdfs dfs -ls input</span>
+</pre></div>
+</div>
+<p>Shell 命令</p>
+<blockquote>
+<div>./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-<em>.jar grep input output &#8216;dfs[a-z.]+&#8217;
+Shell 命令
+查看运行结果的命令（查看的是位于 HDFS 中的输出结果）：
+./bin/hdfs dfs -cat output/</em></div></blockquote>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">hadoop@master:/opt/hadoop-2.7.7$</span> hdfs dfs -cat output/*
+<span class="go">1      dfsadmin</span>
+<span class="go">1      dfs.replication</span>
+<span class="go">1      dfs.namenode.name.dir</span>
+<span class="go">1      dfs.datanode.data.dir</span>
+</pre></div>
+</div>
+<p>可以在slaver节点上使用grep命令搜索的上传的特殊字符串。均可查看到响应的文件。
+至此，分布式环境搭建完毕。</p>
+</div>
+<div class="section" id="id12">
+<h4>扩展hadoop集群<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h4>
+<p>操作系统安装&#8211;&gt;修改主机名&#8211;&gt;配置host.dns&#8211;&gt;创建hadoop组&#8211;&gt;安装NTP并配置&#8211;&gt;安装java并配置&#8211;&gt;配置slaver-3-&gt;slaver-3，master-&gt;slaver-3免密登录&#8211;&gt;安装hadoop&#8211;&gt;配置slaver环境变量&#8211;&gt;master节点修改配置&#8211;&gt;安装时钟同步软件&#8211;&gt;master节点重启服务并验证。</p>
+<p>1、安装操作系统。</p>
+<p>2、修改host主机名，也可在安装操作系统时进行设定。建议安装集群前统一规划规范主机名命名规范。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">root@ubuntu:/home/ubuntu#</span> vi /etc/hostname  <span class="c1">#修改为 slaver-3,重启生效。</span>
+</pre></div>
+</div>
+<p>3、修改host域名解析。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> 在slaver-3上添加域名解析.
+<span class="gp">root@ubuntu:/home/ubuntu#</span> vi /etc/hosts <span class="c1"># 仅添加master及本机域名解析即可。</span>
+
+<span class="go">        17.17.17.2      master</span>
+<span class="go">        17.17.17.6      slaver-3</span>
+<span class="gp">#</span> 在master上添加域名解析。
+<span class="gp">root@master:/home/ubuntu#</span> vi /etc/hosts <span class="c1"># 添加slaver-3域名解析。</span>
+<span class="gp">#</span>
+</pre></div>
+</div>
+<p>4、创建hadoop 用户和组。</p>
+<p>使用root登陆系统，创建用户组：hadoop，然后在此用户组下创建hadoop用户。可在安装系统的时候创建，也可以在安装好之后用如下命令创建：</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">添加用户：# sudo useradd -m hadoop -s /bin/bash</span>
+<span class="go">设置密码：# passwd hadoop</span>
+<span class="go">设置root权限：# sudo adduser hadoop sudo。</span>
+</pre></div>
+</div>
+<p>5、java安装</p>
+<p>5.1. 下载jdk软件包。jdk下载地址为：(<a class="reference external" href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</a>)
+选择所需要的软件包，本次安装环境为ubuntu1604，选择软件包版本为：jdk-8u191-linux-x64.tar.gz</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/jdk-choose.png"><img alt="jdk-choose" src="../_images/jdk-choose.png" style="width: 80%;" /></a>
+</div>
+<p>5.2. 将下载的压缩包，传输至安装环境。解压。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> tar -xzvf jdk-8u191-linux-x64.tar.gz 解压
+<span class="gp">#</span> mv jdk1.8.0_191/ /usr/lib/jdk 将解压文件移动至/usr/lib/jdk，作为jdk安装目录。
+</pre></div>
+</div>
+<p>5.3. 配置环境变量。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> vi /etc/profile 配置全局环境变量
+<span class="go">写入：</span>
+<span class="gp">#</span> <span class="nb">set</span> java environment
+<span class="go">export JAVA_HOME=/usr/lib/jdk</span>
+<span class="go">export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/jre/lib</span>
+<span class="go">export PATH=.:$JAVA_HOME/bin:$PATH</span>
+</pre></div>
+</div>
+<p>5.4. 测试验证。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> java -version 测试
+<span class="go">java version &quot;1.8.0_191&quot;</span>
+<span class="go">Java(TM) SE Runtime Environment (build 1.8.0_191-b12)</span>
+<span class="go">Java HotSpot(TM) 64-Bit Server VM (build 25.191-b12, mixed mode)</span>
+
+<span class="go">NOTE: 切换到hadoop 用户，测试java是否正常，直接执行java -version 提示需要安装java，需要执行 source /etc/profile 即可。</span>
+<span class="go">在不执行 /etc/profile 情况下，hadoop不能读取环境变量，该情况下，修改/home/hadoop/.bashrc文件，追加上述环境变量，source /home/hadoop/.bashrc 即可在hadoop用户下永久生效。</span>
+<span class="go">如果只允许某个用户使用java，则只需要在该用户的主目录下，修改.bashrc，在文件末尾追加上述环境变量即可。</span>
+</pre></div>
+</div>
+<p>至此，java安装完毕。</p>
+<p>6、配置slaver-3-&gt;slaver-3，master-&gt;slaver-3免密码登录。</p>
+<p>6.1 配置本机免密码登录。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> 配置本机免密码登录。
+<span class="gp">hadoop@slaver-3:~$</span> ssh-keygen -t rsa <span class="c1">#过程中直接Enter即可。注意使用hadoop用户执行。</span>
+<span class="go">cd /home/hadoop/</span>
+<span class="gp">hadoop@master:~$</span> cat .ssh/id_rsa.pub &gt;&gt; .ssh/authorized_keys
+
+<span class="gp">hadoop@master:~$</span> ssh localhost <span class="c1">#首次登录需要输入密码，第二次登录不需要输入密码即免密码登录设置成功。</span>
+</pre></div>
+</div>
+<p>6.2 配置master-&gt;slaver-3免密码登录。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> 将主机master 上hadoop 用户 id_rsa.pub传输至slaver-3。
+<span class="gp">hadoop@master:~$</span> scp id_rsa.pub  ubuntu@17.17.17.6:/home/ubuntu
+<span class="go">ubuntu@17.17.17.6&#39;s password:</span>
+<span class="go">id_rsa.pub            100%  395     0.4KB/s   00:00</span>
+<span class="gp">#</span>将 id_rsa.pub 写入 slaver-3 hadoop用户授权key.
+<span class="gp">hadoop@slaver-3:~$</span> cat id_rsa.pub &gt;&gt; .ssh/authorized_keys
+<span class="gp">#</span> 验证。
+<span class="gp">#</span> hadoop@master:~$ ssh hadoop@slaver-3 <span class="c1"># 注意是使用hadoop验证。首次需要输入，第二次后免密登录生效。</span>
+</pre></div>
+</div>
+<p>7、复制hadoop至新节点.</p>
+<p>将master hadoop 目录拷贝到slaver-3,注意，不要将 logs文件及数据文件拷贝到slaver-3，同时注意文件权限.</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">root@slaver-3:/opt#</span> chown -R hadoop:hadoop hadoop-2.7.7/
+</pre></div>
+</div>
+<p>8、slaver-3节点配置hadoop环境变量。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">export JAVA_HOME=/usr/lib/jdk</span>
+<span class="go">export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/jre/lib</span>
+<span class="go">export PATH=.:$JAVA_HOME/bin:$PATH</span>
+
+<span class="gp">#</span> <span class="nb">set</span> hadoop environment
+<span class="go">export PATH=$PATH:/opt/hadoop-2.7.7/sbin:/opt/hadoop-2.7.7/bin</span>
+</pre></div>
+</div>
+<p>9、在master节点修改slaver配置文件。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">hadoop@master:/opt/hadoop-2.7.7/etc/hadoop$</span> vi slaves
+<span class="go">slaver-1</span>
+<span class="go">slaver-2</span>
+<span class="go">slaver-3</span>
+</pre></div>
+</div>
+<p>10、安装并配置时钟。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">root@slaver-3:/home/ubuntu#</span> apt-get install  ntp ntpdate
+
+<span class="gp">root@slaver-3:/home/ubuntu#</span> /etc/init.d/ntp stop
+<span class="go">[ ok ] Stopping ntp (via systemctl): ntp.service.</span>
+<span class="gp">root@slaver-3:/home/ubuntu#</span> ntpdate master
+<span class="go">28 Jan 13:30:15 ntpdate[2923]: adjust time server 17.17.17.2 offset 0.021848 sec</span>
+<span class="gp">root@slaver-3:/home/ubuntu#</span> /etc/init.d/start
+<span class="go">bash: /etc/init.d/start: No such file or directory</span>
+<span class="gp">root@slaver-3:/home/ubuntu#</span> /etc/init.d/ntp start
+<span class="go">[ ok ] Starting ntp (via systemctl): ntp.service.</span>
+</pre></div>
+</div>
+<p>11、master节点重启服务。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">hadoop@master:/opt/hadoop-2.7.7$</span> ./sbin/start-all.sh
+<span class="gp">#</span> 查看slaver-3节点服务状态。
+<span class="gp">hadoop@master:/opt/hadoop-2.7.7$</span> jps
+<span class="go">13444 NameNode</span>
+<span class="go">13670 SecondaryNameNode</span>
+<span class="go">3501 Jps</span>
+<span class="go">13837 ResourceManager</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="hadoop-ha">
+<h3>hadoop HA完全分布式安装<a class="headerlink" href="#hadoop-ha" title="Permalink to this headline">¶</a></h3>
+<p>部署情况如下，master，master-0节点做HA。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">17.17.17.2      master    # namenode master节点     jdk1.8+hadoop2.7                  namenode+resourcemanager+DFSZKFailoverController(zkfc)</span>
+<span class="go">17.17.17.7      master-0  # namenode master节点     jdk1.8+hadoop2.7                  namenode+resourcemanager+DFSZKFailoverController(zkfc)</span>
+<span class="go">17.17.17.4      slaver-1  # DataNode slaver节点     jdk1.8+hadoop2.7+zookeeper3.4.12  DataNode+NodeManager+JournalNode+QuorumPeerMain</span>
+<span class="go">17.17.17.5      slaver-2  # Datanode slaver节点     jdk1.8+hadoop2.7+zookeeper3.4.12  DataNode+NodeManager+JournalNode+QuorumPeerMain</span>
+<span class="go">17.17.17.6      slaver-3  # DataNode slaver节点     jdk1.8+hadoop2.7+zookeeper3.4.12  DataNode+NodeManager+JournalNode+QuorumPeerMain</span>
+</pre></div>
+</div>
+<p>前置条件（可根据上述章节完成配置）：</p>
+<p>1、所有的机器上增加hadoop用户；</p>
+<p>2、安装java；</p>
+<p>3、配置master-&gt;slaver-<em>，master-0&#8211;&gt;slaver-</em>，master&lt;&#8211;&gt;master-0节点及各自节点hadoop用户的免密码登录；</p>
+<p>4、同步ntp时钟；</p>
+<p>5、修改ip域名解析；</p>
+<div class="section" id="slaverzookeeper">
+<h4>slaver节点安装zookeeper<a class="headerlink" href="#slaverzookeeper" title="Permalink to this headline">¶</a></h4>
+<p>slaver-1,slaver-2,slaver-3节点上安装zookeeper（下载地址为https://zookeeper.apache.org/releases.html），版本兼容性较好，可选择最新版本。</p>
+<p>1、解压安装包</p>
+<p>在slaver-1节点上执行：</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">root@slaver-1:/home/hadoop#</span> tar -xzvf zookeeper-3.4.12.tar.gz
+<span class="gp">root@slaver-1:/home/hadoop#</span> mv zookeeper-3.4.12 /opt/
+</pre></div>
+</div>
+<p>2、配置slaver-1 zookeeper 环境变量</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">root@slaver-1:/opt/zookeeper-3.4.12/conf#</span> vi /home/hadoop/.bashrc
+<span class="gp">    #</span> 追加
+<span class="gp">    #</span> <span class="nb">set</span> zookeeper environment
+<span class="go">    export ZOOKEEPER_HOME=/opt/zookeeper-3.4.12</span>
+<span class="go">    export PATH=$PATH:$ZOOKEEPER_HOME/bin</span>
+</pre></div>
+</div>
+<p>3、 配置slaver-1 zookeeper配置文件。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">root@slaver-1:/opt/zookeeper-3.4.12/conf#</span> cp zoo_sample.cfg  zoo.cfg
+<span class="gp">root@slaver-1:/opt/zookeeper-3.4.12/conf#</span> vi zoo.cfg
+<span class="gp">root@slaver-1:/opt/zookeeper-3.4.12/conf#</span> grep -vE  <span class="s1">&#39;^#|^$&#39;</span>  zoo.cfg
+<span class="go">      tickTime=2000 # 服务器与客户端之间交互的基本时间单元（ms）</span>
+<span class="go">      initLimit=10  # zookeeper所能接受的客户端数量</span>
+<span class="go">      syncLimit=5   # 服务器与客户端之间请求和应答的时间间隔</span>
+<span class="go">      dataDir=/opt/zookeeper-3.4.12/zookeeperdata # 存放数据文件</span>
+<span class="go">      LogDir=/opt/zookeeper-3.4.12/dataLogDir # 存放日志文件</span>
+<span class="go">      clientPort=2181 # 客户端与zookeeper相互交互的端口</span>
+<span class="go">      server.1=slaver-1:2888:3888</span>
+<span class="go">      server.2=slaver-2:2888:3888</span>
+<span class="go">      server.3=slaver-3:2888:3888</span>
+<span class="gp">      #</span>server.A<span class="o">=</span>B:C:D  其中A是一个数字，代表这是第几号服务器；B是服务器的IP地址或域名解析地址；C表示服务器与群集中的“领导者”交换信息的端口；当领导者失效后，D表示用来执行选举时服务器相互通信的端口。
+<span class="go">      root@slaver-1:/opt/zookeeper-3.4.12# mkdir zookeeperdata dataLogDir # 创建相应文件，验证环境，正式环境建议将数据文件目录与安装文件目录分离。</span>
+</pre></div>
+</div>
+<p>4、将slaver-1 zookeeper安装及配置文件复制到slaver-2和slaver-3节点上。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> slaver-1执行
+<span class="gp">root@slaver-1:/opt#</span> scp -r zookeeper-3.4.12/ ubuntu@slaver-2:/home/ubuntu
+<span class="gp">root@slaver-1:/opt#</span> scp -r zookeeper-3.4.12/ ubuntu@slaver-3:/home/ubuntu
+<span class="gp">#</span> slaver-2执行
+<span class="gp">root@slaver-2:/home/hadoop#</span> mv /home/ubuntu/zookeeper-3.4.12 /opt/     <span class="c1"># 安装到指定目录。</span>
+<span class="gp">root@slaver-2:/opt/zookeeper-3.4.12/zookeeperdata#</span> <span class="nb">echo</span> <span class="m">2</span> &gt; myid
+<span class="gp">#</span> slaver-3执行
+<span class="gp">root@slaver-3:/home/hadoop#</span> mv /home/ubuntu/zookeeper-3.4.12 /opt/     <span class="c1"># 安装到指定目录。</span>
+<span class="gp">root@slaver-3:/opt/zookeeper-3.4.12/zookeeperdata#</span> <span class="nb">echo</span> <span class="m">3</span> &gt; myid
+</pre></div>
+</div>
+<p>5、验证zookeeper是否安装及配置成功，启动和关闭zookeeper服务。分别在slaver-1,slaver-2,slaver-3节点执行：</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">root@slaver-1:/opt/zookeeper-3.4.12/bin#</span> ./zkServer.sh start <span class="c1">#执行启动脚本</span>
+<span class="go">ZooKeeper JMX enabled by default</span>
+<span class="go">Using config: /opt/zookeeper-3.4.12/bin/../conf/zoo.cfg</span>
+<span class="go">Starting zookeeper ... already running as process 23444.</span>
+<span class="gp">root@slaver-1:/opt/zookeeper-3.4.12/bin# jps #</span>检查是否启动成功
+<span class="go">25235 Jps</span>
+<span class="go">23444 QuorumPeerMain #启动成功 可通过/opt/zookeeper-3.4.12/bin/zookeeper.out 文件查看启动日志。</span>
+</pre></div>
+</div>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">#</span> slaver-1
+<span class="gp">root@slaver-1:/opt/zookeeper-3.4.12/bin#</span> ./zkServer.sh status
+<span class="go">ZooKeeper JMX enabled by default</span>
+<span class="go">Using config: /opt/zookeeper-3.4.12/bin/../conf/zoo.cfg</span>
+<span class="go">Mode: follower</span>
+<span class="gp">#</span> slaver-2
+<span class="gp">root@slaver-2:/opt/zookeeper-3.4.12#</span> ./bin/zkServer.sh status
+<span class="go">ZooKeeper JMX enabled by default</span>
+<span class="go">Using config: /opt/zookeeper-3.4.12/bin/../conf/zoo.cfg</span>
+<span class="go">Mode: leader</span>
+<span class="gp">#</span> slaver-3
+<span class="gp">root@slaver-3:/opt/zookeeper-3.4.12#</span> ./bin/zkServer.sh status
+<span class="go">ZooKeeper JMX enabled by default</span>
+<span class="go">Using config: /opt/zookeeper-3.4.12/bin/../conf/zoo.cfg</span>
+<span class="go">Mode: follower</span>
+</pre></div>
+</div>
+<p>6、注意事项。zookeeper没有限制系统用户，但如果使用root用户执行该脚本，需要让root用户拥有java执行权限，即需要在root用户bashrc文件下配置java环境变量。</p>
+</div>
+<div class="section" id="id13">
+<h4>各节点安装hadoop<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h4>
+<p>安装过程跟上述章节一致，不同的是需要修改相应的配置文件，各个具体配置如下：</p>
+<p>6.1 首先需要在各个节点上先创建相关文件：</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">root@master:/opt/hadoop-2.7.7#</span> mkdir -p ./data/dfs/name
+<span class="gp">root@master:/opt/hadoop-2.7.7#</span> mkdir -p ./data/dfs/name
+<span class="gp">root@master:/opt/hadoop-2.7.7#</span> mkdir -p ./data/dfs/data
+<span class="gp">root@master:/opt/hadoop-2.7.7#</span> mkdir -p ./data/yarn/local
+<span class="gp">root@master:/opt/hadoop-2.7.7#</span> mkdir -p ./log/yarn
+<span class="gp">#</span> 修改创建文件权限
+<span class="gp">root@master:/opt/hadoop-2.7.7#</span> chown -R hadoop:hadoop log
+<span class="gp">root@master:/opt/hadoop-2.7.7#</span> chown -R hadoop:hadoop data
+</pre></div>
+</div>
+<p>6.2 core-site.xml 配置文件如下：</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">root@master:/opt/hadoop-2.7.7/etc/hadoop#</span> vi core-site.xml
+<span class="go">       &lt;configuration&gt;</span>
+<span class="go">     &lt;property&gt;</span>
+<span class="go">         &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</span>
+<span class="go">         &lt;value&gt;file:/opt/hadoop-2.7.7/tmp&lt;/value&gt;</span>
+<span class="go">         &lt;description&gt;Abase for other temporary directories.&lt;/description&gt;</span>
+<span class="go">     &lt;/property&gt;</span>
+<span class="go">     &lt;property&gt;</span>
+<span class="go">         &lt;name&gt;fs.defaultFS&lt;/name&gt;</span>
+<span class="go">         &lt;value&gt;hdfs://cluster1&lt;/value&gt;</span>
+<span class="go">     &lt;/property&gt;</span>
+<span class="go">     &lt;property&gt;</span>
+<span class="go">       &lt;name&gt;ha.zookeeper.quorum&lt;/name&gt;</span>
+<span class="go">       &lt;value&gt;slaver-1:2181,slaver-2:2181,slaver-3:2181&lt;/value&gt;</span>
+<span class="go">   &lt;/property&gt;</span>
+<span class="go"> &lt;/configuration&gt;</span>
+</pre></div>
+</div>
+<p>6.2 配置hdfs-site.xml文件。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">&lt;configuration&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.nameservices&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;cluster1&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.ha.namenodes.cluster1&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master,master-0&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.namenode.rpc-address.cluster1.master&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master:9000&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.namenode.rpc-address.cluster1.master-0&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master-0:9000&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.namenode.http-address.cluster1.master&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master:50070&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.namenode.http-address.cluster1.master-0&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master-0:50070&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.namenode.shared.edits.dir&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;qjournal://slaver-1:8485;slaver-2:8485;slaver-3:8485/cluster1&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.client.failover.proxy.provider.cluster1&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.ha.fencing.methods&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;sshfence&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.ha.fencing.ssh.private-key-files&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;/home/hadoop/.ssh/id_rsa&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.journalnode.edits.dir&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;/opt/hadoop-2.7.7/data/tmp/journal&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.ha.automatic-failover.enabled&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;true&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;/opt/hadoop-2.7.7/data/dfs/name&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;/opt/hadoop-2.7.7/data/dfs/data&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.replication&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;3&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.webhdfs.enabled&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;true&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.journalnode.http-address&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;0.0.0.0:8480&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;dfs.journalnode.rpc-address&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;0.0.0.0:8485&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;ha.zookeeper.quorum&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;slaver-1:2181,slaver-2:2181,slaver-3:2181&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+
+<span class="go">&lt;/configuration&gt;</span>
+</pre></div>
+</div>
+<p>6.3 配置map-site.xml文件。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">&lt;configuration&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;yarn&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master:10020&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master-0:19888&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">&lt;/configuration&gt;</span>
+</pre></div>
+</div>
+<p>6.4 配置yarn-site.xml文件。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">&lt;configuration&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.connect.retry-interval.ms&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;2000&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">                &lt;value&gt;true&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.ha.rm-ids&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;rm1,rm2&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;ha.zookeeper.quorum&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;slaver-1:2181,slaver-2:2181,slaver-3:2181&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.ha.automatic-failover.enabled&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;true&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.hostname.rm1&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.hostname.rm2&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master-0&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.ha.id&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;rm1&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;!--开启自动恢复功能 --&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.recovery.enabled&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;true&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;!--配置与zookeeper的连接地址 --&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.zk-state-store.address&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;slaver-1:2181,slaver-2:2181,slaver-3:2181&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.store.class&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;org.apache.hadoop.yarn.server.resourcemanager.recovery.ZKRMStateStore&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.zk-address&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;slaver-1:2181,slaver-2:2181,slaver-3:2181&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.cluster-id&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;cluster1-yarn&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;!--schelduler失联等待连接时间 --&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.app.mapreduce.am.scheduler.connection.wait.interval-ms&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;5000&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;!--配置rm1 --&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.address.rm1&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master:8132&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.scheduler.address.rm1&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master:8130&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.webapp.address.rm1&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master:8188&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.resource-tracker.address.rm1&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master:8131&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.admin.address.rm1&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master:8033&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.ha.admin.address.rm1&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master:23142&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;!--配置rm2 --&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.address.rm2&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master-0:8132&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.scheduler.address.rm2&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master-0:8130&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.webapp.address.rm2&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master-0:8188&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.resource-tracker.address.rm2&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master-0:8131&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.admin.address.rm2&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master-0:8033&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.ha.admin.address.rm2&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;master-0:23142&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.nodemanager.aux-services.mapreduce.shuffle.class&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;org.apache.hadoop.mapred.ShuffleHandler&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.nodemanager.local-dirs&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;/opt/hadoop-2.7.7/data/yarn/local&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.nodemanager.log-dirs&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;/opt/hadoop-2.7.7/log/yarn&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;mapreduce.shuffle.port&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;23080&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;!--故障处理类 --&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.client.failover-proxy-provider&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;org.apache.hadoop.yarn.client.ConfiguredRMFailoverProxyProvider&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">        &lt;property&gt;</span>
+<span class="go">                &lt;name&gt;yarn.resourcemanager.ha.automatic-failover.zk-base-path&lt;/name&gt;</span>
+<span class="go">                &lt;value&gt;/yarn-leader-election&lt;/value&gt;</span>
+<span class="go">        &lt;/property&gt;</span>
+<span class="go">&lt;/configuration&gt;</span>
+</pre></div>
+</div>
+<p>6.5 按照原来章节配置hadoop-env.sh、yarn-env.sh以及slave。</p>
+<p>6.6 将配置文件复制到各个节点。</p>
+<p>6.7 启动命令。</p>
+<p>启动命令（hdfs和yarn的相关命令）</p>
+<p>6.7.1 在各个datanode节点上启动zk服务。启动命令为 zkServer.sh start,可以输入zkServer.sh status查看启动状态， 本次我们配置了三个DN节点，会出现一个leader和两个follower。输入jps，会显示启动进程：QuorumPeerMain</p>
+<p>6.7.2 在namenode节点，我们选在master节点，启动启动journalnode服务，命令如下：hadoop-daemons.sh start journalnode。或者单独进入到每个DN输入启动命令：hadoop-daemon.sh start journalnode。输入jps显示启动进程：JournalNode。</p>
+<p>6.7.3 在master节点格式化ZK，命令如下：hdfs zkfc -formatZK。</p>
+<p>6.7.4 在master节点格式化HDFS，命令如下：hadoop namenode -format。</p>
+<p>6.7.5 在master节点启动hdfs和yarn，命令如下：start-dfs.sh和start-yarn.sh，在master-0节点启动namenode和ResourceManager进程，命令如下：hadoop-daemon.sh start namenode和yarn-daemon.sh start resourcemanager。</p>
+<p>6.7.6 同步数据，在master-0节点同步命令，命令如下：hdfs namenode -bootstrapStandby，同步后master和master-1节点/opt/hadoop-2.7.7/data/dfs/name/current 下version数据应该一致。</p>
+<p>6.8 HA测试验证。直接将master节点断网处置，master-0状态由standby，变为active。</p>
+<p>6.9 hadoop 集群存储及计算验证。</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="go">要使用 HDFS，首先需要在 HDFS 中创建用户目录：</span>
+<span class="go">./bin/hdfs dfs -mkdir -p  /user/hadoop</span>
+<span class="go">Shell 命令</span>
+<span class="go">接着将 ./etc/hadoop 中的 xml 文件作为输入文件复制到分布式文件系统中，即将 /usr/local/hadoop/etc/hadoop 复制到分布式文件系统中的 /user/hadoop/input 中。我们使用的是 hadoop 用户，并且已创建相应的用户目录 /user/hadoop ，因此在命令中就可以使用相对路径如 input，其对应的绝对路径就是 /user/hadoop/input:</span>
+<span class="go">./bin/hdfs dfs -mkdir input</span>
+<span class="go">./bin/hdfs dfs -put ./etc/hadoop/*.xml input</span>
+<span class="go">Shell 命令</span>
+<span class="go">复制完成后，可以通过如下命令查看文件列表：</span>
+<span class="go">./bin/hdfs dfs -ls input</span>
+<span class="go">Shell 命令</span>
+<span class="go">伪分布式运行 MapReduce 作业的方式跟单机模式相同，区别在于伪分布式读取的是HDFS中的文件（可以将单机步骤中创建的本地 input 文件夹，输出结果 output 文件夹都删掉来验证这一点）。</span>
+<span class="go">./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar grep input output &#39;dfs[a-z.]+&#39;</span>
+<span class="go">Shell 命令</span>
+<span class="go">查看运行结果的命令（查看的是位于 HDFS 中的输出结果）：</span>
+<span class="go">./bin/hdfs dfs -cat output/*</span>
+</pre></div>
+</div>
+<p>至此，hadoop HA 分布式环境搭建完毕。</p>
+<p>参考：</p>
+<p><a class="reference external" href="https://www.cnblogs.com/smartloli/p/4298430.html">https://www.cnblogs.com/smartloli/p/4298430.html</a></p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">HADOOP安装</a><ul>
+<li><a class="reference internal" href="#id1">单机版本安装</a><ul>
+<li><a class="reference internal" href="#id2">创建hadoop用户</a></li>
+<li><a class="reference internal" href="#java">java安装</a></li>
+<li><a class="reference internal" href="#id3">hadoop 单机伪分布式安装</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">分布式版本安装</a><ul>
+<li><a class="reference internal" href="#id5">环境准备</a><ul>
+<li><a class="reference internal" href="#id6">服务器基本配置</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id7">创建hadoop用户</a></li>
+<li><a class="reference internal" href="#master-slaver-hadoop">配置master-slaver hadoop用户免密码登录</a></li>
+<li><a class="reference internal" href="#id8">java安装</a></li>
+<li><a class="reference internal" href="#id9">hadoop 完全分布式安装</a><ul>
+<li><a class="reference internal" href="#id10">软件包下载</a></li>
+<li><a class="reference internal" href="#masterhadoop">master节点安装hadoop</a></li>
+<li><a class="reference internal" href="#slaverhadoop">slaver节点安装hadoop</a></li>
+<li><a class="reference internal" href="#id11">启动hadoop集群</a></li>
+<li><a class="reference internal" href="#id12">扩展hadoop集群</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#hadoop-ha">hadoop HA完全分布式安装</a><ul>
+<li><a class="reference internal" href="#slaverzookeeper">slaver节点安装zookeeper</a></li>
+<li><a class="reference internal" href="#id13">各节点安装hadoop</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index-hadoop.html"
+                        title="previous chapter">Haking On Hadoop（P-version）</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../index-kafka.html"
+                        title="next chapter">Haking On Kafka（P-version）</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/hadoop/hadoop-install.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../index-kafka.html" title="Haking On Kafka（P-version）"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index-hadoop.html" title="Haking On Hadoop（P-version）"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">doczhao 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index-hadoop.html" >Haking On Hadoop（P-version）</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, zhaoyuanjie.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+    </div>
+  </body>
+</html>
