@@ -13,12 +13,12 @@ kafka使用hadoop用户安装。
 
 .. code-block:: console
 
-package                    hostname
-kafka、java                 master
-kafka、java                 master-0
-kafka、java、zookeeper      slaver-1
-kafka、java、zookeeper      slaver-2
-kafka、java、zookeeper      slaver-3
+ package                    hostname
+ kafka、java                 master
+ kafka、java                 master-0
+ kafka、java、zookeeper      slaver-1
+ kafka、java、zookeeper      slaver-2
+ kafka、java、zookeeper      slaver-3
 
 .. end
 
