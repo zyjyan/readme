@@ -17,8 +17,8 @@ kafka使用hadoop用户安装。
  kafka、java                 master
  kafka、java                 master-0
  kafka、java、zookeeper      slaver-1
- kafka、java、zookeeper      slaver-2
- kafka、java、zookeeper      slaver-3
+ java、zookeeper      slaver-2
+ java、zookeeper      slaver-3
 
 .. end
 
