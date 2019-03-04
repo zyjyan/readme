@@ -1,11 +1,32 @@
-KAFKA单机版本安装及使用
-~~~~~~~~~~~~~~~~~~~~~~~
+KAFKA分布式安装及使用
+~~~~~~~~~~~~~~~~~~~~~
 
-前面简单介绍了KAFKA的基本概念及用途。本文中，将选择ubuntu14.04(AMD64)操作系统作为例，进行KAFKA安装实践。
+本文中，将选择ubuntu16.04(AMD64)操作系统作为例，进行KAFKA分布式部署安装及实践。
+kafka依赖于zookeeper和java，因此在安装kafka之前，请确保zookeeper及java正常运行。具体java及zookeeper安装，可见hadoop ha分布式部署相关章节。我们本文中，安装
+kafka使用hadoop用户安装。
 
-1-软件准备
---------
-下载软件包。`KAFKA源选取合适的包下载安装 <https://www.apache.org/dyn/closer.cgi?path=/kafka/2.1.0/kafka_2.11-2.1.0.tgz>`_.
+
+
+1-软件及环境准备
+----------------
+1.1 本次使用三台服务器安装kafka。其中，master、master-0、slaver-1安装kafka集群，slaver-1、slaver-2、slaver-3安装zookeeper集群。
+
+.. code-block:: console
+
+package                    hostname
+kafka、java                 master
+kafka、java                 master-0
+kafka、java、zookeeper      slaver-1
+kafka、java、zookeeper      slaver-2
+kafka、java、zookeeper      slaver-3
+
+.. end
+
+
+
+1.2 下载软件包。`KAFKA源选取合适的包下载安装 <https://www.apache.org/dyn/closer.cgi?path=/kafka/2.1.0/kafka_2.11-2.1.0.tgz>`_.
+将kafka安装包在master节点解压到/opt目录，并改名为kafka。
+
 
 .. code-block:: console
 
@@ -15,44 +36,70 @@ KAFKA单机版本安装及使用
 
 .. end
 
-将下载的软件包解压缩到/opt目录。
-
-2-运行KAFKA服务端
-------------------
-Kafka使用ZooKeeper，所以如果你还没有ZooKeeper服务器，你需要先启动它。KAFKA中集成了一个ZooKeeper实例。
+1.3 修改kafka配置文件;
 
 .. code-block:: console
 
-  root@ubuntu:/opt/kafka# ./bin/zookeeper-server-start.sh config/zookeeper.properties
-  [2018-12-19 14:44:06,230] INFO Server environment:user.home=/root (org.apache.zookeeper.server.ZooKeeperServer)
-  [2018-12-19 14:44:06,230] INFO Server environment:user.dir=/opt/kafka (org.apache.zookeeper.server.ZooKeeperServer)
-  [2018-12-19 14:44:06,243] INFO tickTime set to 3000 (org.apache.zookeeper.server.ZooKeeperServer)
+root@master:/opt/kafka/config# vi server.properties
+root@master:/opt/kafka/config# grep -vE  '^#|^$' server.properties
 
-
-  [2018-12-19 14:44:06,243] INFO minSessionTimeout set to -1 (org.apache.zookeeper.server.ZooKeeperServer)
-  [2018-12-19 14:44:06,243] INFO maxSessionTimeout set to -1 (org.apache.zookeeper.server.ZooKeeperServer)
-  [2018-12-19 14:44:06,254] INFO binding to port 0.0.0.0/0.0.0.0:2181 (org.apache.zookeeper.server.NIOServerCnxnFactory)
+broker.id=1 #根据服务器配置，每个服务器号唯一
+num.network.threads=3
+num.io.threads=8
+socket.send.buffer.bytes=102400
+socket.receive.buffer.bytes=102400
+socket.request.max.bytes=104857600
+log.dirs=/var/kafka-logs
+num.partitions=1
+num.recovery.threads.per.data.dir=1
+offsets.topic.replication.factor=1
+transaction.state.log.replication.factor=1
+transaction.state.log.min.isr=1
+log.retention.hours=168
+log.segment.bytes=1073741824
+log.retention.check.interval.ms=300000
+zookeeper.connect=slaver-1:2181,slaver-2:2181,slaver-3:2181 #zookeeper 集群节点；
+zookeeper.connection.timeout.ms=6000 
+group.initial.rebalance.delay.ms=0
 
 .. end
 
-在另一个shell终端启动KAFKA服务端。
+1.4 将kafka解压包使用scp命令拷贝至集群其他节点，并将文件mv至/opt目录下，修改配置文件中的broker.id项。
+
+1.5 修改各个服务器文件目录权限。
 
 .. code-block:: console
 
-  root@ubuntu:/opt/kafka# bin/kafka-server-start.sh config/server.properties
-  [2018-12-19 14:46:41,891] INFO Registered kafka:type=kafka.Log4jController MBean (kafka.utils.Log4jControllerRegistration$)
-  [2018-12-19 14:46:43,586] INFO starting (kafka.server.KafkaServer)
-  [2018-12-19 14:46:43,588] INFO Connecting to zookeeper on localhost:2181 (kafka.server.KafkaServer)
-
-  [2018-12-19 14:46:48,112] INFO Kafka version : 1.1.0 (org.apache.kafka.common.utils.AppInfoParser)
-  [2018-12-19 14:46:48,112] INFO Kafka commitId : fdcf75ea326b8e07 (org.apache.kafka.common.utils.AppInfoParser)
-  [2018-12-19 14:46:48,121] INFO [KafkaServer id=0] started (kafka.server.KafkaServer)
+root@master:/opt# chown -R hadoop-1:hadoop-1 kafka/
 
 .. end
+
+
+2-启动服务
+----------
+
+2.1 启动zookeeper集群，并确保zookeeper正常运行。
+2.2 登录到三台服务器上，使用hadoop用户启动kafka。
+
+.. code-block:: console
+
+hadoop@master:/opt/kafka$ bin/kafka-server-start.sh config/server.properties &
+
+hadoop@master:/opt/kafka$ jps
+18097 NameNode
+22690 Kafka
+18538 ResourceManager
+23246 Jps
+18462 DFSZKFailoverController
+
+.. end
+
+
+
 
 3-创建TOPIC
 -----------
-再启动一个shell终端，使用如下指令创建名为 ``test`` 的单分区单副本主题：
+创建一个名称为test-zhao的Topic，3个分区，并且复制因子为1，执行如下命令:
 
 .. code-block:: console
 
@@ -66,24 +113,84 @@ Kafka使用ZooKeeper，所以如果你还没有ZooKeeper服务器，你需要先
 
 .. code-block:: console
 
-  root@ubuntu:/opt/kafka# bin/kafka-topics.sh --list --zookeeper localhost:2181
-  test
+  hadoop-1@master:/opt/kafka$ bin/kafka-topics.sh --create --zookeeper slaver-1:2181,slaver-2:2181,slaver-3:2181 --replication-factor 1 --partitions 3 --topic test-zhao
 
 .. end
 
-4-发送消息
-----------
+创建成功后，可在kafka数据目录查看，分别在master、master-0、slaver-1主机的kafka数据目录，
+即配置文件中的log.dirs=/var/kafka-logs，形成partition为 test-zhao-0,test-zhao-1,test-zhao-2的文件夹，
+文件夹下xxx.log是消息集文件， xxx.index 偏移量索引文件 ，xxx.timeindex 时间戳索引文件；
+
+查看已创建的topic；
+
+.. code-block:: console
+
+hadoop-1@master:/opt/kafka$ ./bin/kafka-topics.sh --list --zookeeper slaver-2:2181
+test-zhao
+
+.. end
+
+# 查看topic信息。
+
+.. code-block:: console
+
+hadoop-1@master:/var/log/kafka-logs/test-zhao-0$  /opt/kafka//bin/kafka-topics.sh --describe --zookeeper slaver-1:2181 --topic test-zhao
+Topic:test-zhao	PartitionCount:3	ReplicationFactor:1	Configs:
+	Topic: test-zhao	Partition: 0	Leader: 1	Replicas: 1	Isr: 1
+	Topic: test-zhao	Partition: 1	Leader: 2	Replicas: 2	Isr: 2
+	Topic: test-zhao	Partition: 2	Leader: 3	Replicas: 3	Isr: 3
+
+.. end
+可以看到 partition0在id为1的broker上，其数据副本也在broker1上，并且broker1为leader状态。
+我们可以通过Kafka自带的bin/kafka-console-producer.sh和bin/kafka-console-consumer.sh脚本，来验证演示如果发布消息、消费消息。
+
+4-模拟客户端发送消息
+--------------------
 Kafka自带一个命令行客户机，它将从文件或标准输入中获取输入，并将其作为消息发送到Kafka集群。默认情况下，每一行都将作为单独的消息发送。
 使用如下指令发送消息。
 
 .. code-block:: console
 
-  root@ubuntu:/opt/kafka# bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
-  >this is the first message
-  >can you receive^[[D?
-  >
+hadoop-1@master:/opt/kafka$ bin/kafka-console-producer.sh --broker-list master:9092, master-0:9092, slaver-1:9092 --topic test-zhao
+>cecgw-kafka-zhaoyuanjie-first
 
 .. end
+我们在master节点，模拟发送了‘cecgw-kafka-zhaouanjie-first’的消息。我们通过字符串查找，可以看到，该消息落到了slaver-1节点日志中。
+
+.. code-block:: console
+
+hadoop-1@slaver-1:/var/log/kafka-logs/test-zhao-2$ grep 'cecgw'  ./ -R
+Binary file ./00000000000000000000.log matches
+可以看出该文件中，有发送的消息内容。通过kafka自带的命令，可以将二进制文件，转化为字符类型文件。
+
+opt/kafka/bin/kafka-run-class.sh kafka.tools.DumpLogSegments --files /var/log/kafka-logs/test-zhao-2/00000000000000000000.log --print-data-log
+Dumping /var/log/kafka-logs/test-zhao-2/00000000000000000000.log
+Starting offset: 0
+offset: 0 
+position: 0 
+CreateTime: 1551680240403 
+isvalid: true 
+keysize: -1 
+valuesize: 29 
+magic: 2  #这个占用1个字节，主要用于标识 Kafka 版本。
+compresscodec: NONE 
+producerId: -1 
+producerEpoch: -1 
+sequence: -1 
+isTransactional: false 
+headerKeys: [] 
+payload: cecgw-kafka-zhaoyuanjie-first
+
+# 查看index文件内容
+hadoop-1@slaver-1:/var/log/kafka-logs/test-zhao-2$ /opt/kafka/bin/kafka-run-class.sh kafka.tools.DumpLogSegments --files /var/log/kafka-logs/test-zhao-2/00000000000000000000.index --print-data-log
+Dumping /var/log/kafka-logs/test-zhao-2/00000000000000000000.index
+offset: 0 position: 0
+
+.. end
+
+我们仅在slaver-1节点查找到了该字符串，因此数据备份因子为1生效。
+
+
 
 5-启动消费者
 ------------
@@ -91,67 +198,47 @@ Kafka自带一个命令行客户机，它将从文件或标准输入中获取输
 
 .. code-block:: console
 
-  cecgw@ubuntu:/opt/kafka$ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
-  this is the first message
-  can you receiv?
+hadoop-1@slaver-1:/var/log/kafka-logs/test-zhao-2$ /opt/kafka/bin/kafka-console-consumer.sh --zookeeper slaver-1:2181, slaver-2:2181, slaver-3:2181 --from-beginning --topic test-zhao
+Using the ConsoleConsumer with old consumer is deprecated and will be removed in a future major release. Consider using the new consumer by passing [bootstrap-server] instead of [zookeeper].
+
+cecgw-kafka-zhaoyuanjie-first
 
 .. end
 
 目前已经正常收到消息。
 
-6-设置多代理集群 (multi-broker cluster)
----------------------------------------
-在同一个物理服务器下，启动多代理模式。
-首先为每个代理创建配置文件。
+6. 删除topic。
+.. code-block:: console
+
+hadoop-1@master:/opt/kafka$ bin/kafka-topics.sh  --delete --zookeeper slaver-1:2181  --topic test-zhao
+Topic test-zhao is marked for deletion.
+Note: This will have no impact if delete.topic.enable is not set to true.
+[2019-03-04 15:05:49,125] INFO [GroupMetadataManager brokerId=1] Removed 0 expired offsets in 1 milliseconds. (kafka.coordinator.group.GroupMetadataManager)
+[2019-03-04 15:05:49,172] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions  (kafka.server.ReplicaFetcherManager)
+[2019-03-04 15:05:49,172] INFO [ReplicaAlterLogDirsManager on broker 1] Removed fetcher for partitions  (kafka.server.ReplicaAlterLogDirsManager)
+[2019-03-04 15:05:49,177] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions test-zhao-0 (kafka.server.ReplicaFetcherManager)
+[2019-03-04 15:05:49,177] INFO [ReplicaAlterLogDirsManager on broker 1] Removed fetcher for partitions test-zhao-0 (kafka.server.ReplicaAlterLogDirsManager)
+[2019-03-04 15:05:49,180] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions  (kafka.server.ReplicaFetcherManager)
+[2019-03-04 15:05:49,180] INFO [ReplicaAlterLogDirsManager on broker 1] Removed fetcher for partitions  (kafka.server.ReplicaAlterLogDirsManager)
+[2019-03-04 15:05:49,181] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions test-zhao-0 (kafka.server.ReplicaFetcherManager)
+[2019-03-04 15:05:49,181] INFO [ReplicaAlterLogDirsManager on broker 1] Removed fetcher for partitions test-zhao-0 (kafka.server.ReplicaAlterLogDirsManager)
+[2019-03-04 15:05:49,219] INFO Log for partition test-zhao-0 is renamed to /var/log/kafka-logs/test-zhao-0.fd5fa204b9a54209afd39ced6263e026-delete and is scheduled for deletion (kafka.log.LogManager)
+
+.. end
+可以看到各个节点上的partition均已经删除掉。
+
+
+
+
+7、创建一个复制因子为2,partition为3的主题：
 
 .. code-block:: console
 
-  root@ubuntu:/opt/kafka/config# cp server.properties server-1.properties 
-  root@ubuntu:/opt/kafka/config# cp server.properties server-2.properties
+  > bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 2 --partitions 3 --topic my-replicated-topic
 
 .. end
 
-编辑配置文件如下：
 
-.. code-block:: console
-
-  config/server-1.properties:
-      broker.id=1
-      listeners=PLAINTEXT://:9093
-      log.dirs=/tmp/kafka-logs-1
- 
-  config/server-2.properties:
-      broker.id=2
-      listeners=PLAINTEXT://:9094
-      log.dirs=/tmp/kafka-logs-2
-
-.. end
-
-.. Note::
-
-  broker.id 是唯一标识，在同一个物理服务器上，端口不能重复使用，在进行配置时注意。
-
-.. end
-
-我们已经有了Zookeeper，我们的单节点已经启动，所以我们只需要启动两个新节点:
-
-.. code-block:: console
-
-  root@ubuntu:/opt/kafka# bin/kafka-server-start.sh config/server-1.properties &
-  [1] 7869
-  root@ubuntu:/opt/kafka# [2018-12-19 15:14:06,475] INFO Registered kafka:type=kafka.Log4jController MBean (kafka.utils.Log4jControllerRegistration$)
-
-  root@ubuntu:/opt/kafka#bin/kafka-server-start.sh config/server-2.properties &
-
-.. end
-
-创建一个复制因子为3的主题：
-
-.. code-block:: console
-
-  > bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 --partitions 1 --topic my-replicated-topic
-
-.. end
 
 
    
