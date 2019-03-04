@@ -14,8 +14,10 @@ Get-Start Docker
 ---------------
 1. image:镜像是一个轻量级的、独立的、可执行的包，它包含运行一个软件所需的所有东西，包括代码、运行时、库、环境变量和配置文件。
 2. Container 容器是一个映像的运行时实例，当实际执行时，映像会在内存中出现。默认情况下，它与主机环境完全隔离，只有在配置时才访问主机文件和端口。
+
 Docker 与 VM 的比较
---------------------
+-------------------
+
 .. figure:: image/docker/vm.png
    :width: 80%
    :align: center
@@ -122,6 +124,7 @@ app.py
 	app.py  Dockerfile  requirements.txt
 
 .. end
+
 现在可以运行docker命令，构建一个Docker镜像. 我们用-t命令标记该镜像。
 
 .. code-block:: console
@@ -187,6 +190,7 @@ app.py
 	 ---> e8aafca68713
 	Successfully built e8aafca68713
 	Successfully tagged friendlyhello:latest
+
 .. end
 
 运行容器
@@ -233,7 +237,9 @@ curl命令进行查看。
 
 	# curl http://localhost:4000
 	<h3>Hello World!</h3><b>Hostname:</b> 598cc14f4c28<br/><b>Visits:</b> <i>cannot connect to Redis, counter disabled</i>
+
 .. end
+
 分享镜像
 --------
 
@@ -320,7 +326,7 @@ docker-compose.yml 文件定义了Docker容器的在生成中的行为。
 
 我们定义如下docker-compose.yml 文件.
 
-.. code-block:: yml
+.. code-block:: console
 
 	version: "3"
 	services:
@@ -354,7 +360,8 @@ docker-compose.yml 文件定义了Docker容器的在生成中的行为。
 6. 定义webnet网络，使用默认的设置.
 
 运行新的负载均衡APP
-------------------
+-------------------
+
 1. 终端执行 docker swarm init --advertise-addr br-ex
 .. code-block:: console
 
@@ -371,11 +378,14 @@ docker-compose.yml 文件定义了Docker容器的在生成中的行为。
 
 2. 终端执行 docker stack deploy -c docker-compose.yml getstartedlab 需要给运行的APP一个名字，此名字定义为getstartedlab:
 
-.. code-block:: cosole
-	docker stack deploy -c docker-compose.yml getstartedlab
+.. code-block:: console
+	
+        docker stack deploy -c docker-compose.yml getstartedlab
 	Creating network getstartedlab_webnet
 	Creating service getstartedlab_web
+
 .. end 
+
 这样，我们的一个服务栈已经运行了5个容器实例，在同一个物理服务器中.
 
 3. 查看服务.docker service ls
@@ -414,9 +424,13 @@ deb包安装
 
 用户可以到 `Docker源选取合适的包下载安装 <https://download.docker.com/linux/ubuntu/dists/trusty/>`_.
 下载后，使用如下命令进行安装：
+
 .. code-block:: console
+
    root@cecgw:/home/cecgw# dpkg -i docker-ce_17.12.0~ce-0~ubuntu_amd64.deb
+
 .. end
+
 首次执行后，发现出现报错信息如下:
 
 .. code-block:: console
@@ -435,13 +449,16 @@ deb包安装
   Processing triggers for man-db (2.6.7.1-1ubuntu1) ...
   Errors were encountered while processing:
   docker-ce
+
 .. end
+
 发现系统中缺少依赖，关于依赖的问题，确实是在软件部署及升级过程中，非常头痛的问题，Docker也是在着重解决该问题。
 
 .. Note::
 
   这里给大家普及下，如何找到相关的依赖，`站点 https://pkgs.org/ <https://pkgs.org/>`_ 中提供了linux中大部分的软件包，
   大家可以在此网站上，选取适合自己的操作系统版本，并搜索下载相关的软件包。
+
 .. end
 
 

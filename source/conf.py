@@ -43,7 +43,7 @@ source_suffix = '.rst'
 
 # The master toctree document.
 master_doc = 'index'
-
+latex_engine = 'xelatex'
 # General information about the project.
 project = u'doczhao'
 copyright = u'2017, zhaoyuanjie'
