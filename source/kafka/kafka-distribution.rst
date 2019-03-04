@@ -40,27 +40,27 @@ kafka、java、zookeeper      slaver-3
 
 .. code-block:: console
 
-root@master:/opt/kafka/config# vi server.properties
-root@master:/opt/kafka/config# grep -vE  '^#|^$' server.properties
+ root@master:/opt/kafka/config# vi server.properties
+ root@master:/opt/kafka/config# grep -vE  '^#|^$' server.properties
 
-broker.id=1 #根据服务器配置，每个服务器号唯一
-num.network.threads=3
-num.io.threads=8
-socket.send.buffer.bytes=102400
-socket.receive.buffer.bytes=102400
-socket.request.max.bytes=104857600
-log.dirs=/var/kafka-logs
-num.partitions=1
-num.recovery.threads.per.data.dir=1
-offsets.topic.replication.factor=1
-transaction.state.log.replication.factor=1
-transaction.state.log.min.isr=1
-log.retention.hours=168
-log.segment.bytes=1073741824
-log.retention.check.interval.ms=300000
-zookeeper.connect=slaver-1:2181,slaver-2:2181,slaver-3:2181 #zookeeper 集群节点；
-zookeeper.connection.timeout.ms=6000 
-group.initial.rebalance.delay.ms=0
+ broker.id=1 #根据服务器配置，每个服务器号唯一
+ num.network.threads=3
+ num.io.threads=8
+ socket.send.buffer.bytes=102400
+ socket.receive.buffer.bytes=102400
+ socket.request.max.bytes=104857600
+ log.dirs=/var/kafka-logs
+ num.partitions=1
+ num.recovery.threads.per.data.dir=1
+ offsets.topic.replication.factor=1
+ transaction.state.log.replication.factor=1
+ transaction.state.log.min.isr=1
+ log.retention.hours=168
+ log.segment.bytes=1073741824
+ log.retention.check.interval.ms=300000
+ zookeeper.connect=slaver-1:2181,slaver-2:2181,slaver-3:2181 #zookeeper 集群节点；
+ zookeeper.connection.timeout.ms=6000 
+ group.initial.rebalance.delay.ms=0
 
 .. end
 
@@ -70,7 +70,7 @@ group.initial.rebalance.delay.ms=0
 
 .. code-block:: console
 
-root@master:/opt# chown -R hadoop-1:hadoop-1 kafka/
+ root@master:/opt# chown -R hadoop-1:hadoop-1 kafka/
 
 .. end
 
@@ -83,15 +83,15 @@ root@master:/opt# chown -R hadoop-1:hadoop-1 kafka/
 
 .. code-block:: console
 
-hadoop@master:/opt/kafka$ bin/kafka-server-start.sh config/server.properties &
+ hadoop@master:/opt/kafka$ bin/kafka-server-start.sh config/server.properties &
 
-hadoop@master:/opt/kafka$ jps
-18097 NameNode
-22690 Kafka
-18538 ResourceManager
-23246 Jps
-18462 DFSZKFailoverController
-
+ hadoop@master:/opt/kafka$ jps
+ 18097 NameNode
+ 22690 Kafka
+ 18538 ResourceManager
+ 23246 Jps
+ 18462 DFSZKFailoverController
+ 
 .. end
 
 
@@ -125,8 +125,8 @@ hadoop@master:/opt/kafka$ jps
 
 .. code-block:: console
 
-hadoop-1@master:/opt/kafka$ ./bin/kafka-topics.sh --list --zookeeper slaver-2:2181
-test-zhao
+ hadoop-1@master:/opt/kafka$ ./bin/kafka-topics.sh --list --zookeeper slaver-2:2181
+ test-zhao
 
 .. end
 
@@ -134,13 +134,14 @@ test-zhao
 
 .. code-block:: console
 
-hadoop-1@master:/var/log/kafka-logs/test-zhao-0$  /opt/kafka//bin/kafka-topics.sh --describe --zookeeper slaver-1:2181 --topic test-zhao
-Topic:test-zhao	PartitionCount:3	ReplicationFactor:1	Configs:
+ hadoop-1@master:/var/log/kafka-logs/test-zhao-0$  /opt/kafka//bin/kafka-topics.sh --describe --zookeeper slaver-1:2181 --topic test-zhao
+ Topic:test-zhao	PartitionCount:3	ReplicationFactor:1	Configs:
 	Topic: test-zhao	Partition: 0	Leader: 1	Replicas: 1	Isr: 1
 	Topic: test-zhao	Partition: 1	Leader: 2	Replicas: 2	Isr: 2
 	Topic: test-zhao	Partition: 2	Leader: 3	Replicas: 3	Isr: 3
 
 .. end
+
 可以看到 partition0在id为1的broker上，其数据副本也在broker1上，并且broker1为leader状态。
 我们可以通过Kafka自带的bin/kafka-console-producer.sh和bin/kafka-console-consumer.sh脚本，来验证演示如果发布消息、消费消息。
 
@@ -151,40 +152,41 @@ Kafka自带一个命令行客户机，它将从文件或标准输入中获取输
 
 .. code-block:: console
 
-hadoop-1@master:/opt/kafka$ bin/kafka-console-producer.sh --broker-list master:9092, master-0:9092, slaver-1:9092 --topic test-zhao
->cecgw-kafka-zhaoyuanjie-first
+ hadoop-1@master:/opt/kafka$ bin/kafka-console-producer.sh --broker-list master:9092, master-0:9092, slaver-1:9092 --topic test-zhao
+ >cecgw-kafka-zhaoyuanjie-first
 
 .. end
+
 我们在master节点，模拟发送了‘cecgw-kafka-zhaouanjie-first’的消息。我们通过字符串查找，可以看到，该消息落到了slaver-1节点日志中。
 
 .. code-block:: console
 
-hadoop-1@slaver-1:/var/log/kafka-logs/test-zhao-2$ grep 'cecgw'  ./ -R
-Binary file ./00000000000000000000.log matches
-可以看出该文件中，有发送的消息内容。通过kafka自带的命令，可以将二进制文件，转化为字符类型文件。
+ hadoop-1@slaver-1:/var/log/kafka-logs/test-zhao-2$ grep 'cecgw'  ./ -R
+ Binary file ./00000000000000000000.log matches
+ 可以看出该文件中，有发送的消息内容。通过kafka自带的命令，可以将二进制文件，转化为字符类型文件。
 
-opt/kafka/bin/kafka-run-class.sh kafka.tools.DumpLogSegments --files /var/log/kafka-logs/test-zhao-2/00000000000000000000.log --print-data-log
-Dumping /var/log/kafka-logs/test-zhao-2/00000000000000000000.log
-Starting offset: 0
-offset: 0 
-position: 0 
-CreateTime: 1551680240403 
-isvalid: true 
-keysize: -1 
-valuesize: 29 
-magic: 2  #这个占用1个字节，主要用于标识 Kafka 版本。
-compresscodec: NONE 
-producerId: -1 
-producerEpoch: -1 
-sequence: -1 
-isTransactional: false 
-headerKeys: [] 
-payload: cecgw-kafka-zhaoyuanjie-first
+ opt/kafka/bin/kafka-run-class.sh kafka.tools.DumpLogSegments --files /var/log/kafka-logs/test-zhao-2/00000000000000000000.log --print-data-log
+ Dumping /var/log/kafka-logs/test-zhao-2/00000000000000000000.log
+ Starting offset: 0
+ offset: 0 
+ position: 0 
+ CreateTime: 1551680240403 
+ isvalid: true 
+ keysize: -1 
+ valuesize: 29 
+ magic: 2  #这个占用1个字节，主要用于标识 Kafka 版本。
+ compresscodec: NONE 
+ producerId: -1 
+ producerEpoch: -1 
+ sequence: -1 
+ isTransactional: false 
+ headerKeys: [] 
+ payload: cecgw-kafka-zhaoyuanjie-first
 
-# 查看index文件内容
-hadoop-1@slaver-1:/var/log/kafka-logs/test-zhao-2$ /opt/kafka/bin/kafka-run-class.sh kafka.tools.DumpLogSegments --files /var/log/kafka-logs/test-zhao-2/00000000000000000000.index --print-data-log
-Dumping /var/log/kafka-logs/test-zhao-2/00000000000000000000.index
-offset: 0 position: 0
+ # 查看index文件内容
+ hadoop-1@slaver-1:/var/log/kafka-logs/test-zhao-2$ /opt/kafka/bin/kafka-run-class.sh kafka.tools.DumpLogSegments --files /var/log/kafka-logs/test-zhao-2/00000000000000000000.index --print-data-log
+ Dumping /var/log/kafka-logs/test-zhao-2/00000000000000000000.index
+ offset: 0 position: 0
 
 .. end
 
@@ -198,10 +200,10 @@ offset: 0 position: 0
 
 .. code-block:: console
 
-hadoop-1@slaver-1:/var/log/kafka-logs/test-zhao-2$ /opt/kafka/bin/kafka-console-consumer.sh --zookeeper slaver-1:2181, slaver-2:2181, slaver-3:2181 --from-beginning --topic test-zhao
-Using the ConsoleConsumer with old consumer is deprecated and will be removed in a future major release. Consider using the new consumer by passing [bootstrap-server] instead of [zookeeper].
+ hadoop-1@slaver-1:/var/log/kafka-logs/test-zhao-2$ /opt/kafka/bin/kafka-console-consumer.sh --zookeeper slaver-1:2181, slaver-2:2181, slaver-3:2181 --from-beginning --topic test-zhao
+ Using the ConsoleConsumer with old consumer is deprecated and will be removed in a future major release. Consider using the new consumer by passing [bootstrap-server] instead of [zookeeper].
 
-cecgw-kafka-zhaoyuanjie-first
+ cecgw-kafka-zhaoyuanjie-first
 
 .. end
 
@@ -210,21 +212,22 @@ cecgw-kafka-zhaoyuanjie-first
 6. 删除topic。
 .. code-block:: console
 
-hadoop-1@master:/opt/kafka$ bin/kafka-topics.sh  --delete --zookeeper slaver-1:2181  --topic test-zhao
-Topic test-zhao is marked for deletion.
-Note: This will have no impact if delete.topic.enable is not set to true.
-[2019-03-04 15:05:49,125] INFO [GroupMetadataManager brokerId=1] Removed 0 expired offsets in 1 milliseconds. (kafka.coordinator.group.GroupMetadataManager)
-[2019-03-04 15:05:49,172] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions  (kafka.server.ReplicaFetcherManager)
-[2019-03-04 15:05:49,172] INFO [ReplicaAlterLogDirsManager on broker 1] Removed fetcher for partitions  (kafka.server.ReplicaAlterLogDirsManager)
-[2019-03-04 15:05:49,177] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions test-zhao-0 (kafka.server.ReplicaFetcherManager)
-[2019-03-04 15:05:49,177] INFO [ReplicaAlterLogDirsManager on broker 1] Removed fetcher for partitions test-zhao-0 (kafka.server.ReplicaAlterLogDirsManager)
-[2019-03-04 15:05:49,180] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions  (kafka.server.ReplicaFetcherManager)
-[2019-03-04 15:05:49,180] INFO [ReplicaAlterLogDirsManager on broker 1] Removed fetcher for partitions  (kafka.server.ReplicaAlterLogDirsManager)
-[2019-03-04 15:05:49,181] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions test-zhao-0 (kafka.server.ReplicaFetcherManager)
-[2019-03-04 15:05:49,181] INFO [ReplicaAlterLogDirsManager on broker 1] Removed fetcher for partitions test-zhao-0 (kafka.server.ReplicaAlterLogDirsManager)
-[2019-03-04 15:05:49,219] INFO Log for partition test-zhao-0 is renamed to /var/log/kafka-logs/test-zhao-0.fd5fa204b9a54209afd39ced6263e026-delete and is scheduled for deletion (kafka.log.LogManager)
+ hadoop-1@master:/opt/kafka$ bin/kafka-topics.sh  --delete --zookeeper slaver-1:2181  --topic test-zhao
+ Topic test-zhao is marked for deletion.
+ Note: This will have no impact if delete.topic.enable is not set to true.
+ [2019-03-04 15:05:49,125] INFO [GroupMetadataManager brokerId=1] Removed 0 expired offsets in 1 milliseconds. (kafka.coordinator.group.GroupMetadataManager)
+ [2019-03-04 15:05:49,172] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions  (kafka.server.ReplicaFetcherManager)
+ [2019-03-04 15:05:49,172] INFO [ReplicaAlterLogDirsManager on broker 1] Removed fetcher for partitions  (kafka.server.ReplicaAlterLogDirsManager)
+ [2019-03-04 15:05:49,177] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions test-zhao-0 (kafka.server.ReplicaFetcherManager)
+ [2019-03-04 15:05:49,177] INFO [ReplicaAlterLogDirsManager on broker 1] Removed fetcher for partitions test-zhao-0 (kafka.server.ReplicaAlterLogDirsManager)
+ [2019-03-04 15:05:49,180] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions  (kafka.server.ReplicaFetcherManager)
+ [2019-03-04 15:05:49,180] INFO [ReplicaAlterLogDirsManager on broker 1] Removed fetcher for partitions  (kafka.server.ReplicaAlterLogDirsManager)
+ [2019-03-04 15:05:49,181] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions test-zhao-0 (kafka.server.ReplicaFetcherManager)
+ [2019-03-04 15:05:49,181] INFO [ReplicaAlterLogDirsManager on broker 1] Removed fetcher for partitions test-zhao-0 (kafka.server.ReplicaAlterLogDirsManager)
+ [2019-03-04 15:05:49,219] INFO Log for partition test-zhao-0 is renamed to /var/log/kafka-logs/test-zhao-0.fd5fa204b9a54209afd39ced6263e026-delete and is scheduled for deletion (kafka.log.LogManager)
 
 .. end
+
 可以看到各个节点上的partition均已经删除掉。
 
 
