@@ -210,6 +210,7 @@ Kafka自带一个命令行客户机，它将从文件或标准输入中获取输
 目前已经正常收到消息。
 
 6. 删除topic。
+
 .. code-block:: console
 
  hadoop-1@master:/opt/kafka$ bin/kafka-topics.sh  --delete --zookeeper slaver-1:2181  --topic test-zhao
