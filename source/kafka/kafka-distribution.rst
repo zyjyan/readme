@@ -101,15 +101,7 @@ kafka使用hadoop用户安装。
 -----------
 创建一个名称为test-zhao的Topic，3个分区，并且复制因子为1，执行如下命令:
 
-.. code-block:: console
 
-  root@ubuntu:/opt# cd kafka/
-  root@ubuntu:/opt/kafka# bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
-  Created topic "test".
-
-.. end
-
-可以通过命令行查看已创建的TOPIC.
 
 .. code-block:: console
 
