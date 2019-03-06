@@ -203,6 +203,42 @@ Kafka自带一个命令行客户机，它将从文件或标准输入中获取输
 
 目前已经正常收到消息。
 
+查看消费者组。
+
+.. code-block:: console
+
+ hadoop-1@master:/home/ubuntu$ /opt/kafka/bin/kafka-consumer-groups.sh --zookeeper slaver-1:2181 --list
+ Note: This will only show information about consumers that use ZooKeeper (not those using the Java consumer API).
+ console-consumer-40107
+ console-consumer-99536
+ console-consumer-60818
+ console-consumer-57442
+ testgroup
+ console-consumer-61493
+ console-consumer-79230
+ console-consumer-10997
+ console-consumer-20932
+ console-consumer-1732
+ console-consumer-86987
+
+.. end
+
+查看某一消费者组描述信息。
+
+.. code-block:: console
+
+ hadoop-1@master:/home/ubuntu$ /opt/kafka/bin/kafka-consumer-groups.sh --zookeeper slaver-1:2181 --group console-consumer-40107 --describe
+ Note: This will only show information about consumers that use ZooKeeper (not those using the Java consumer API).
+
+ TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     
+ test-new        0          11              39996           39985           -               
+ test-new        1          11              40002           39991           -               
+ test-new        2          12              33335           33323           -  
+
+ #消费的topic名称、partition id、consumer group最后一次提交的offset、最后提交的生产消息offset、消费offset与生产offset之间的差值、当前消费topic-partition的group成员id.
+
+.. end
+
 6. 删除topic。
 
 .. code-block:: console
