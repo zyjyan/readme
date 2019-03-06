@@ -83,7 +83,9 @@ kafka使用hadoop用户安装。
 
 .. code-block:: console
 
- hadoop@master:/opt/kafka$ bin/kafka-server-start.sh config/server.properties &
+ hadoop@master:/opt/kafka$ bin/kafka-server-start.sh config/server.properties & # 此为临时启动命令，关闭窗口后kafka停止运行，后台日志报错
+ # 后端运行命令。 # ./kafka-server-start.sh ../config/server.properties 1>/dev/null 2>&1 &
+ # 1>/dev/null  2>&1 是将命令产生的输入和错误都输入到空设备，也就是不输出的意思。
 
  hadoop@master:/opt/kafka$ jps
  18097 NameNode
@@ -149,7 +151,7 @@ Kafka自带一个命令行客户机，它将从文件或标准输入中获取输
 
 .. end
 
-我们在master节点，模拟发送了‘cecgw-kafka-zhaouanjie-first’的消息。我们通过字符串查找，可以看到，该消息落到了slaver-1节点日志中。
+我们在master节点，模拟发送了"cecgw-kafka-zhaouanjie-first"的消息。我们通过字符串查找，可以看到，该消息落到了slaver-1节点日志中。
 
 .. code-block:: console
 
