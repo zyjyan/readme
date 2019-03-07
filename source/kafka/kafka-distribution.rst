@@ -20,6 +20,8 @@ kafka使用hadoop用户安装。
  java、zookeeper      slaver-2
  java、zookeeper      slaver-3
 
+ # kafka 版本2.12 zookeeper版本3.4.12 java 1.8
+
 .. end
 
 
@@ -101,6 +103,7 @@ kafka使用hadoop用户安装。
 
 3-创建TOPIC
 -----------
+
 创建一个名称为test-zhao的Topic，3个分区，并且复制因子为1，执行如下命令:
 
 
@@ -141,6 +144,7 @@ kafka使用hadoop用户安装。
 
 4-模拟客户端发送消息
 --------------------
+
 Kafka自带一个命令行客户机，它将从文件或标准输入中获取输入，并将其作为消息发送到Kafka集群。默认情况下，每一行都将作为单独的消息发送。
 使用如下指令发送消息。
 
@@ -260,7 +264,6 @@ Kafka自带一个命令行客户机，它将从文件或标准输入中获取输
 .. end
 
 可以看到各个节点上的partition均已经删除掉。
-
 
 
 
