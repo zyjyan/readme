@@ -121,10 +121,10 @@ HBASE_CLASSPATH设置为本机Hadoop安装目录下的conf目录（即/opt/hadoo
 
 
 				  master         master-0        slaver-1       slaver-2        slaver-3
-	zookeeper                                       √              √               √
-	java            √                √              √              √               √
-	hadoop        namenode        namenode       datanode       datanode         datanode 
-	hbase         Hmaster         Hmaster      HRegionServer  HRegionServer   HRegionServer
+	zookeeper                                                     √              √               √
+	java                        √                √              √              √               √
+	hadoop                    namenode        namenode       datanode       datanode         datanode 
+	hbase                     Hmaster         Hmaster      HRegionServer  HRegionServer   HRegionServer
 
 .. end
 
