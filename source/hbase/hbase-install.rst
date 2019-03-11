@@ -247,6 +247,7 @@ HBASE_CLASSPATH设置为本机Hadoop安装目录下的conf目录（即/opt/hadoo
 .. end
 
 3.8 jps可查看hbase状态。
+    可通过http:://ip:16010 查看hbase状态。
 
 .. Note::
    
