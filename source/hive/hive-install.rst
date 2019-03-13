@@ -144,11 +144,12 @@ Hive服务端安装
 
 5、启动hive服务；
 
+.. code-block:: console
 
-hive --service metastore 1>/dev/null 2>&1 &
-hive --service hiveserver2 1>/dev/null 2>&1 &
+ hive --service metastore 1>/dev/null 2>&1 &
+ hive --service hiveserver2 1>/dev/null 2>&1 &
 
-
+.. end
 
 错误记录：
 
