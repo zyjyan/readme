@@ -206,6 +206,13 @@ hive数据库初始化报错：
 
 .. end
 
+通过webui可以访问hive相关信息。
+
+.. figure:: image/hivewebui.png
+   :width: 80%
+   :align: center
+   :alt: hivewebui
+
 参考文献：https://www.itread01.com/content/1532926928.html
 
 
