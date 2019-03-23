@@ -38,6 +38,7 @@
    index-hbase
    index-hive
    index-elasticsearch
+   index-linux
 ..   index-opensatck
 ..   index-docker
 ..   index-logstash
