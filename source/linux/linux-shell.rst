@@ -21,7 +21,7 @@ awk
 
 .. code-block:: console
 
- for i in `ps -aux|grep ping |awk '{print $2}'`;  do kill -9 $i; done
+ for i in `ps -aux|grep ping |awk '{print $2}'`;  do kill -9 $i; done; 
 
 .. end
 
@@ -31,8 +31,24 @@ awk
    :alt: awk
 
 
+find
+----
 
+.. code-block:: console
 
+ # find /  -name "cecgw"
+
+.. end
+
+du
+--
+
+.. code-block:: console
+
+ 查看目录大小
+ # du  -h --max-depth=1 /home/cecgw
+
+.. end
 
 .. Note::
    
