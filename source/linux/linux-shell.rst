@@ -16,11 +16,19 @@ Linux-Shell
 .. end
 
 
+awk
+---
 
-.. figure:: image/kafka/log_anatomy.png
+.. code-block:: console
+
+ for i in `ps -aux|grep ping |awk '{print $2}'`;  do kill -9 $i; done
+
+.. end
+
+.. figure:: image/linux-shell/awk.png
    :width: 80%
    :align: center
-   :alt: log_anatomy
+   :alt: awk
 
 
 
