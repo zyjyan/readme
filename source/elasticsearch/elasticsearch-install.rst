@@ -194,7 +194,7 @@ elasticsearch.yml主要配置项如下：
 	discovery.zen.ping.unicast.hosts: ["17.17.17.2", "17.17.17.4", "17.17.17.5"] #设置集群中master节点的初始列表，可以通过这些节点来自动发现新加入集群的节点
 	discovery.zen.minimum_master_nodes: 2 #设置这个参数来保证集群中的节点可以知道其它N个有master资格的节点。默认为1，对于大的集群来说，可以设置大一点的值（2-4）
 	
- .. end
+.. end
 
 设置JVM选项（包括系统属性和JVM标志）通过jvm.options配置文件，这个文件的默认位置是config/jvm.options.
 jvm的配置建议，可点此查看。 `<https://www.elastic.co/guide/en/elasticsearch/reference/6.6/heap-size.html>`_.
@@ -228,6 +228,7 @@ jvm配置项说明可点此查看详情 `<https://www.elastic.co/guide/en/elasti
 5. 调整操作系统参数。详情可查看`<https://www.elastic.co/guide/en/elasticsearch/reference/6.6/setting-system-settings.html>`_.
 主要的参数为ulimit参数。在Linux系统上，可以使用ulimit临时更改资源限制。
 修改/etc/security/limits.conf下参数。
+
 .. code-block:: console
 
 	* soft nofile 65536
@@ -239,13 +240,14 @@ jvm配置项说明可点此查看详情 `<https://www.elastic.co/guide/en/elasti
 
 .. code-block:: console
 
-vi /etc/sysctl.conf
+ vi /etc/sysctl.conf
 
-	#改打开文件数量
-	vm.max_map_count=655360
-	运行 sysctl -p 命令，使这些系统参数生效。
+ #改打开文件数量
+ vm.max_map_count=655360
+ 运行 sysctl -p 命令，使这些系统参数生效。
 	
 .. end
+
 .. note::
 
  Ubuntu忽略了这些限制。编辑/etc/pam.d/su和取消注释如下行:
@@ -325,11 +327,11 @@ vi /etc/sysctl.conf
 
 .. code-block:: console
 
-vi /etc/sysctl.conf
+ vi /etc/sysctl.conf
 
-	#改打开文件数量
-	vm.max_map_count=655360
-	运行 sysctl -p 命令，使这些系统参数生效。
+ #改打开文件数量
+ vm.max_map_count=655360
+ 运行 sysctl -p 命令，使这些系统参数生效。
 	
 .. end
 
@@ -360,6 +362,7 @@ ElasticHD 支持 ES监控、实时搜索，Index template快捷替换修改，�
 
 
 .. end
+
 可通过浏览器访问查看相关监控信息。
 
 .. figure:: image/elasticsearch/elasticHD.png
