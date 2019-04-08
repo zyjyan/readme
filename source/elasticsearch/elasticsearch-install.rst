@@ -365,7 +365,7 @@ ElasticHD 支持 ES监控、实时搜索，Index template快捷替换修改，�
 
 可通过浏览器访问查看相关监控信息。
 
-.. figure:: image/elasticsearch/elasticHD.png
+.. figure:: image/elasticHD.png
    :width: 80%
    :align: center
    :alt: elasticHD
