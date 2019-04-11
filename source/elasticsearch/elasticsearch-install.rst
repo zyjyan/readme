@@ -193,7 +193,12 @@ elasticsearch.yml主要配置项如下：
 	http.port: 9200
 	discovery.zen.ping.unicast.hosts: ["17.17.17.2", "17.17.17.4", "17.17.17.5"] #设置集群中master节点的初始列表，可以通过这些节点来自动发现新加入集群的节点
 	discovery.zen.minimum_master_nodes: 2 #设置这个参数来保证集群中的节点可以知道其它N个有master资格的节点。默认为1，对于大的集群来说，可以设置大一点的值（2-4）
-	
+        # 是否支持跨域
+        http.cors.enabled: true
+
+        # *表示支持所有域名供EShead使用。
+        http.cors.allow-origin: "*"	
+
 .. end
 
 设置JVM选项（包括系统属性和JVM标志）通过jvm.options配置文件，这个文件的默认位置是config/jvm.options.
