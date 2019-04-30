@@ -159,12 +159,15 @@ SPARK安装
 前置条件：安装java hadoop scala
 
 部署环境情况
-              master    master-0  slaver-1  slaver-2     slaver-3 
-java_8u191     √         √          √          √            √
-hadoop       namenode    namenode  datanode  datanode     datanode
-scala          √         √          √          √            √ 
-zookeeper                           √          √            √ 
-spark
+
+.. code-block:: console
+
+               master    master-0  slaver-1  slaver-2     slaver-3 
+ java_8u191     √         √          √          √            √
+ hadoop       namenode    namenode  datanode  datanode     datanode
+ scala          √         √          √          √            √ 
+ zookeeper                             √          √            √ 
+ spark         master    master-ha  slaver    slaver       slaver
     
 安装scala
 =========
@@ -382,17 +385,18 @@ spark
 
  在Ubuntu的终端中启动进入spark-shell交互式执行环境，去测试Spark读取HDFS数据是否成功:
 
-scala> val line=sc.textFile("hdfs://cluster-cecgw/user/hadoop/new-1-0.log")
-line: org.apache.spark.rdd.RDD[String] = hdfs://cluster-cecgw/user/hadoop/new-1-0.log MapPartitionsRDD[3] at textFile at <console>:24
+ scala> val line=sc.textFile("hdfs://cluster-cecgw/user/hadoop/new-1-0.log")
+ line: org.apache.spark.rdd.RDD[String] = hdfs://cluster-cecgw/user/hadoop/new-1-0.log MapPartitionsRDD[3] at textFile at <console>:24
 
-scala> println(line.count())
-26670                                                                               
+ scala> println(line.count())
+ 26670                                                                               
 
  scala>
  测试成功，可以读取到hdfs上数据。
  需要注意的是，如果我们以hadoop用户登录spark-shell，可以将val line=sc.textFile("hdfs://cluster-cecgw/user/hadoop/new-1-0.log") 路径简化为 val line=sc.textFile("/user/hadoop/new-1-0.log") OR val line=sc.textFile("new-1-0.log"),均可通过验证。
  但如果以root 用户登录spark-shell，则需要全路径方可访问。
  
+.. end
 
 .. Note::
    
