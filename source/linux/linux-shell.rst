@@ -50,6 +50,95 @@ du
 
 .. end
 
+
+linux用户和组
+-------------
+Linux 是个多用户多任务的分时操作系统，所有想要调用系统资源的用户都必须先向系统管理员申请一个账号，
+然后通过这个账号进入系统。用户的账号一方面能帮助系统管理员对使用系统的用户进行跟踪，控制他们对系统资源的访问；
+另一方面也能帮助用户组织文件，为用户提供安全性保护。每个账号都拥有一个唯一的用户名和用户密码。
+用户在登录时键入正确的用户名和密码后，才能进入系统和自己的主目录。
+一个用户可以存在于多个用户组中。
+
+
+
+1、查看用户信息。
+
+.. code-block:: console
+
+root@ubuntu:~# vi /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+
+文件中每行记录用冒号 : 分隔为 7 个字段，从左到右具体含义是：
+用户名：密码占位符（x 表示用户需要密码登录）：用户标识号（UID）：组标识号（GID）：注释性描述：主目录：登录的 shell
+
+.. end
+
+2、查看密码文件。
+
+.. code-block:: console
+
+root@ubuntu:~# vi /etc/shadow
+root:!:17882:0:99999:7:::
+daemon:*:17001:0:99999:7:::
+bin:*:17001:0:99999:7:::
+sys:*:17001:0:99999:7:::
+sync:*:17001:0:99999:7:::
+games:*:17001:0:99999:7:::
+man:*:17001:0:99999:7:::
+lp:*:17001:0:99999:7:::
+mail:*:17001:0:99999:7:::
+
+文件中每行记录用冒号 : 分隔为 9 个字段，从左到右具体含义是：
+用户名：加密口令：最后一次修改时间：最短有效天数：最长有效天数：过期前的警告时间：不活动时间：用户失效时间：暂时保留未使用
+
+.. end
+
+3、查看组信息文件。
+
+.. code-block:: console
+
+root@ubuntu:~# vi /etc/group
+root:x:0:
+daemon:x:1:
+bin:x:2:
+sys:x:3:
+adm:x:4:syslog,cecgw
+tty:x:5:
+disk:x:6:
+lp:x:7:
+mail:x:8:
+
+用户组的所有信息都存放在/etc/group文件中。将用户分组是Linux 系统中对用户进行管理及控制访问权限的一种手段。
+
+每个用户都属于某个用户组；一个组中可以有多个用户，一个用户也可以属于不同的组。
+当一个用户同时是多个组中的成员时，在/etc/passwd文件中记录的是用户所属的主组，也就是登录时所属的默认组，而其他组称为附加组。
+
+用户要访问属于附加组的文件时，必须首先使用newgrp命令使自己成为所要访问的组中的成员。
+用户组的所有信息都存放在/etc/group文件中。此文件的格式也类似于/etc/passwd文件，由冒号(:)隔开若干个字段，这些字段有：
+组名:口令:组标识号:组内用户列表
+"组名"是用户组的名称，由字母或数字构成。与/etc/passwd中的登录名一样，组名不能重复。
+"口令"字段存放的是用户组加密后的口令字。一般Linux 系统的用户组都没有口令，即这个字段一般为空，或者是*。
+"组标识号"与用户标识号类似，也是一个整数，被系统内部用来标识组。
+
+.. end
+
+
+.. figure:: image/linux-shell/awk.png
+   :width: 80%
+   :align: center
+   :alt: awk
+
 .. Note::
    
    For KAFKA。
