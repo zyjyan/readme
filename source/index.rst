@@ -40,6 +40,7 @@
    index-elasticsearch
    index-flume
    index-linux
+   index-ranger
 ..   index-opensatck
 ..   index-docker
 ..   index-logstash
