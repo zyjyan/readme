@@ -147,7 +147,7 @@ Hive服务端安装
 .. code-block:: console
 
  hive --service metastore 1>/dev/null 2>&1 &
- hive --service hiveserver2 1>/dev/null 2>&1 &
+ hive --service hiveserver2 1>/dev/null 2>&1 & #启用后默认端口为10002.可通过ip:10002查看hive相关信息。
 
 .. end
 
@@ -207,6 +207,7 @@ hive数据库初始化报错：
 .. end
 
 通过webui可以访问hive相关信息。
+
 
 .. figure:: image/hivewebui.png
    :width: 80%
