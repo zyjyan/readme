@@ -93,7 +93,7 @@ Hive服务端安装
 	root@master:/opt/hive/conf# cp hive-default.xml.template hive-site.xml
 	root@master:/opt/hive/conf# cp hive-log4j2.properties.template  hive-log4j2.properties
 	root@master:/opt/hive/conf# cp hive-exec-log4j2.properties.template  hive-exec-log4j2.properties
-	root@master:/opt/hive/conf# vi hive-default.xml
+	root@master:/opt/hive/conf# vi hive-site.xml
 
  <property>
         <name>javax.jdo.option.ConnectionURL</name>
@@ -132,6 +132,10 @@ Hive服务端安装
         <description>Whether to include the current database in the Hive prompt.</description>
     </property>
 
+ 查看hive-site.xml配置，会看到配置值含有"system:java.io.tmpdir"的配置项
+ 新建文件夹在hive目录下新建一个tmp目录
+ 将含有"system:java.io.tmpdir"的配置项的值修改为如上地址
+ 把${system:java.io.tmpdir}改成：/opt/hive/tmp
 
 	root@master:/opt/hive/conf#  grep -vE  '^#|^$' hive-env.sh
 	HADOOP_HOME=/opt/hadoop-2.7.7
