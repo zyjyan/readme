@@ -150,6 +150,16 @@ Hive服务端安装
 
 .. code-block:: console
 
+ hadoop@ubuntu:/opt/hive/conf$ schematool -dbType mysql -initSchema # 初始化数据库
+ Metastore connection URL:	 jdbc:mysql://localhost:3306/metastore?createDatabaseIfNotExist=true
+ Metastore Connection Driver :	 com.mysql.jdbc.Driver
+ Metastore connection User:	 hive
+ Starting metastore schema initialization to 2.3.0
+ Initialization script hive-schema-2.3.0.mysql.sql
+ Initialization script completed
+ schemaTool completed
+
+
  hive --service metastore 1>/dev/null 2>&1 &
  hive --service hiveserver2 1>/dev/null 2>&1 & #启用后默认端口为10002.可通过ip:10002查看hive相关信息。
 

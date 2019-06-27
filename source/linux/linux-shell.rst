@@ -1,4 +1,4 @@
-Linux-Shell
+	Linux-Shell
 ~~~~~~~~~~~
 
 修改Ubuntu网卡名称
@@ -133,6 +133,68 @@ mail:x:8:
 
 .. end
 
+
+
+lsof
+----
+linux哲学为“一切皆文件”. linux下文件类型包括：
+1普通文件
+2目录
+3符号链接
+4面向块的设备文件
+5面向字符的设备文件
+6管道和命名管道
+7套接字
+
+lsof是list open files的简称。
+
+1、 查看当前所有打开文件。
+
+
+.. code-block:: console
+
+ root@ubuntu:/home/cecgw/readme/source# lsof |more
+COMMAND    PID  TID             USER   FD      TYPE             DEVICE SIZE/OFF       NODE NAME
+systemd      1                  root  cwd       DIR              252,0     4096          2 /
+systemd      1                  root  rtd       DIR              252,0     4096          2 /
+systemd      1                  root  txt       REG              252,0  1581360     131115 /lib/systemd/systemd
+systemd      1                  root  mem       REG              252,0    18976     131700 /lib/x86_64-linux-gnu/libuuid.so.1.3.0
+systemd      1                  root  mem       REG              252,0   262408     131575 /lib/x86_64-linux-gnu/libblkid.so.1.1.0
+systemd      1                  root  mem       REG              252,0    14608     135552 /lib/x86_64-linux-gnu/libdl-2.23.so
+lsof显示的结果，从左往右分别代表：打开该文件的程序名，进程id，用户，文件描述符，文件类型，设备，大小，iNode号，文件名。
+
+.. end
+
+2、列出被删除但占用空间的文件
+
+.. code-block:: console
+
+ root@ubuntu:~# lsof |grep deleted
+
+.. end
+
+3、恢复打开但被删除的文件。
+
+以/home/cecgw/abc.txt 文件为例，通过linux窗口1打开该文件，然后通过另外一个窗口删除它(root用户)：
+
+.. code-block:: console
+
+root@ubuntu:/home/cecgw# lsof|grep abc.txt
+vi        3025                  root    4u      REG              252,0    12288    4198167 /home/cecgw/.abc.txt.swp
+
+可以找到进程id为3025的进程打开了该文件，每个进程在/proc下都有文件描述符打开的记录：
+
+root@ubuntu:/home/cecgw# ls -l /proc/3025/fd
+total 0
+lrwx------ 1 root root 64 May 23 14:49 0 -> /dev/pts/1
+lrwx------ 1 root root 64 May 23 14:49 1 -> /dev/pts/1
+lrwx------ 1 root root 64 May 23 14:49 2 -> /dev/pts/1
+lrwx------ 1 root root 64 May 23 14:49 4 -> /home/cecgw/.abc.txt.swp
+
+这里就找到了被删除的abc.txt文件,文件描述符是4，我们把它重定向出来：
+
+
+.. end
 
 .. figure:: image/linux-shell/awk.png
    :width: 80%
