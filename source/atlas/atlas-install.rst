@@ -497,7 +497,7 @@ Atlas安装
 
 启动成功后，可通过 http:21000端口访问，使用admin:admin登录.
 
-.. figure:: image/atlas_login.png
+.. figure:: image/atlas_login.jpg
    :width: 80%
    :align: center
    :alt: atlas_login
@@ -786,7 +786,7 @@ atlas-hive-hook服务安装及使用
 		
 .. end
 
-.. figure:: image/hive_atlas_data_real_found.png
+.. figure:: image/hive_atlas_data_real_found.jpg
    :width: 80%
    :align: center
    :alt: hive_atlas_data_real_found
@@ -795,7 +795,6 @@ atlas-hive-hook服务安装及使用
 
 1.8 进一步通过tag验证与ranger联动.
 
-h
 
 
 
