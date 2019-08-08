@@ -41,6 +41,7 @@
    index-flume
    index-linux
    index-ranger
+   index-atlas
 ..   index-opensatck
 ..   index-docker
 ..   index-logstash
