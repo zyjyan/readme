@@ -758,7 +758,7 @@ atlas-hive-hook服务安装及使用
 
 控制台端可以查看如下信息.
 
-.. figure:: image/hive_data_found.png
+.. figure:: image/hive_data_found.jpg
    :width: 80%
    :align: center
    :alt: hive_data_found
@@ -786,7 +786,7 @@ atlas-hive-hook服务安装及使用
 		
 .. end
 
-.. figure:: image/hive_atlas_data_real_found.jpg
+.. figure:: image/hive_atlas_data_real_found.png
    :width: 80%
    :align: center
    :alt: hive_atlas_data_real_found
