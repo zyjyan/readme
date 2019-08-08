@@ -1201,14 +1201,6 @@ slaver-1,slaver-2,slaver-3节点上安装zookeeper（下载地址为https://zook
 			<name>mapreduce.framework.name</name>
 			<value>yarn</value>
 		</property>
-		<property>
-			<name>mapreduce.jobhistory.address</name>
-			<value>master:10020</value>
-		</property>
-		<property>
-			<name>mapreduce.jobhistory.webapp.address</name>
-			<value>master-0:19888</value>
-		</property>
 	</configuration>
 
 .. end
@@ -1217,147 +1209,102 @@ slaver-1,slaver-2,slaver-3节点上安装zookeeper（下载地址为https://zook
 
 .. code-block:: console
 
-	<configuration>
-		<property>
-			<name>yarn.resourcemanager.connect.retry-interval.ms</name>
-			<value>2000</value>
-		</property>
-			<value>true</value>
-		</property>
-		<property>
-			<name>yarn.resourcemanager.ha.rm-ids</name>
-			<value>rm1,rm2</value>
-		</property>
-		<property>
-			<name>ha.zookeeper.quorum</name>
-			<value>slaver-1:2181,slaver-2:2181,slaver-3:2181</value>
-		</property>
+ <configuration>
+    <property>
+        <name>yarn.resourcemanager.connect.retry-interval.ms</name>
+        <value>2000</value>
+    </property>
+        <value>true</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.ha.rm-ids</name>
+        <value>rm1,rm2</value>
+    </property>
+    <property>
+        <name>ha.zookeeper.quorum</name>
+        <value>slaver-1:2181,slaver-2:2181,slaver-3:2181</value>
+    </property>
 
-		<property>
-			<name>yarn.resourcemanager.ha.automatic-failover.enabled</name>
-			<value>true</value>
-		</property>
-		<property>
-			<name>yarn.resourcemanager.hostname.rm1</name>
-			<value>master</value>
-		</property>
+    <property>
+        <name>yarn.resourcemanager.ha.automatic-failover.enabled</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.hostname.rm1</name>
+        <value>master</value>
+    </property>
 
-		<property>
-			<name>yarn.resourcemanager.hostname.rm2</name>
-			<value>master-0</value>
-		</property>
-		<property>
-			<name>yarn.resourcemanager.ha.id</name>
-			<value>rm1</value>
-		</property>
-		<!--开启自动恢复功能 -->
-		<property>
-			<name>yarn.resourcemanager.recovery.enabled</name>
-			<value>true</value>
-		</property>
-		<!--配置与zookeeper的连接地址 -->
-		<property>
-			<name>yarn.resourcemanager.zk-state-store.address</name>
-			<value>slaver-1:2181,slaver-2:2181,slaver-3:2181</value>
-		</property>
-		<property>
-			<name>yarn.resourcemanager.store.class</name>
-			<value>org.apache.hadoop.yarn.server.resourcemanager.recovery.ZKRMStateStore</value>
-		</property>
-		<property>
-			<name>yarn.resourcemanager.zk-address</name>
-			<value>slaver-1:2181,slaver-2:2181,slaver-3:2181</value>
-		</property>
-		<property>
-			<name>yarn.resourcemanager.cluster-id</name>
-			<value>cluster1-yarn</value>
-		</property>
-		<!--schelduler失联等待连接时间 -->
-		<property>
-			<name>yarn.app.mapreduce.am.scheduler.connection.wait.interval-ms</name>
-			<value>5000</value>
-		</property>
-		<!--配置rm1 -->
-		<property>
-			<name>yarn.resourcemanager.address.rm1</name>
-			<value>master:8132</value>
-		</property>
-		<property>
-			<name>yarn.resourcemanager.scheduler.address.rm1</name>
-			<value>master:8130</value>
-		</property>
-		<property>
-			<name>yarn.resourcemanager.webapp.address.rm1</name>
-			<value>master:8188</value>
-		</property>
-		<property>
-			<name>yarn.resourcemanager.resource-tracker.address.rm1</name>
-			<value>master:8131</value>
-		</property>
-		<property>
-			<name>yarn.resourcemanager.admin.address.rm1</name>
-			<value>master:8033</value>
-		</property>
-		<property>
-			<name>yarn.resourcemanager.ha.admin.address.rm1</name>
-			<value>master:23142</value>
-		</property>
-		<!--配置rm2 -->
-		<property>
-			<name>yarn.resourcemanager.address.rm2</name>
-			<value>master-0:8132</value>
-		</property>
-		<property>
-			<name>yarn.resourcemanager.scheduler.address.rm2</name>
-			<value>master-0:8130</value>
-		</property>
-		<property>
-			<name>yarn.resourcemanager.webapp.address.rm2</name>
-			<value>master-0:8188</value>
-		</property>
-		<property>
-			<name>yarn.resourcemanager.resource-tracker.address.rm2</name>
-			<value>master-0:8131</value>
-		</property>
-		<property>
-			<name>yarn.resourcemanager.admin.address.rm2</name>
-			<value>master-0:8033</value>
-		</property>
-		<property>
-			<name>yarn.resourcemanager.ha.admin.address.rm2</name>
-			<value>master-0:23142</value>
-		</property>
-		<property>
-			<name>yarn.nodemanager.aux-services</name>
-			<value>mapreduce_shuffle</value>
-		</property>
-		<property>
-			<name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
-			<value>org.apache.hadoop.mapred.ShuffleHandler</value>
-		</property>
-		<property>
-			<name>yarn.nodemanager.local-dirs</name>
-			<value>/opt/hadoop-2.7.7/data/yarn/local</value>
-		</property>
-		<property>
-			<name>yarn.nodemanager.log-dirs</name>
-			<value>/opt/hadoop-2.7.7/log/yarn</value>
-		</property>
-		<property>
-			<name>mapreduce.shuffle.port</name>
-			<value>23080</value>
-		</property>
-		<!--故障处理类 -->
-		<property>
-			<name>yarn.client.failover-proxy-provider</name>
-			<value>org.apache.hadoop.yarn.client.ConfiguredRMFailoverProxyProvider</value>
-		</property>
-		<property>
-			<name>yarn.resourcemanager.ha.automatic-failover.zk-base-path</name>
-			<value>/yarn-leader-election</value>
-		</property>
-	</configuration>
-
+    <property>
+        <name>yarn.resourcemanager.hostname.rm2</name>
+        <value>master-0</value>
+    </property>
+    <!--开启自动恢复功能 -->
+    <property>
+        <name>yarn.resourcemanager.recovery.enabled</name>
+        <value>true</value>
+    </property>
+    <!--配置与zookeeper的连接地址 -->
+    <property>
+        <name>yarn.resourcemanager.zk-state-store.address</name>
+        <value>slaver-1:2181,slaver-2:2181,slaver-3:2181</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.store.class</name>
+        <value>org.apache.hadoop.yarn.server.resourcemanager.recovery.ZKRMStateStore</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.zk-address</name>
+        <value>slaver-1:2181,slaver-2:2181,slaver-3:2181</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.cluster-id</name>
+        <value>cluster-cecgw</value>
+    </property>
+    <!--schelduler失联等待连接时间 -->
+    <property>
+        <name>yarn.app.mapreduce.am.scheduler.connection.wait.interval-ms</name>
+        <value>5000</value>
+    </property>
+    <!--配置rm1 -->
+    <property>
+        <name>yarn.resourcemanager.webapp.address.rm1</name>
+        <value>master:8088</value>
+    </property>
+    <!--配置rm2 -->
+    <property>
+        <name>yarn.resourcemanager.webapp.address.rm2</name>
+        <value>master-0:8088</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+        <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.local-dirs</name>
+        <value>/opt/hadoop-2.7.7/data/yarn/local</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.log-dirs</name>
+        <value>/opt/hadoop-2.7.7/data/log/yarn</value>
+    </property>
+    <property>
+        <name>mapreduce.shuffle.port</name>
+        <value>23080</value>
+    </property>
+    <!--故障处理类 -->
+    <property>
+        <name>yarn.client.failover-proxy-provider</name>
+        <value>org.apache.hadoop.yarn.client.ConfiguredRMFailoverProxyProvider</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.ha.automatic-failover.zk-base-path</name>
+        <value>/yarn-leader-election</value>
+    </property>
+ </configuration>
 .. end
 
 6.5 按照原来章节配置hadoop-env.sh、yarn-env.sh以及slave。
