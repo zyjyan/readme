@@ -1050,14 +1050,14 @@ ranger-hive-hook服务安装及使用
 
 1.4 注册成功后，点击连接，显示成功.
 
-.. figure:: image/hive_con.png
+.. figure:: image/hive_con.jpg
    :width: 80%
    :align: center
    :alt: hive_con
    
 1.5 管理控制台配置hive策略.
 
-.. figure:: image/hive_policy.png
+.. figure:: image/hive_policy.jpg
    :width: 80%
    :align: center
    :alt: hive_policy
@@ -1084,7 +1084,7 @@ ranger-hive-hook服务安装及使用
 
 1.7 查看访问控制日志.
 
-.. figure:: image/hive_policy_log.png
+.. figure:: image/hive_policy_log.jpg
    :width: 80%
    :align: center
    :alt: hive_policy_log
