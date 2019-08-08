@@ -1066,19 +1066,19 @@ ranger-hive-hook服务安装及使用
 
 .. code-block:: console
 
-hadoop@ubuntu:/opt/hive/bin$ beeline -n hadoop -u jdbc:hive2://localhost:10000
-Connecting to jdbc:hive2://localhost:10000
-Connected to: Apache Hive (version 2.3.4)
-Driver: Hive JDBC (version 2.3.4)
-Transaction isolation: TRANSACTION_REPEATABLE_READ
-Beeline version 2.3.4 by Apache Hive
-0: jdbc:hive2://localhost:10000> show tables;
-+------------+
-|  tab_name  |
-+------------+
-| employees  |
-| pokes      |
-+------------+
+	hadoop@ubuntu:/opt/hive/bin$ beeline -n hadoop -u jdbc:hive2://localhost:10000
+	Connecting to jdbc:hive2://localhost:10000
+	Connected to: Apache Hive (version 2.3.4)
+	Driver: Hive JDBC (version 2.3.4)
+	Transaction isolation: TRANSACTION_REPEATABLE_READ
+	Beeline version 2.3.4 by Apache Hive
+	0: jdbc:hive2://localhost:10000> show tables;
+	+------------+
+	|  tab_name  |
+	+------------+
+	| employees  |
+	| pokes      |
+	+------------+
 
 .. end
 
@@ -1093,7 +1093,6 @@ Beeline version 2.3.4 by Apache Hive
 
 
 
-参考文献：https://www.itread01.com/content/1532926928.html
 
 
 
