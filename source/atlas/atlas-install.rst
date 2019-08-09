@@ -798,4 +798,132 @@ atlas-hive-hook服务安装及使用
 
 
 
+atlas-hbase-hook服务安装及使用
+++++++++++++++++++++++++++++++
+
+1.0 前置条件。hbase运行正常.(本次验证在hbase 伪分布式模式验证).
+
+1.1 解压apache-atlas-2.0.0-hbase-hook到指定文件.
+
+.. code-block:: console
+
+  tar -xzvf apache-atlas-2.0.0-hbase-hook.tar.gz 
+  mv apache-atlas-hbase-hook-2.0.0/ atlas-hbase-hook
+  chown -R hadoop:hadoop atlas-hbase-hook
+
+.. end
+
+1.2 修改hbase hbase-site.xml配置文件.
+   
+.. code-block:: console
+
+   Register Atlas hook in hbase-site.xml by adding the following:
+    <property>
+      <name>hbase.coprocessor.master.classes</name>
+      <value>org.apache.atlas.hbase.hook.HBaseAtlasCoprocessor</value>
+    </property>
+	
+.. end
+
+1.3 建立jar包软链接.#注意软链接后边的*号以及所使用的用户与hadoop保持一致.
+
+.. code-block:: console
+
+ hadoop@ubuntu:/opt/hbase/lib$ ln -s /opt/atlas-hook/atlas-hbase-hook/hook/hbase/* .
+ 
+.. end
+
+1.4 将atlas-application.properties拷贝到Hbase配置目录下/opt/hbase/conf.
+
+.. code-block:: console
+
+	root@ubuntu:/opt/hbase/conf# grep -vE  '^#|^$' atlas-application.properties 
+	atlas.graph.storage.backend=hbase2
+	atlas.graph.storage.hbase.table=apache_atlas_janus
+	atlas.graph.storage.hostname=localhost
+	atlas.graph.storage.hbase.regions-per-server=1
+	atlas.graph.storage.lock.wait-time=10000
+	atlas.EntityAuditRepository.impl=org.apache.atlas.repository.audit.HBaseBasedAuditRepository
+	atlas.graph.index.search.backend=solr
+	atlas.graph.index.search.solr.mode=cloud
+	atlas.graph.index.search.solr.zookeeper-url=localhost:2181
+	atlas.graph.index.search.solr.zookeeper-connect-timeout=60000
+	atlas.graph.index.search.solr.zookeeper-session-timeout=60000
+	atlas.graph.index.search.solr.wait-searcher=true
+	atlas.graph.index.search.max-result-set-size=150
+	atlas.notification.embedded=false
+	atlas.kafka.data=/opt/kafka/logs/atlas
+	atlas.kafka.zookeeper.connect=atlas:2183
+	atlas.kafka.bootstrap.servers=atlas:9092
+	atlas.kafka.zookeeper.session.timeout.ms=400
+	atlas.kafka.zookeeper.connection.timeout.ms=200
+	atlas.kafka.zookeeper.sync.time.ms=20
+	atlas.kafka.auto.commit.interval.ms=1000
+	atlas.kafka.hook.group.id=atlas
+	atlas.kafka.enable.auto.commit=true
+	atlas.kafka.auto.offset.reset=earliest
+	atlas.kafka.session.timeout.ms=30000
+	atlas.kafka.offsets.topic.replication.factor=1
+	atlas.kafka.poll.timeout.ms=1000
+	atlas.notification.create.topics=true
+	atlas.notification.replicas=1
+	atlas.notification.topics=ATLAS_HOOK,ATLAS_ENTITIES
+	atlas.notification.log.failed.messages=true
+	atlas.notification.consumer.retry.interval=500
+	atlas.notification.hook.retry.interval=1000
+	atlas.enableTLS=false
+	atlas.authentication.method.kerberos=false
+	atlas.authentication.method.file=true
+	atlas.authentication.method.ldap.type=none
+	atlas.authentication.method.file.filename=${sys:atlas.home}/conf/users-credentials.properties
+	atlas.rest.address=http://atlas:21000
+	atlas.audit.hbase.tablename=apache_atlas_entity_audit
+	atlas.audit.zookeeper.session.timeout.ms=1000
+	atlas.audit.hbase.zookeeper.quorum=localhost:2181
+	atlas.server.ha.enabled=false
+	atlas.authorizer.impl=simple
+	atlas.authorizer.simple.authz.policy.file=atlas-simple-authz-policy.json
+	atlas.rest-csrf.enabled=true
+	atlas.rest-csrf.browser-useragents-regex=^Mozilla.*,^Opera.*,^Chrome.*
+	atlas.rest-csrf.methods-to-ignore=GET,OPTIONS,HEAD,TRACE
+	atlas.rest-csrf.custom-header=X-XSRF-HEADER
+	atlas.metric.query.cache.ttlInSecs=900
+	atlas.search.gremlin.enable=false
+	atlas.hook.hive.synchronous=false 
+	atlas.hook.hive.numRetries=3 
+	atlas.hook.hive.queueSize=10000 
+	atlas.cluster.name=primary
+	atlas.hook.hbase.synchronous=false # whether to run the hook synchronously. false recommended to avoid delays inHBase operations. D: false
+	atlas.hook.hbase.numRetries=3      # number of retries for notification failure. Default: 3
+	atlas.hook.hbase.queueSize=10000   # queue size for the threadpool. Default: 10000
+	atlas.cluster.name=primary # clusterName to use in qualifiedName of entities. Default: primary
+ 
+.. end
+
+1.5 重启hbase.注意查看日志是否报错.
+
+1.6 在hbase中创建相应的测试table.
+
+.. code-block:: console
+
+	hbase(main):010:0> create 'svn',{NAME => 'f1', VERSIONS => 2},{NAME => 'f2', VERSIONS => 2}
+	Created table svn
+	Took 1.6629 seconds                                                                                                                      
+	=> Hbase::Table - svn
+	hbase(main):011:0> list	TABLE                                                                                                                                  
+	User                                                                                                                              
+	svn                                                                                                                                
+	2 row(s)
+	Took 0.0110 seconds                                                                                                                        
+	=> ["User", "svn"]
+ 
+.. end
+
+
+1.7 查看atlas server控制台数据.
+
+.. figure:: image/hbase_data_found.png
+   :width: 80%
+   :align: center
+   :alt: hbase_data_found
    
