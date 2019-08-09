@@ -1094,6 +1094,190 @@ ranger-hive-hook服务安装及使用
 
 
 
+ranger+atlas联动
+++++++++++++++++
 
+ranger+atlas可以实现基于标签的访问控制实施。atlas通过动态数据发现，在atlas前段将所要实施访问控制策略的字段定义标签后，可
+通过与ranger联动，实现基于标签的访问控制。
+
+本次验证以hive为例进行验证。前提条件：atlas服务正常，大数据集群服务正常，ranger服务正常.
+
+在ranger-srever服务端，安装ranger-tagsync服务.
+
+1.0 解压软件包.
+
+.. code-block:: console
+
+	root@ranger-server:/opt# tar -xzvf /home/cecgw/ranger-1.2.0-tagsync.tar.gz -C .
+
+.. end
+
+1.1 配置相关配置文件.
+
+.. code-block:: console
+
+	root@ranger-server:/opt/ranger-1.2.0-tagsync$ grep -vE  '^#|^$' install.properties 
+	TAG_DEST_RANGER_ENDPOINT = http://ranger-server:6080 # ranger server 地址
+	TAG_DEST_RANGER_SSL_CONFIG_FILENAME =
+	TAG_SOURCE_ATLAS_ENABLED = true
+	TAG_SOURCE_ATLAS_KAFKA_BOOTSTRAP_SERVERS = slaver-4:9092 # atlas kafka地址
+	TAG_SOURCE_ATLAS_KAFKA_ZOOKEEPER_CONNECT = slaver-4:2181 # atlas zookeeper kafka使用地址
+	TAG_SOURCE_ATLAS_KAFKA_ENTITIES_GROUP_ID = ranger_entities_consumer
+	TAG_SOURCE_ATLAS_KAFKA_SERVICE_NAME = kafka
+	TAG_SOURCE_ATLAS_KAFKA_SECURITY_PROTOCOL = PLAINTEXTSASL
+	TAG_SOURCE_ATLAS_KERBEROS_PRINCIPAL =
+	TAG_SOURCE_ATLAS_KERBEROS_KEYTAB =
+	TAG_SOURCE_ATLASREST_ENABLED = true
+	TAG_SOURCE_ATLASREST_ENDPOINT = http://atlas:21000 # atlas server地址
+	TAG_SOURCE_ATLASREST_DOWNLOAD_INTERVAL_IN_MILLIS = 900000
+	TAG_SOURCE_ATLASREST_USERNAME = admin  # atlas登录用户名
+	TAG_SOURCE_ATLASREST_PASSWORD = admin  # atlas 登录密码
+	TAG_SOURCE_FILE_ENABLED = true
+	TAG_SOURCE_FILE_FILENAME = /etc/ranger/data/tags.json
+	TAG_SOURCE_FILE_CHECK_INTERVAL_IN_MILLIS = 60000
+	TAGSYNC_ATLAS_TO_RANGER_SERVICE_MAPPING=primary,hive,hivedev # 与ranger控制台设置的服务保持一致
+	TAGSYNC_ATLAS_CUSTOM_RESOURCE_MAPPERS=
+	TAGSYNC_KEYSTORE_FILENAME = /etc/ranger/tagsync/conf/rangertagsync.jceks
+	TAG_SOURCE_ATLASREST_KEYSTORE_FILENAME = /etc/ranger/tagsync/conf/atlasuser.jceks
+	TAG_SOURCE_ATLASREST_SSL_CONFIG_FILENAME =
+	unix_user=ranger
+	unix_group=ranger
+	rangerTagsync_password=
+	logdir = log
+	TAGSYNC_PID_DIR_PATH=/var/run/ranger
+	is_secure = false
+	tagsync_principal=
+	tagsync_keytab=
+	hadoop_conf=/etc/hadoop/conf	
+
+.. end
+
+   
+1.2 启动相关服务.
+
+在启动之前，检查kafka消费情况.
+
+.. code-block:: console
+
+	cecgw@atlas:/opt/kafka/bin$ ./kafka-consumer-groups.sh --new-consumer --bootstrap-server atlas:9092 --list ATLAS_ENTITIES
+	The [new-consumer] option is deprecated and will be removed in a future major release.The new consumer is used by default if the [bootstrap-server] option is provided.
+	Note: This will not show information about old Zookeeper-based consumers.
+	atlas
+
+.. end
+
+启动之前，可看到消费者只有一个.
+
+启动服务.
+
+.. code-block:: console
+
+	root@ranger-server:/opt/ranger-1.2.0-tagsync# ./setup.sh 
+
+	INFO: Installing ranger-tagsync .....
+
+	INFO: Direct Key not found:rangerTagsync_password
+	INFO: Direct Key not found:is_secure
+	INFO: Direct Key not found:TAGSYNC_PID_DIR_PATH
+	log4j:WARN No appenders could be found for logger (org.apache.hadoop.util.Shell).
+	log4j:WARN Please initialize the log4j system properly.
+	log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+	SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+	SLF4J: Defaulting to no-operation (NOP) logger implementation
+	SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+	tagadmin.user.password has been successfully created.
+	org.apache.hadoop.security.alias.JavaKeyStoreProvider has been updated.
+	log4j:WARN No appenders could be found for logger (org.apache.hadoop.util.Shell).
+	log4j:WARN Please initialize the log4j system properly.
+	log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+	SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+	SLF4J: Defaulting to no-operation (NOP) logger implementation
+	SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+	atlas.user.password has been successfully created.
+	org.apache.hadoop.security.alias.JavaKeyStoreProvider has been updated.
+	INFO: Creating ranger-tagsync-env-hadoopconfdir.sh file
+	INFO: Creating ranger-tagsync-env-piddir.sh file
+	WARN: core-site.xml file not found in provided hadoop conf path...
+
+	INFO: Completed ranger-tagsync installation.....
+
+	root@ranger-server:/opt/ranger-1.2.0-tagsync# ls
+	conf       dist                lib  ranger-tagsync              ranger-tagsync-upload.sh  setup.sh   updatetagadminpassword.py
+	conf.dist  install.properties  log  ranger-tagsync-services.sh  setup.py                  templates  version
+    ----------------------------------------------------------------------------------
+	root@ranger-server:/opt/ranger-1.2.0-tagsync# ./ranger-tagsync-services.sh start
+	Starting Apache Ranger Tagsync Service
+	Apache Ranger Tagsync Service with pid 3474 has started.
+
+.. end
+
+在启动之后，再次检查kafka消费情况.
+
+.. code-block:: console
+
+	cecgw@atlas:/opt/kafka/bin$ ./kafka-consumer-groups.sh --new-consumer --bootstrap-server atlas:9092 --list ATLAS_ENTITIES
+	The [new-consumer] option is deprecated and will be removed in a future major release.The new consumer is used by default if the [bootstrap-server] option is provided.
+	Note: This will not show information about old Zookeeper-based consumers.
+	atlas
+	ranger_entities_consumer # 启动tag sync后，新生成消费者.
+
+.. end
+
+1.3 前台创建新的tag服务.
+
+.. figure:: image/tag_hive_service.png
+   :width: 80%
+   :align: center
+   :alt: tag_hive_service
+   
+1.4 关联hivedev服务.
+
+
+.. figure:: image/tag_service_link_hive_service.png
+   :width: 80%
+   :align: center
+   :alt: tag_service_link_hive_service
+
+1.5 atlas端标记字段标签；在此我们同时标记两个表两个字段. 给hive中的students表class以及hank表name标记senstive敏感tag.
+
+.. figure:: image/tag_atlas_mark.png
+   :width: 80%
+   :align: center
+   :alt: tag_atlas_mark
+   
+1.6 在ranger端设置该标签与策略之间的关联关系.
+
+.. figure:: image/tag_based_policy.png
+   :width: 80%
+   :align: center
+   :alt: tag_based_policy
+
+1.7 后端访问相关数据库.
+
+.. code-block:: console
+
+	0: jdbc:hive2://localhost:10000> select * from hank;
+	+-----------+------------+
+	| hank.ssn  | hank.name  |
+	+-----------+------------+
+	| 16        | john       |
+	| 17        | robert     |
+	| 18        | andrew     |
+	| 19        | katty      |
+	| 27        | edward     |
+	| 29        | alan       |
+	| 31        | kerry      |
+	| 34        | tom        |
+	| 35        | zack       |
+	+-----------+------------+
+
+.. end 
+
+1.8 检查审计日志生成.
+
+.. figure:: image/tag_based_policy_log.png
+   :width: 80%
+   :align: center
+   :alt: tag_based_policy_log
 
    
