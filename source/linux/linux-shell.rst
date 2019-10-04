@@ -274,6 +274,205 @@ lsof是list open files的简称。
 
 .. end
 
+ubuntu linux-18.04制作本地源
+----------------------------
+
+.. note::
+从Ubuntu 16.04 (xenial)版本开始，在将本地deb软件包创建repo时候，跟14.04以前的版本相比，强制要求gpg对Release文件签名，否则无法使用。
+
+1、在能够联网的ubuntu 18.04服务器上安装密钥生成软件，为了提升下载速度，可以将ubuntu默认源修改为清华源。(vi /etc/apt/source.list exe-->:%s/hk.archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/gc)
+
+.. code-block:: console
+
+	root@ubuntu:/etc/apt# apt-get update
+	root@ubuntu:/etc/apt# apt-get install gnupg rng-tools
+
+
+.. end
+
+2、下载相关的软件包。
+
+.. code-block:: console
+
+	root@ubuntu:/etc/apt# apt-get dist-upgrade
+	root@ubuntu:/etc/apt# apt-get install python syslog-ng tree ruby-sass ntp mariadb-server
+
+
+.. end
+
+3、将下载的软件包拷贝到离线源目录。
+
+
+.. code-block:: console
+
+	root@ubuntu:~# mkdir packs
+	root@ubuntu:~# mv /var/cache/apt/archives/*.deb packs/
+	root@ubuntu:~# mv /var/cache/apt/archives/partial/*.deb packs/
+
+
+.. end
+
+4、生成公私钥对。
+
+.. code-block:: console
+
+	root@ubuntu:~# gpg --gen-key
+	gpg (GnuPG) 2.2.4; Copyright (C) 2017 Free Software Foundation, Inc.
+	This is free software: you are free to change and redistribute it.
+	There is NO WARRANTY, to the extent permitted by law.
+
+	Note: Use "gpg --full-generate-key" for a full featured key generation dialog.
+
+	GnuPG needs to construct a user ID to identify your key.
+
+	Real name: cecgw
+	Email address: cecgw@cecgw.cn
+	You selected this USER-ID:
+		"cecgw <cecgw@cecgw.cn>"
+
+	Change (N)ame, (E)mail, or (O)kay/(Q)uit? O
+	We need to generate a lot of random bytes. It is a good idea to perform
+	some other action (type on the keyboard, move the mouse, utilize the
+	disks) during the prime generation; this gives the random number
+	generator a better chance to gain enough entropy.
+	We need to generate a lot of random bytes. It is a good idea to perform
+	some other action (type on the keyboard, move the mouse, utilize the
+	disks) during the prime generation; this gives the random number
+	generator a better chance to gain enough entropy.
+	gpg: /root/.gnupg/trustdb.gpg: trustdb created
+	gpg: key 3DCD44A298D1963A marked as ultimately trusted
+	gpg: directory '/root/.gnupg/openpgp-revocs.d' created
+	gpg: revocation certificate stored as '/root/.gnupg/openpgp-revocs.d/2C7AF0C89E56F1796EAA4C183DCD44A298D1963A.rev'
+	public and secret key created and signed.
+
+	pub   rsa3072 2019-09-30 [SC] [expires: 2021-09-29]
+		  2C7AF0C89E56F1796EAA4C183DCD44A298D1963A
+	uid                      cecgw <cecgw@cecgw.cn>
+	sub   rsa3072 2019-09-30 [E] [expires: 2021-09-29]
+
+	
+.. end
+
+执行gpg会进入一些对话，其中要新建一个用户名username和相应的密码。结束之后，输入命令，可以查看key：
+
+
+.. code-block:: console
+
+	root@ubuntu:~# gpg --list-key
+	gpg: checking the trustdb
+	gpg: marginals needed: 3  completes needed: 1  trust model: pgp
+	gpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u
+	gpg: next trustdb check due at 2021-09-29
+	/root/.gnupg/pubring.kbx
+	------------------------
+	pub   rsa3072 2019-09-30 [SC] [expires: 2021-09-29]
+		  2C7AF0C89E56F1796EAA4C183DCD44A298D1963A
+	uid           [ultimate] cecgw <cecgw@cecgw.cn>
+	sub   rsa3072 2019-09-30 [E] [expires: 2021-09-29]
+
+
+.. end
+
+导出公私钥对。
+
+.. code-block:: console
+
+	# 公钥
+	root@ubuntu:~# gpg -a --export cecgw> cecgw.pub
+	root@ubuntu:~# ls
+	cecgw.pub  packs
+    # 私钥
+	root@ubuntu:~# gpg -a --export-secret-keys cecgw > cecgw.sec
+	root@ubuntu:~# ls
+	cecgw.pub  cecgw.sec  
+	
+.. end
+
+上述完成制作本地源的基本准备工作。
+
+5、进入准备好的deb包目录生成索引文件及Release文件和签名文件。	
+
+.. code-block:: console
+
+	root@ubuntu:~/packs# apt-ftparchive packages . > Packages
+	root@ubuntu:~/packs# gzip -c Packages > Packages.gz
+	root@ubuntu:~/packs# apt-ftparchive release . > Release
+	root@ubuntu:~/packs# gpg --clearsign -o InRelease Release 
+	root@ubuntu:~/packs# gpg -abs -o Release.gpg Release 
+	root@ubuntu:~/packs# cp /root/cecgw.pub . # 将生成的公钥拷贝到离线文件夹中。
+	
+	
+	
+.. end
+
+
+6、打包本地源。
+
+.. code-block:: console
+
+	root@ubuntu:~# tar -czvf packs.tar.gz packs/
+
+.. end
+
+至此我们得到了packs.tar.gz 离线源文件。
+
+7、使用。在新的ubuntu18.04离线电脑上，将packs.tar.gz拷贝到该电脑中,以解压到/tmp文件为例.
+
+.. code-block:: console
+
+	root@ubuntu:/home/cecgw# tar -xzvf packs.tar.gz -C /tmp/
+
+.. end
+
+修改apt source 文件源为本地源.
+
+.. code-block:: console
+
+	root@ubuntu:/etc/apt# mv sources.list sources.list_org
+	root@ubuntu:/etc/apt# touch sources.list
+	root@ubuntu:/etc/apt# vi sources.list
+	root@ubuntu:/etc/apt# echo 'deb file:///tmp/packs/ /' > /etc/apt/sources.list
+
+.. end
+
+添加认证公钥。
+
+.. code-block:: console
+
+	root@ubuntu:/tmp/packs# cd /tmp/packs/
+	root@ubuntu:/tmp/packs# apt-key add cecgw.pub
+	OK
+
+.. end
+
+这样我们即可在本地使用该离线源。
+
+.. code-block:: console
+
+	root@ubuntu:/tmp/packs# apt-get update
+	Get:1 file:/tmp/packs  InRelease [1,524 B]
+	Get:1 file:/tmp/packs  InRelease [1,524 B]
+	Get:2 file:/tmp/packs  Packages [365 kB]
+	Reading package lists... Done 
+	root@ubuntu:/tmp/packs# apt-get install python
+	Reading package lists... Done
+	Building dependency tree       
+	Reading state information... Done
+	The following additional packages will be installed:
+	  libpython-stdlib libpython2.7-minimal libpython2.7-stdlib python-minimal python2.7 python2.7-minimal
+	Suggested packages:
+	  python-doc python-tk python2.7-doc binutils binfmt-support
+	The following NEW packages will be installed:
+	  libpython-stdlib libpython2.7-minimal libpython2.7-stdlib python python-minimal python2.7 python2.7-minimal
+	0 upgraded, 7 newly installed, 0 to remove and 0 not upgraded.
+	Need to get 0 B/3,958 kB of archives.
+	After this operation, 16.8 MB of additional disk space will be used.
+
+.. end
+
+
+
+
 .. Note::
    
    For KAFKA。
