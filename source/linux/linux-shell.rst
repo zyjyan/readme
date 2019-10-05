@@ -1008,7 +1008,7 @@ chattr --help
 
 .. Note::
 
-	1、Real user id
+	1、Real user id <p>
 	real user id 是执行进程者的 user id，一般情况下就是用户登录时的 user id。子进程的 real user id 从父进继承。通常这个是不更改的，也不需要更改。比如我以用户 cecgw 登录 Linux 系统，我接下来运行的所有命令的进程的 real user id 都是 cecgw 的 user id。
 	2、Effective user id
 	如果要判断一个进程是否对某个文件有操作权限，验证的是进程的 effective user id，而不是 real user id。
