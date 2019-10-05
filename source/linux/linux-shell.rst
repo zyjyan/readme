@@ -698,9 +698,9 @@ d.若密码输入成功后,则执行对应已经授权的命令
 
 openstack中频繁使用该机制.
 
-实例1：给cecgw用户授予root的所有命令:
+实例1：给cecgw用户授予root的所有命令.
 
-..code-block:: console
+.. code-block:: console
 
 	## The COMMANDS section may have other options added to it.
 	##
@@ -713,7 +713,7 @@ openstack中频繁使用该机制.
 
 实例2：授权cecgw用户只可以重启服务器
 
-..code-block:: console
+.. code-block:: console
 
 	vim /etc/sudoers
 
@@ -742,12 +742,12 @@ When the setuid bit is used, the behavior described above it's modified so that 
 
 为了更加清楚的了解这个特性,我们打个比方,普通用户根本没有修改/etc/passwd和/etc/shadow的权利,但是它还是可以通过passwd命令修改自己的密码,这就与SUID这个权限有关.
 
-..code-block:: console
+.. code-block:: console
 
 	root@ubuntu:/home/cecgw/test# ll /usr/bin/passwd
 	-rwsr-xr-x 1 root root 54256 May 17  2017 /usr/bin/passwd*
 
-..end
+.. end
 
 .. Note::
 
@@ -759,7 +759,7 @@ SetUID 权限的特点:
 
 设置命令：
 
-..code-block:: console
+.. code-block:: console
  
     chmod u+s test   || chmod 4755 test
 	cecgw@ubuntu:~/test/directory$ chmod 4755 setuid 
@@ -801,7 +801,7 @@ SetGID 针对目录的作用:
 2.普通用户在此目录中的有效组会变成此目录的属组
 3.普通用户对此目录拥有w权限时，新建的文件的默认属组是这个目录的属组
 
-..code-block:: console
+.. code-block:: console
 
 	cecgw@ubuntu:~/test$ ll -d gid/ # 设置gid
 	drwxrwsrwx 2 cecgw cecgw 4096 Oct  5 14:41 gid//
@@ -826,7 +826,7 @@ SetGID 针对目录的作用:
 	cecgw@ubuntu:~/test/directory/hadoop$ touch cecgw
 	touch: cannot touch 'cecgw': Permission denied # 在该目录下创建文件不允许.
 
-..end
+.. end
 
 Sticky BIT
 ++++++++++
@@ -898,7 +898,7 @@ chattr权限
 文件的隐藏属性有,chattr/lsattr,这些隐藏的属性确实对于系统有很大的帮助的,尤其是在系统安全(Security)上面,不过要先强调的是,chattr命令只能在Ext3/Ext4的文件系统上面生效,其他的文件系统可能就无法支持这个命令.
 
 
-..Note::
+.. Note::
 
 chattr --help
 命令语法：[ chattr [+-=] [状态] [选项] 文件或目录 ]
