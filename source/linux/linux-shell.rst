@@ -538,7 +538,7 @@ Linux操作系统是多任务(Multi-tasks)多用户(Multi-users)分时操作系�
 当我们设置文件目录为774(只读权限)时，cd命令将失效，但可以ls.
 当我们设置文件目录为771(只执行权限)时，可以cd到目录，ls等读命令将被禁止。
 
-.. code-block::
+.. code-block:: console
 
 	cecgw@ubuntu:~/test$ ll -d directory/
 	drwxrwxr-x 2 cecgw cecgw 4096 Oct  5 10:28 directory/
@@ -569,7 +569,7 @@ Linux操作系统是多任务(Multi-tasks)多用户(Multi-users)分时操作系�
 
 上述文件夹及文件的属性是由系统默认掩码控制的,即umask。umask命令用来设置限制新建文件权限的掩码,当新文件被创建时,其最初的权限由文件创建掩码决定,用户每次注册进入系统时,umask命令都被执行,并自动设置掩码mode来限制新文件的权限,用户可以通过再次执行umask命令来改变默认值,新的权限将会把旧的覆盖掉.
 
-.. code-block::
+.. code-block:: console
 
 	root@ubuntu:/home/cecgw/test# umask # root umask=0022
 	0022
@@ -593,7 +593,7 @@ ACL可以针对单一用户、单一文件或目录来进行r、w、x的权限�
 
 我们看某个文件（Linux系统中目录也是文件，一切皆是文件）是否支持 ACL 权限，首先要看文件所在的分区是否支持 ACL 权限。
 
-.. code-block::
+.. code-block:: console
 
 	root@ubuntu:/home/cecgw/test/directory# df -h
 	Filesystem                   Size  Used Avail Use% Mounted on
@@ -623,7 +623,7 @@ ACL可以针对单一用户、单一文件或目录来进行r、w、x的权限�
 
 如果系统默认无acl的支持,那你可以这样做,来手动开启ACL：在/etc/fstab文件中options一项中，写入acl即可。
 
-.. code-block::
+.. code-block:: console
 
 	cecgw@ubuntu:~/test/directory$ ll -d acl/ # 创建acl文件夹
 	drwxrwxr-x 2 cecgw cecgw 4096 Oct  5 11:39 acl//
@@ -700,7 +700,7 @@ openstack中频繁使用该机制.
 
 实例1：给cecgw用户授予root的所有命令:
 
-..code-block::
+..code-block:: console
 
 	## The COMMANDS section may have other options added to it.
 	##
@@ -713,7 +713,7 @@ openstack中频繁使用该机制.
 
 实例2：授权cecgw用户只可以重启服务器
 
-..code-block::
+..code-block:: console
 
 	vim /etc/sudoers
 
@@ -742,7 +742,7 @@ When the setuid bit is used, the behavior described above it's modified so that 
 
 为了更加清楚的了解这个特性,我们打个比方,普通用户根本没有修改/etc/passwd和/etc/shadow的权利,但是它还是可以通过passwd命令修改自己的密码,这就与SUID这个权限有关.
 
-..code-block::
+..code-block:: console
 
 	root@ubuntu:/home/cecgw/test# ll /usr/bin/passwd
 	-rwsr-xr-x 1 root root 54256 May 17  2017 /usr/bin/passwd*
@@ -759,7 +759,7 @@ SetUID 权限的特点:
 
 设置命令：
 
-..code-block::
+..code-block:: console
  
     chmod u+s test   || chmod 4755 test
 	cecgw@ubuntu:~/test/directory$ chmod 4755 setuid 
@@ -801,7 +801,7 @@ SetGID 针对目录的作用:
 2.普通用户在此目录中的有效组会变成此目录的属组
 3.普通用户对此目录拥有w权限时，新建的文件的默认属组是这个目录的属组
 
-..code-block::
+..code-block:: console
 
 	cecgw@ubuntu:~/test$ ll -d gid/ # 设置gid
 	drwxrwsrwx 2 cecgw cecgw 4096 Oct  5 14:41 gid//
@@ -844,7 +844,7 @@ SetBID：黏着位只能对目录有效,在设置了黏着位的目录下,只能
 
 示例：
 
-.. code-block::
+.. code-block:: console
 
 	root@ubuntu:/# ll -d /tmp/
 	drwxrwxrwt 10 root root 4096 Oct  5 13:17 /tmp// # tmp 目录对所有的用户均有读写权限.
@@ -916,7 +916,7 @@ chattr --help
 
 示例一：只能增加不能删除.
 
-.. code-block::
+.. code-block:: console
 
 	root@ubuntu:/home/cecgw/test# chattr +a chattr/ # 只能使用root用户，该命令意思为chattr目录中的文件只能增加不能删除.
 	root@ubuntu:/home/cecgw/test# cd chattr/
@@ -932,7 +932,7 @@ chattr --help
 
 示例二：检查隐藏属性.
 
-.. code-block::
+.. code-block:: console
 
 	root@ubuntu:/home/cecgw/test# lsattr -a ./chattr/
 	-------------e-- ./chattr/..
@@ -943,7 +943,7 @@ chattr --help
 
 示例三：设置某个文件不能被修改.
 
-.. code-block::
+.. code-block:: console
 
 	root@ubuntu:/home/cecgw/test/chattr# chattr +i addfile 
 	root@ubuntu:/home/cecgw/test/chattr# vi addfile 
