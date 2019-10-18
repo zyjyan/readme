@@ -286,6 +286,8 @@ ubuntu linux-18.04制作本地源
 
 	root@ubuntu:/etc/apt# apt-get update
 	root@ubuntu:/etc/apt# apt-get install gnupg rng-tools
+        root@ubuntu:/etc/apt# rngd -r /dev/urandom
+        root@ubuntu:/etc/apt# watch -n 1 cat /proc/sys/kernel/random/entropy_avail 
 
 
 .. end
