@@ -50,6 +50,7 @@ know oneself.
    index-linux
    index-ranger
    index-atlas
+   index-cryptography
 ..   index-opensatck
 ..   index-docker
 ..   index-logstash
