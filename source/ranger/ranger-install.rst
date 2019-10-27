@@ -1093,6 +1093,153 @@ ranger-hive-hook服务安装及使用
 
 
 
+ranger-hbase-hook服务安装及使用
++++++++++++++++++++++++++++++++
+
+ranger 版本2.0  ranger-hook 2.0版本， hbase 2.1.1版本。
+
+1.0 解压软件包。
+
+.. code-block:: console
+
+	root@big-1:/opt/ranger-hook# tar -xzvf ranger-2.0.0-hbase-plugin.tar.gz  #解压ranger-2.0.0-hbase-plugin.tar.gz至安装目录。
+
+.. end
+
+1.1 修改hbase-hook 配置文件.
+
+
+.. code-block:: console
+
+	root@big-1:/opt/ranger-hook/ranger-2.0.0-hbase-plugin# grep -vE  '^#|^$' install.properties 
+	POLICY_MGR_URL=http://ranger-admin:6080 # ranger server 地址.
+	REPOSITORY_NAME=hbasedev # hbase server 服务名称.
+	COMPONENT_INSTALL_DIR_NAME=/opt/hbase # hbase 服务安装目录.
+	XAAUDIT.SUMMARY.ENABLE=true 
+	XAAUDIT.SOLR.ENABLE=true
+	XAAUDIT.SOLR.URL=http://ranger-admin:8983/solr/ranger_audits # solr 地址
+	XAAUDIT.SOLR.USER=NONE
+	XAAUDIT.SOLR.PASSWORD=NONE
+	XAAUDIT.SOLR.ZOOKEEPER=NONE
+	XAAUDIT.SOLR.FILE_SPOOL_DIR=/var/log/hbase/audit/solr/spool
+	XAAUDIT.HDFS.ENABLE=false
+	XAAUDIT.HDFS.HDFS_DIR=hdfs://__REPLACE__NAME_NODE_HOST:8020/ranger/audit
+	XAAUDIT.HDFS.FILE_SPOOL_DIR=/var/log/hbase/audit/hdfs/spool
+	XAAUDIT.HDFS.AZURE_ACCOUNTNAME=__REPLACE_AZURE_ACCOUNT_NAME
+	XAAUDIT.HDFS.AZURE_ACCOUNTKEY=__REPLACE_AZURE_ACCOUNT_KEY
+	XAAUDIT.HDFS.AZURE_SHELL_KEY_PROVIDER=__REPLACE_AZURE_SHELL_KEY_PROVIDER
+	XAAUDIT.HDFS.AZURE_ACCOUNTKEY_PROVIDER=__REPLACE_AZURE_ACCOUNT_KEY_PROVIDER
+	XAAUDIT.HDFS.IS_ENABLED=false
+	XAAUDIT.HDFS.DESTINATION_DIRECTORY=hdfs://__REPLACE__NAME_NODE_HOST:8020/ranger/audit/%app-type%/%time:yyyyMMdd%
+	XAAUDIT.HDFS.LOCAL_BUFFER_DIRECTORY=__REPLACE__LOG_DIR/hbase/audit/%app-type%
+	XAAUDIT.HDFS.LOCAL_ARCHIVE_DIRECTORY=__REPLACE__LOG_DIR/hbase/audit/archive/%app-type%
+	XAAUDIT.HDFS.DESTINTATION_FILE=%hostname%-audit.log
+	XAAUDIT.HDFS.DESTINTATION_FLUSH_INTERVAL_SECONDS=900
+	XAAUDIT.HDFS.DESTINTATION_ROLLOVER_INTERVAL_SECONDS=86400
+	XAAUDIT.HDFS.DESTINTATION_OPEN_RETRY_INTERVAL_SECONDS=60
+	XAAUDIT.HDFS.LOCAL_BUFFER_FILE=%time:yyyyMMdd-HHmm.ss%.log
+	XAAUDIT.HDFS.LOCAL_BUFFER_FLUSH_INTERVAL_SECONDS=60
+	XAAUDIT.HDFS.LOCAL_BUFFER_ROLLOVER_INTERVAL_SECONDS=600
+	XAAUDIT.HDFS.LOCAL_ARCHIVE_MAX_FILE_COUNT=10
+	XAAUDIT.SOLR.IS_ENABLED=true # 设置为true
+	XAAUDIT.SOLR.MAX_QUEUE_SIZE=1
+	XAAUDIT.SOLR.MAX_FLUSH_INTERVAL_MS=1000
+	XAAUDIT.SOLR.SOLR_URL=http://ranger-admin:6083/solr/ranger_audits # solr api 接口地址.
+	SSL_KEYSTORE_FILE_PATH=/etc/hbase/conf/ranger-plugin-keystore.jks
+	SSL_KEYSTORE_PASSWORD=myKeyFilePassword
+	SSL_TRUSTSTORE_FILE_PATH=/etc/hbase/conf/ranger-plugin-truststore.jks
+	SSL_TRUSTSTORE_PASSWORD=changeit
+	UPDATE_XAPOLICIES_ON_GRANT_REVOKE=true
+	CUSTOM_USER=hadoop-1 # hadoop 用户名 
+	CUSTOM_GROUP=hadoop-1 # hadoop 用户组 
+
+.. end
+
+1.2 将hook 文件夹拷贝并复制到hbase 其他所有节点.
+
+1.3 在各个节点启动hbase hook.
+
+.. code-block:: console
+
+	root@big-1:/opt/ranger-hook/ranger-2.0.0-hbase-plugin# ./enable-hbase-plugin.sh 
+
+.. end
+
+1.4 在服务控制台注册hbasedev服务.
+
+.. figure:: image/hbase_dev_service.png
+   :width: 80%
+   :align: center
+   :alt: hbase_dev_service
+   
+1.5 测试hbasedev是否连接成功.
+
+
+.. figure:: image/hbase_link_test.png
+   :width: 80%
+   :align: center
+   :alt: hbase_link_test
+
+
+1.6 在各个节点重启hbase 服务.
+
+1.7 查看服务注册情况.
+
+.. figure:: image/hbase_service_register.png
+   :width: 80%
+   :align: center
+   :alt: hbase_service_register
+
+1.8 测试使用,使用hadoop-1用户，在hbase中创建表.
+
+.. code-block:: console
+
+
+	hbase(main):002:0>  create 't1',{NAME => 'f1', VERSIONS => 3},{NAME => 'f2', VERSIONS => 1};
+	hbase(main):003:0* list
+	Created table t1
+	Took 2.7758 seconds                                                                                                                        
+	TABLE                                                                                                                                      
+	t1                                                                                                                                         
+	1 row(s)
+	Took 0.0154 seconds                                                                                                                        
+	=> ["t1"]
+
+.. end
+
+使用ubuntu 用户创建表,被拒绝.
+
+.. code-block:: console
+
+hbase(main):093:0> create 'hbase_test',  {NAME=>'cf1'},{NAME=>'cf2'}
+
+ERROR: org.apache.hadoop.hbase.security.AccessDeniedException: Insufficient permissions for user 'ubuntu' (action=create)
+
+.. end
+
+1.9 查看策略及日志生成情况.
+
+.. figure:: image/hbase_log.png
+   :width: 80%
+   :align: center
+   :alt: hbase_log
+
+   
+.. figure:: image/hbase-policy.png
+   :width: 80%
+   :align: center
+   :alt: hbase-policy
+
+
+.. figure:: image/hbase_deny_log.png
+   :width: 80%
+   :align: center
+   :alt: hbase_deny_log
+
+
+
+
+
 
 ranger+atlas联动
 ++++++++++++++++
@@ -1279,5 +1426,7 @@ ranger+atlas可以实现基于标签的访问控制实施。atlas通过动态数
    :width: 80%
    :align: center
    :alt: tag_based_policy_log
+   
+
 
    
