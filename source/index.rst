@@ -26,6 +26,14 @@
 当然也对工作中扯皮（规避责任）的事情深感无奈。确实，满满的都是故事。
 的确，横看成岭侧成峰。
 
+
+hank for what?
+
+yes, zero. 
+
+know oneself.
+
+
 .. test 
 .. toctree::
    :maxdepth: 5
