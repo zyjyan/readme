@@ -20,7 +20,7 @@ Contents
 .. toctree::
    :maxdepth: 2
 
-   fy/fy-box.rst
+   fy/fy.rst
 .. Pseudo only directive for each distribution used by the build tool.
    This pseudo only directive for toctree only works fine with Tox.
    When you directly build this guide with Sphinx,
