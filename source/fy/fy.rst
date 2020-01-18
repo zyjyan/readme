@@ -480,12 +480,137 @@ horizon+keystone+ceilometer
     "identity": 3,
  }
  >>
+
+ >> OPENSTACK_KEYSTONE_DEFAULT_DOMAIN = "Default">>
+ >> TIME_ZONE = "UTC" >> 
+
+ 注意查看 /etc/apache2/conf-available/openstack-dashboard.conf 中的配置.这是apache link django 的配置. horizon是django的一个应用.
+ 如果涉及apache的配置文件有修改,记得执行 service apache2 reload 并重启apache2
+
+ 到这里，我们已经搭建了一个web框架，我们可以通过访问. http://ip/horizon 进行访问.
+
+
 .. end
 
-.. figure:: image/linux-shell/awk.png
+ 到这里，我们已经搭建了一个web框架，我们可以通过访问. http://ip/horizon 进行访问.
+
+.. figure:: image/fy-img/first_login.png
    :width: 80%
    :align: center
-   :alt: awk
+   :alt: first_login
+
+我们使用命令行创建的默认用户登录. admin  pas**rd登录.
+
+.. figure:: image/fy-img/first_login_in.png
+   :width: 80%
+   :align: center
+   :alt: first_login_in
+
+可以修改主题.
+
+.. figure:: image/fy-img/first_login_in_1.png
+   :width: 80%
+   :align: center
+   :alt: first_login_in_1
+
+我们查看一下用户情况.
+
+.. figure:: image/fy-img/first_login_think.png
+   :width: 80%
+   :align: center
+   :alt:  first_login_think.png
+
+查看下admin进行用户创建，能做什么操作。
+
+.. figure:: image/fy-img/admin_create_user.png
+   :width: 80%
+   :align: center
+   :alt:  admin_create_user.png
+
+我们再以fying 登录查看下看.
+
+.. figure:: image/fy-img/tenant_login.png
+   :width: 80%
+   :align: center
+   :alt:  tenant_login.png
+
+我们发现以fying登录，点击用户，发现只能看到自己的信息，并且不能进行用户创建的权限.↑
+
+点击登录租户查看.
+
+.. figure:: image/fy-img/tenant_tenant_user.png
+   :width: 80%
+   :align: center
+   :alt:  tenant_tenant_user.png
+
+我们发现也不能进行创建操作.因为fying只是一个普通用户. 连创建按钮查看的权力都没有. 事实上，程序并不会为某个用户创建独立的dashboard，但是却可
+可以依据用户的角色，选择界面上哪些元素显示或者不显示. 这个是horizon的特色之一.也是代码设计者的巧妙之处.
+
+
+停下来思考-1
+------------
+
+All right.
+随着openstack社区的更新，组件的安全已经变得越来越简单,并进行了很大的优化. 想起14年进行安装时，官方的文档还不全，按照官网操作基本一步一坑.
+往往，人在踩坑的时候才会去思考. 
+
+到目前为止，我们很顺利的搭建了:
+一个基于django的web应用框架.
+一个带认证的应用框架. 
+一个使用keystone作为认证后端的框架.
+一个基于rest的认证组件.
+一个采用了多租户模型，多微服务应用管理，多角色管理的认证组件.
+一个采用了严格api管控的认证组件.
+一个采用模块化编程的前端框架。
+一个基于restAPI进行交互的框架.
+一个可分布式部署的框架.
+一个可基于可控制dashboard-->pannel-->tab-->table-->button-->form灵活显示的前端框架.
+一个...
+我们仅仅搭建了horizon+keystone，却应该先停下来思考几个问题. 在相对简单的情况下想清楚一些问题，有助于在面临复杂问题的时候从容面对.
+想明白了1+1. 1+2也不会太难. horizon是整个openstack项目面向用户的门户,构建了一个多租户模型应用,本身并不提供任何功能,所有的功能由 keystone、nova、neutron、cinder、glance、ceilometer等提供，从这个角度而言,keytone的地位与其余的项目一致,都作为horizon的能力供应服务. 但也有一些不同，keystone 不仅提供了hirizon的认证，也提供了 nova、neutron等其余组件对外暴漏API接口的权限认证,从这个角度讲，keystone提供了多个服务的统一认证框架,至于其余的组件，如何使用该认证,涉及的内容非常多，其中最主要的是paste框架,采用该框架,可以非常灵活的在其余组件的api供应组件中(ceimmeter-api、neutron-server、nova-api等)方便的加载keystone.
+
+horizon是openstack中，从技术维度讲，是较为简单的一个，但确实业务逻辑构建最复杂的一个，需要有horizon完成基于nova,keystone,glance等组件的业
+务流程，面向用户，提供云计算服务，所以对产品设计的人而言，非常值得借鉴.
+
+
+不应该因为顺利停止思考:大概有这几个点需要进行深入的思考。
+1、django如何部署在apache下？
+2、我们刚才使用不同的用户为何看到的内容不一致？
+3、我们刚才登录的两个用户角色范围是什么？他们如何定义？
+4、openstack原生提供了什么样子的权限模型？
+5、openstack原生提供的多租户模型全貌是什么？
+6、刚才的一次登录发生了什么？
+7、后台敲几个命令行，为何能够创建用户？
+8、django如何采用keystone进行权限认证？
+9、django如何连接数据库？
+10、为何hirizon设置了dashboard-->pannel-->tab-->table-->form-->button等模板元素?
+11、如何通过权限控制上述界面元素的显示?
+12、一个用户可不可以拥有多个角色？
+13、当一个用户拥有多个角色的时候，元素显示是或允许还是并允许？
+14、一个用户可不可以在多个租户中？
+15、admin 租户，service租户，tenant租户之间什么关系？
+16、为何其余的组件没有安装，前端界面没有报错？并仅仅显示了已经安装的keystone相关功能？
+17、创建用户发生了什么？
+18、如何查看日志？
+19、如何使用中文显示？
+20、如何汉化？
+21、horizon如何与keystone 交互.
+22、keystone提供了token机制流程是怎么工作的？
+23、keytone提供了多少种token认证机制？如何配置，如何选择？
+24、keystone 如何实现多微服务管理？
+25、keystone 如何通过policy实现对api的细粒度管理？
+26、我想重构界面怎么做？
+27、我想重构权限逻辑如何做？
+28、我想重构租户模型怎么做？
+29、为何有了password 还要有token认证的出现？
+30、and so on.
+31、再加上ceilometer呢？
+
+
+>>>>>>>理解>>>>重构>>>>>>增值>>>>>合适>>>>>>
+
+
+>>>>>Get what?>>>>> if..>>>>>>>>>>>>>>>>>>>>
 
 
 django 如何部署在apache下
