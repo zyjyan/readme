@@ -555,7 +555,8 @@ All right.
 
 .. code-block:: console
 
-	随着openstack社区的更新，组件的安全已经变得越来越简单,并进行了很大的优化. 想起14年进行安装时，官方的文档还不全，按照官网操作基本一步一坑.
+	随着openstack社区的更新，组件的安全已经变得越来越简单,并进行了很大的优化. 想起14年进行安装时，
+        官方的文档还不全，按照官网操作基本一步一坑.
 	往往，人在踩坑的时候才会去思考. 
 
 	到目前为止，我们很顺利的搭建了:
@@ -570,10 +571,19 @@ All right.
 	一个可分布式部署的框架.
 	一个可基于可控制dashboard-->pannel-->tab-->table-->button-->form灵活显示的前端框架.
 	一个...
-	我们仅仅搭建了horizon+keystone，却应该先停下来思考几个问题. 在相对简单的情况下想清楚一些问题，有助于在面临复杂问题的时候从容面对.
-	想明白了1+1. 1+2也不会太难. horizon是整个openstack项目面向用户的门户,构建了一个多租户模型应用,本身并不提供任何功能,所有的功能由 keystone、nova、neutron、cinder、glance、ceilometer等提供，从这个角度而言,keytone的地位与其余的项目一致,都作为horizon的能力供应服务. 但也有一些不同，keystone 不仅提供了hirizon的认证，也提供了 nova、neutron等其余组件对外暴漏API接口的权限认证,从这个角度讲，keystone提供了多个服务的统一认证框架,至于其余的组件，如何使用该认证,涉及的内容非常多，其中最主要的是paste框架,采用该框架,可以非常灵活的在其余组件的api供应组件中(ceimmeter-api、neutron-server、nova-api等)方便的加载keystone.
+	我们仅仅搭建了horizon+keystone，却应该先停下来思考几个问题. 在相对简单的情况下想清楚一些问题，
+        有助于在面临复杂问题的时候从容面对.
 
-	horizon是openstack中，从技术维度讲，是较为简单的一个，但确实业务逻辑构建最复杂的一个，需要有horizon完成基于nova,keystone,glance等组件的业
+	想明白了1+1. 1+2也不会太难. horizon是整个openstack项目面向用户的门户,构建了一个多租户模型应用,
+        本身并不提供任何功能,所有的功能由 keystone、nova、neutron、cinder、glance、ceilometer等提供，从
+        这个角度而言,keytone的地位与其余的项目一致,都作为horizon的能力供应服务. 但也有一些不同，keystone
+        不仅提供了hirizon的认证，也提供了 nova、neutron等其余组件对外暴漏API接口的权限认证,从这个角度讲，
+        keystone提供了多个服务的统一认证框架,至于其余的组件，如何使用该认证,涉及的内容非常多，其中最主要
+        的是paste框架,采用该框架,可以非常灵活的在其余组件的api供应组件中(ceimmeter-api、neutron-server、n
+        ova-api等)方便的加载keystone.
+
+	horizon是openstack中，从技术维度讲，是较为简单的一个，但确实业务逻辑构建最复杂的一个，需要有horizon
+        完成基于nova,keystone,glance等组件的业
 	务流程，面向用户，提供云计算服务，所以对产品设计的人而言，非常值得借鉴.
 
 
