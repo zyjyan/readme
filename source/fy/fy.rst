@@ -431,7 +431,7 @@ horizon+keystone+ceilometer
 	| user_id    | 303212a7aea24e5194128f862a198667                                                                                                                                                        |
 	+------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-	root@ubuntu:/etc/apache2# openstack service list
+	root@ubuntu:/etc/apache2# openstack service list # 列出服务信息,keystone,ceilometer,nova,nuetorn在keystone中都是一种服务，并且均有用户存在，同一由keystone service租户管理.
 	+----------------------------------+----------+----------+
 	| ID                               | Name     | Type     |
 	+----------------------------------+----------+----------+
@@ -439,7 +439,7 @@ horizon+keystone+ceilometer
 	+----------------------------------+----------+----------+
 
 
-	root@ubuntu:/etc/apache2# openstack user list
+	root@ubuntu:/etc/apache2# openstack user list # 列出该租户下的用户.
 	+----------------------------------+-------+
 	| ID                               | Name  |
 	+----------------------------------+-------+
@@ -447,7 +447,7 @@ horizon+keystone+ceilometer
 	| c5607a5305fb4e73acf6376b77baa855 | fying |
 	+----------------------------------+-------+
 
-	root@ubuntu:/etc/apache2# openstack project list
+	root@ubuntu:/etc/apache2# openstack project list # 列出租户信息.
 	+----------------------------------+---------+
 	| ID                               | Name    |
 	+----------------------------------+---------+
@@ -456,7 +456,30 @@ horizon+keystone+ceilometer
 	| ee8ba2a1b05c4ea383bea1d1f8b0996d | admin   |
 	+----------------------------------+---------+
 
+	root@ubuntu:/home/ubuntu# openstack endpoint list #列出服务入口,每一个组件（nova,keystone,ceilometer,neutron,cinder..）的对外发布入口都是以微服务组件的形式发布，提供统一的rest api，keystone负责统一api的管理及认证.这种微服务的形式，是可进行分布式或弹性部署的前提.
+	+----------------------------------+-----------+--------------+--------------+---------+-----------+------------------------+
+	| ID                               | Region    | Service Name | Service Type | Enabled | Interface | URL                    |
+	+----------------------------------+-----------+--------------+--------------+---------+-----------+------------------------+
+	| 07f8a36af7194a9894a212d4729f383f | RegionOne | keystone     | identity     | True    | internal  | http://ubuntu:5000/v3/ |
+	| 93a8b806bc984b78addcc05ec6c2e014 | RegionOne | keystone     | identity     | True    | admin     | http://ubuntu:5000/v3/ |
+	| b18dd1dc9b0148ca97a1136bfc8f922e | RegionOne | keystone     | identity     | True    | public    | http://ubuntu:5000/v3/ |
+	+----------------------------------+-----------+--------------+--------------+---------+-----------+------------------------+
+ >><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><>><><><><><><<<>><<>><<><><><><><><><>><>><><>>>><><>>><><><>><<<<<<<<>>>>>><<<><><><><>>
 
+ root@ubuntu:/home/ubuntu# apt-get install openstack-dashboard
+ root@ubuntu:/usr/lib/python2.7/dist-packages/openstack_dashboard/local# vi local_settings.py
+ >>>>>>>> set OPENSTACK_HOST = "ubuntu" >>>> ALLOWED_HOSTS = ['*'] >>> 
+ >>CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': 'ubuntu:11211',
+    },
+ } >>>>
+ >>OPENSTACK_KEYSTONE_URL = "http://%s:5000/v3" % OPENSTACK_HOST>>
+ >>OPENSTACK_API_VERSIONS = {
+    "identity": 3,
+ }
+ >>
 .. end
 
 .. figure:: image/linux-shell/awk.png
