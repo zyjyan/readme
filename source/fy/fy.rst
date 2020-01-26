@@ -702,9 +702,22 @@ All right.
 
 .. end
 
-如何使用上述debuglog文件？
+掌握日志相关的知识非常有必要，主要目的是可以将数据从程序流转化为日志流，进一步通过标准syslog协议（syslog-ng rsyslog ulog）可对接外部日志分析系统. 
 
-首先讲debuglog.py加入到系统默认的python代码路径中.
+那么，如何使用上述debuglog文件？
+
+首先将debuglog.py加入到系统默认的python代码路径中(系统默认的python路径 /usr/lib/python2.7/dist-packages/&&/usr/local/lib/python2.7/dist-packages/&&.).
+
+
+.. code-block:: console
+
+	>>> import sys
+	>>> sys.path
+	['', '/usr/local/lib/python2.7/dist-packages/Sphinx-1.5-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/requests-2.21.0-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/imagesize-1.1.0-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/alabaster-0.7.12-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/Babel-2.6.0-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/snowballstemmer-1.2.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/docutils-0.14-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/Pygments-2.3.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/Jinja2-2.10-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/six-1.12.0-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/certifi-2018.11.29-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/urllib3-1.24.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/idna-2.8-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/chardet-3.0.4-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/pytz-2018.9-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/MarkupSafe-1.1.0-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages']
+
+.. end
+
+>>>>>>>>>>>>>>>>>>>>.how to use debuglog >>>>>>>>>>>>>>>>>>>>.
 
 
 .. code-block:: console
@@ -740,15 +753,34 @@ All right.
 
  def login(request, template_name=None, extra_context=None, \**kwargs):
     """Logs a user in using the :class:`~openstack_auth.forms.Login` form."""
-    Log.info('now this is first login request info=%s' % dir(request))
+    Log.info('now this is first login request info=%s' % dir(request)) # add anywhere you want.
+
  重启apache 
 
  root@ubuntu:/usr/lib/python2.7/dist-packages/openstack_auth# /etc/init.d/apache2 restart
  [ ok ] Restarting apache2 (via systemctl): apache2.service.
+
+.. end
+
+
+.. code-block:: console
+
  浏览器访问: http://your_ip/horizon/auth/login/
  查看日志文件:
  root@ubuntu:/usr/lib/python2.7/dist-packages/openstack_auth# vi /var/log/fy.log 
-  2020-01-26 09:40:37,605(INFO)novadebug : now this is first login request info=['COOKIES', 'FILES', 'GET', 'LANGUAGE_CODE', 'META', 'POST', '__class__', '__delattr__', '__dict__', '__doc__', '__format__', '__getattribute__', '__hash__', '__init__', '__iter__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_cached_user', '_encoding', '_get_post', '_get_raw_host', '_get_scheme', '_initialize_handlers', '_load_post_and_files', '_mark_post_parse_error', '_messages', '_post_parse_error', '_read_started', '_set_post', '_stream', '_upload_handlers', 'body', 'build_absolute_uri', 'close', 'content_params', 'content_type', 'csrf_processing_done', 'encoding', 'environ', 'get_full_path', 'get_host', 'get_port', 'get_raw_uri', 'get_signed_cookie', 'horizon', 'is_ajax', 'is_secure', 'method', 'parse_file_upload', 'path', 'path_info', 'read', 'readline', 'readlines', 'resolver_match', 'scheme', 'sensitive_post_parameters', 'session', 'upload_handlers', 'user', 'xreadlines']
+  2020-01-26 09:40:37,605(INFO)novadebug : now this is first login request info=[
+  'COOKIES', 'FILES', 'GET', 'LANGUAGE_CODE', 'META', 'POST', '__class__', '__delattr__', 
+  '__dict__', '__doc__', '__format__', '__getattribute__', '__hash__', '__init__', 
+  '__iter__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', 
+  '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 
+  '_cached_user', '_encoding', '_get_post', '_get_raw_host', '_get_scheme', 
+  '_initialize_handlers', '_load_post_and_files', '_mark_post_parse_error', '_messages', 
+  '_post_parse_error', '_read_started', '_set_post', '_stream', '_upload_handlers', 
+  'body', 'build_absolute_uri', 'close', 'content_params', 'content_type', 'csrf_processing_done',
+  'encoding', 'environ', 'get_full_path', 'get_host', 'get_port', 'get_raw_uri', 
+  'get_signed_cookie', 'horizon', 'is_ajax', 'is_secure', 'method', 'parse_file_upload', 
+  'path', 'path_info', 'read', 'readline', 'readlines', 'resolver_match', 'scheme', 
+  'sensitive_post_parameters', 'session', 'upload_handlers', 'user', 'xreadlines']
 
 	1  HttpRequest.scheme 　     请求的协议，一般为http或者https，字符串格式(以下属性中若无特殊指明，均为字符串格式)
 
@@ -768,7 +800,8 @@ All right.
 
 	9  HttpRequest.GET                    返回一个 querydict 对象(类似于字典)，该对象包含了所有的HTTP GET参数
 
-	10  HttpRequest.POST                返回一个 querydict ，该对象包含了所有的HTTP POST参数，通过表单上传的所有字符都会保存在该属性中。
+	10  HttpRequest.POST                返回一个 querydict ，该对象包含了所有的HTTP POST参数，
+                                            通过表单上传的所有字符都会保存在该属性中。
 
 	11  HttpRequest.COOKIES  　     返回一个包含了所有cookies的字典。
 
@@ -782,7 +815,8 @@ All right.
 
 	15  HttpRequest.site　　      中间件属性
 
-	16  HttpRequest.user　　     中间件属性，表示当前登录的用户。HttpRequest.user实际上是由一个定义在 django.contrib.auth.models中的user model类所创建的对象。此模型也可以自己定义.
+	16  HttpRequest.user　　     中间件属性，表示当前登录的用户。HttpRequest.user实际上是由一个定义在
+                                     django.contrib.auth.models中的user model类所创建的对象。此模型也可以自己定义.
 
 	 16.2  属性 
 	　is_authenticated   布尔值，标志着用户是否已认证。在django1.10之前，没有该属性，但有与该属性同名的方法。
@@ -791,16 +825,38 @@ All right.
 
 
 
-	 2020-01-26 09:48:38,047(INFO)novadebug : now this is first login request.user=['__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__unicode__', '__weakref__', '_groups', '_user_permissions', 'check_password', 'delete', 'get_all_permissions', 'get_group_permissions', 'get_username', 'groups', 'has_module_perms', 'has_perm', 'has_perms', 'id', 'is_active', 'is_anonymous', 'is_authenticated', 'is_staff', 'is_superuser', 'pk', 'save', 'set_password', 'user_permissions', 'username']
+	 2020-01-26 09:48:38,047(INFO)novadebug : now this is first login request.user=
+         ['__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', 
+          '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', 
+          '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', 
+          '__subclasshook__', '__unicode__', '__weakref__', '_groups', '_user_permissions', 
+          'check_password', 'delete', 'get_all_permissions', 'get_group_permissions', 
+          'get_username', 'groups', 'has_module_perms', 'has_perm', 'has_perms', 'id', 
+          'is_active', 'is_anonymous', 'is_authenticated', 'is_staff', 'is_superuser', 
+          'pk', 'save', 'set_password', 'user_permissions', 'username']
 
 
 	 这样我们便可以看到request 中的信息.其中对我们最重要的为 session, COOKIES, user等信息.尤其是user.
 	 正常的request中并不会有user熟悉,思考一下user是在哪里封装到reqeust中的.
 	 做一个简单的测试:
 	 我们将setting.py-middleware中与session的中间件注释掉，重启apache2，再次查看下request.
-	 2020-01-26 11:52:33,079(INFO)novadebug : now this is first login request info=['COOKIES', 'FILES', 'GET', 'LANGUAGE_CODE', 'META', 'POST', '__class__', '__delattr__', '__dict__', '__doc__', '__format__', '__getattribute__', '__hash__', '__init__', '__iter__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_encoding', '_get_post', '_get_raw_host', '_get_scheme', '_initialize_handlers', '_load_post_and_files', '_mark_post_parse_error', '_post_parse_error', '_read_started', '_set_post', '_stream', '_upload_handlers', 'body', 'build_absolute_uri', 'close', 'content_params', 'content_type', 'csrf_processing_done', 'encoding', 'environ', 'get_full_path', 'get_host', 'get_port', 'get_raw_uri', 'get_signed_cookie', 'horizon', 'is_ajax', 'is_secure', 'method', 'parse_file_upload', 'path', 'path_info', 'read', 'readline', 'readlines', 'resolver_match', 'scheme', 'sensitive_post_parameters', 'upload_handlers', 'xreadlines']
+	 2020-01-26 11:52:33,079(INFO)novadebug : now this is first login request 
+         info=['COOKIES', 'FILES', 'GET', 'LANGUAGE_CODE', 'META', 'POST', '__class__', 
+         '__delattr__', '__dict__', '__doc__', '__format__', '__getattribute__', '__hash__',
+         '__init__', '__iter__', '__module__', '__new__', '__reduce__', '__reduce_ex__',
+         '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__',
+         '_encoding', '_get_post', '_get_raw_host', '_get_scheme', '_initialize_handlers',
+         '_load_post_and_files', '_mark_post_parse_error', '_post_parse_error', '_read_started',
+         '_set_post', '_stream', '_upload_handlers', 'body', 'build_absolute_uri', 'close',
+         'content_params', 'content_type', 'csrf_processing_done', 'encoding', 'environ', 
+         'get_full_path', 'get_host', 'get_port', 'get_raw_uri', 'get_signed_cookie', 'horizon', 
+         'is_ajax', 'is_secure', 'method', 'parse_file_upload', 'path', 'path_info', 'read', 
+         'readline', 'readlines', 'resolver_match', 'scheme', 'sensitive_post_parameters', 
+         'upload_handlers', 'xreadlines']
 	 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-	 发现user属性不在了. 可知,Django 使用 sessions 和中间件将身份验证系统挂接到请求对象中。它们在每次请求中都会提供 request.user 属性。如果当前没有用户登录，这个属性将会被设置为 AnonymousUser ，否则将会被设置为 User 实例。可以使用 is_authenticated 区分两者.
+	 发现user属性不在了. 可知,Django 使用 sessions 和中间件将身份验证系统挂接到请求对象中。
+         它们在每次请求中都会提供 request.user 属性。如果当前没有用户登录，这个属性将会被设置为 AnonymousUser，
+         否则将会被设置为 User 实例。可以使用 is_authenticated 区分两者.
 	 具体的是通过：
 	     'django.contrib.auth.middleware.AuthenticationMiddleware',
 	 中间件加载的.赋值代码为：
@@ -817,14 +873,13 @@ All right.
 	 那么如何加载用户模型？我们看到的request.user已经被赋值,但并没有加载user模型.
 	 我们登录后查看用户属性.
   
- 
-
-
-
 
 .. end
 
 
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..
+ 那么如何加载用户模型？我们看到的request.user已经被赋值,但并没有加载keystone user模型.
+ 我们登录后查看用户属性.
 
 
 django 如何部署在apache下
