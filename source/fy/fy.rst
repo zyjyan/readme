@@ -713,7 +713,26 @@ All right.
 
 	>>> import sys
 	>>> sys.path
-	['', '/usr/local/lib/python2.7/dist-packages/Sphinx-1.5-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/requests-2.21.0-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/imagesize-1.1.0-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/alabaster-0.7.12-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/Babel-2.6.0-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/snowballstemmer-1.2.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/docutils-0.14-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/Pygments-2.3.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/Jinja2-2.10-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/six-1.12.0-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/certifi-2018.11.29-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/urllib3-1.24.1-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/idna-2.8-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/chardet-3.0.4-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/pytz-2018.9-py2.7.egg', '/usr/local/lib/python2.7/dist-packages/MarkupSafe-1.1.0-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages']
+	['', '/usr/local/lib/python2.7/dist-packages/Sphinx-1.5-py2.7.egg', 
+             '/usr/local/lib/python2.7/dist-packages/requests-2.21.0-py2.7.egg', 
+             '/usr/local/lib/python2.7/dist-packages/imagesize-1.1.0-py2.7.egg', 
+             '/usr/local/lib/python2.7/dist-packages/alabaster-0.7.12-py2.7.egg', 
+             '/usr/local/lib/python2.7/dist-packages/Babel-2.6.0-py2.7.egg', 
+             '/usr/local/lib/python2.7/dist-packages/snowballstemmer-1.2.1-py2.7.egg', 
+             '/usr/local/lib/python2.7/dist-packages/docutils-0.14-py2.7.egg',
+             '/usr/local/lib/python2.7/dist-packages/Pygments-2.3.1-py2.7.egg', 
+             '/usr/local/lib/python2.7/dist-packages/Jinja2-2.10-py2.7.egg', 
+             '/usr/local/lib/python2.7/dist-packages/six-1.12.0-py2.7.egg', 
+             '/usr/local/lib/python2.7/dist-packages/certifi-2018.11.29-py2.7.egg', 
+             '/usr/local/lib/python2.7/dist-packages/urllib3-1.24.1-py2.7.egg', 
+             '/usr/local/lib/python2.7/dist-packages/idna-2.8-py2.7.egg', 
+             '/usr/local/lib/python2.7/dist-packages/chardet-3.0.4-py2.7.egg', 
+             '/usr/local/lib/python2.7/dist-packages/pytz-2018.9-py2.7.egg', 
+             '/usr/local/lib/python2.7/dist-packages/MarkupSafe-1.1.0-py2.7.egg',
+             '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', 
+             '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', 
+             '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', 
+             '/usr/lib/python2.7/dist-packages']
 
 .. end
 
