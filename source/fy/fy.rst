@@ -887,11 +887,14 @@ All right.
 		    "'django.contrib.sessions.middleware.SessionMiddleware' before "
 		    "'django.contrib.auth.middleware.AuthenticationMiddleware'."
 		) % ("_CLASSES" if settings.MIDDLEWARE is None else "")
-		request.user = SimpleLazyObject(lambda: get_user(request))
+		request.user = SimpleLazyObject(lambda: get_user(request))# 重点，在这里创建request 的user属性.
 	 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..
-	 那么如何加载用户模型？我们看到的request.user已经被赋值,但并没有加载user模型.
+	 那么如何加载用户模型？我们看到的request.user已经被赋值,但并没有加载keystone 的user模型.
+
 	 我们登录后查看用户属性.
-  
+
+代码位置：
+ openstack_auth\views.py 
 
 .. end
 
