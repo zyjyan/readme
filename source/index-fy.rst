@@ -4,15 +4,16 @@ FY Knowledge
 
 Abstract
 ~~~~~~~~
-FOR ALL FOR NOTHING.
+
 
 .. note::
-   。我知我知。我知我不知。我不知我知。我不知我不知。 
 
+ FOR ALL FOR NOTHING.
 
 .. warning::
-
-   。我知你知。我知你不知。我不知你知。我不知你不知。
+ 
+ Wish You All The Best. 
+ Be Happy.
 
 Contents
 ~~~~~~~~
