@@ -887,7 +887,11 @@ All right.
 
 .. end
 
-.. note:: 突发疫情.我们知道他们在说谎，他们自己也知道自己说谎，他们也知道我们知道他们在说谎，我们也知道他们知道我们知道他们说谎，他们知道我们也知道他们知道我们知道他们说谎，但是他们依然在说谎.   # 真相难寻.看下代码如何看到加载keystone user 模型的真相.
+.. note::
+ 突发疫情.我们知道他们在说谎，他们自己也知道自己说谎，他们也知道我们知道他们在说谎，我们也知道他们知道我们知道他们说谎，他们知道我们也知道他们知道我们知道他们说谎，但是他们依然在说谎.   # 真相难寻.
+
+
+看下代码如何看到加载keystone user 模型的真相.
 
 我们登录后查看用户属性.那么如何加载用户模型？我们看到的request.user已经被赋值,但并没有加载keystone user模型.
  我们登录后查看用户属性.
@@ -896,7 +900,7 @@ All right.
 
   代码位置：
   openstack_auth\views.py 
-	def login(request, template_name=None, extra_context=None, **kwargs):
+	def login(request, template_name=None, extra_context=None, \**kwargs):
 		"""Logs a user in using the :class:`~openstack_auth.forms.Login` form."""
 		Log.info('now this is first login request info=%s' % dir(request))
 		Log.info('now this is first login request.user=%s' % dir(request.user))
@@ -960,7 +964,7 @@ All right.
 									  template_name=template_name,
 									  authentication_form=form,
 									  extra_context=extra_context,
-									  **kwargs)
+									  \**kwargs)
 		# Save the region in the cookie, this is used as the default
 		# selected region next time the Login form loads.
 		
@@ -993,7 +997,7 @@ All right.
    :alt:  login_main.png
    
    
-上述的代码流反映了一次登录的情况，也是一个系统的核心框架，即一次api调用流程，一次带认证的API调用流程.构成了一个认证系统的核心.每一步都值得思考，逻辑判断的点非常多，整体的流程可归结为：
+上述的代码流反映了一次登录的情况，也是一个系统的核心框架，即一次api调用流程，一次带认证的API调用流程.构成了一个认证系统的核心.每一步都值得思考，逻辑判断的点非常多，更细化的流程可归结为：
 
 .. figure:: image/fy-img/opensack_first_login_process.png
    :width: 80%
@@ -1042,18 +1046,18 @@ All right.
 		  "authenticate_with_backend(backend, backend_path, request, credentials)(\\django\\contrib\\auth\\__init__.py)"[label="非常关键的一步，选取认证backend,是从setting文件中读取,实现认证由django默认认证方式，转为openstack认证openstack_auth.backend.KeystoneBackend"];
 		  "authenticate_with_backend(backend, backend_path, request, credentials)(\\django\\contrib\\auth\\__init__.py)" ->
 		  "_authenticate_with_backend(backend, backend_path, request, credentials)(\\django\\contrib\\auth\\__init__.py)";
-          "_authenticate_with_backend(backend, backend_path, request, credentials)(\\django\\contrib\\auth\\__init__.py)" -> "backend.authenticate(*args, **credentials)"[label="非常关键的一步，使用openstack认证openstack_auth.backend.KeystoneBackend 认证"];
-          "backend.authenticate(*args, **credentials)" -> "def authenticate(self, auth_url=None, **kwargs):(\\openstack_auth\\backend.py)"[label="非常关键，正式进入openstack认证流程，从这里开始由openstck_auth转向keystone认证构造过程"];
-          "def authenticate(self, auth_url=None, **kwargs):(\\openstack_auth\\backend.py)" -> "unscoped_auth = plugin.get_plugin(auth_url=auth_url, **kwargs)";
-		  "unscoped_auth = plugin.get_plugin(auth_url=auth_url, **kwargs)" ->  "v3_auth.Password"[label="非常关键，选择keystone API版本，有3或者2，根据setting配置文件选择，后续以3为验证过程，再此完成认证初始化准备"];
-		  "unscoped_auth = plugin.get_plugin(auth_url=auth_url, **kwargs)" ->  "v2_auth.Password"[label="非常关键，选择keystone API版本，有3或者2，根据setting配置文件选择，后续以3为验证过程"];
+          "_authenticate_with_backend(backend, backend_path, request, credentials)(\\django\\contrib\\auth\\__init__.py)" -> "backend.authenticate(\*args, \**credentials)"[label="非常关键的一步，使用openstack认证openstack_auth.backend.KeystoneBackend 认证"];
+          "backend.authenticate(\*args, \**credentials)" -> "def authenticate(self, auth_url=None, \**kwargs):(\\openstack_auth\\backend.py)"[label="非常关键，正式进入openstack认证流程，从这里开始由openstck_auth转向keystone认证构造过程"];
+          "def authenticate(self, auth_url=None, \**kwargs):(\\openstack_auth\\backend.py)" -> "unscoped_auth = plugin.get_plugin(auth_url=auth_url, \**kwargs)";
+		  "unscoped_auth = plugin.get_plugin(auth_url=auth_url, \**kwargs)" ->  "v3_auth.Password"[label="非常关键，选择keystone API版本，有3或者2，根据setting配置文件选择，后续以3为验证过程，再此完成认证初始化准备"];
+		  "unscoped_auth = plugin.get_plugin(auth_url=auth_url, \**kwargs)" ->  "v2_auth.Password"[label="非常关键，选择keystone API版本，有3或者2，根据setting配置文件选择，后续以3为验证过程"];
 		  "v3_auth.Password" -> 
 		  "unscoped_auth_ref = plugin.get_access_info(unscoped_auth)"[label="非常关键，开始keystone认证流程，首先使用username+password换取token，看一下流程如何实现"];
 		  "unscoped_auth_ref = plugin.get_access_info(unscoped_auth)" ->"session";
 		  "unscoped_auth_ref = plugin.get_access_info(unscoped_auth)" -> "unscoped_auth_ref = keystone_auth.get_access(session)(\\openstack_auth\\plugin\\base.py)"[label="unscoped_auth_ref指是该用户还未获得tenant信息"];
-		  "unscoped_auth_ref = keystone_auth.get_access(session)(\\openstack_auth\\plugin\\base.py)" -> "def get_auth_ref(self, session, **kwargs):(\\keystoneauth1\\identity\\v3\\base.py)"[label="开始调用keystoneauth1,是keystone的认证中间件,get_auth_ref是v3_auth.Password父类来实现的，位置在\\keystoneauth1\\identity\\v3\\base.py"];
-		  "def get_auth_ref(self, session, **kwargs):(\\keystoneauth1\\identity\\v3\\base.py)" -> "resp = session.post(token_url, json=body, headers=headers,authenticated=False, log=False, **rkwargs)(\\keystoneauth1\\identity\\v3\\base.py)"[label="构造restapi，post 动作发出，至此dashboard正式通过keystoneauth1开始第一次认证，企图获取认证token"];
-		  "resp = session.post(token_url, json=body, headers=headers,authenticated=False, log=False, **rkwargs)(\\keystoneauth1\\identity\\v3\\base.py)" -> "Routers(wsgi.RoutersBase):( post_action='authenticate_for_token')(\\keystone\\auth\\routers.py)"[label="由keystone开始处理rest请求，用到router wsgi框架处理"];
+		  "unscoped_auth_ref = keystone_auth.get_access(session)(\\openstack_auth\\plugin\\base.py)" -> "def get_auth_ref(self, session, \**kwargs):(\\keystoneauth1\\identity\\v3\\base.py)"[label="开始调用keystoneauth1,是keystone的认证中间件,get_auth_ref是v3_auth.Password父类来实现的，位置在\\keystoneauth1\\identity\\v3\\base.py"];
+		  "def get_auth_ref(self, session, \**kwargs):(\\keystoneauth1\\identity\\v3\\base.py)" -> "resp = session.post(token_url, json=body, headers=headers,authenticated=False, log=False, \**rkwargs)(\\keystoneauth1\\identity\\v3\\base.py)"[label="构造restapi，post 动作发出，至此dashboard正式通过keystoneauth1开始第一次认证，企图获取认证token"];
+		  "resp = session.post(token_url, json=body, headers=headers,authenticated=False, log=False, \**rkwargs)(\\keystoneauth1\\identity\\v3\\base.py)" -> "Routers(wsgi.RoutersBase):( post_action='authenticate_for_token')(\\keystone\\auth\\routers.py)"[label="由keystone开始处理rest请求，用到router wsgi框架处理"];
 		  "Routers(wsgi.RoutersBase):( post_action='authenticate_for_token')(\\keystone\\auth\\routers.py)" -> "Auth(controller.V3Controller).authenticate_for_token(\\keystone\\auth\\controllers.py)"[label="根据路由，选择处理函数为authenticate_for_token"];
           "Auth(controller.V3Controller).authenticate_for_token(\\keystone\\auth\\controllers.py)" ->  "Auth(controller.V3Controller).authenticate(\\keystone\\auth\\controllers.py)"[label="根据路由，选择处理函数为authenticate_for_token"];
 		  "Auth(controller.V3Controller).authenticate(\\keystone\\auth\\controllers.py)" -> 
@@ -1089,10 +1093,10 @@ All right.
 		  "request.user = user" -> 
 		  "keystone_client_class = utils.get_keystone_client().Client(\\openstack_auth\\backend.py)"[label="初始化keystoneclient，根据配置选择V2或者V3,至此完成user认证，并获得client及endpoint信息"];
 		  "keystone_client_class = utils.get_keystone_client().Client(\\openstack_auth\\backend.py)" ->
-		  "def authenticate(self, auth_url=None, **kwargs) return user(\\openstack_auth\\backend.py)"[label="keystone认证结束，返回django 认证流程"];
-		  "def authenticate(self, auth_url=None, **kwargs) return user(\\openstack_auth\\backend.py)" ->
+		  "def authenticate(self, auth_url=None, \**kwargs) return user(\\openstack_auth\\backend.py)"[label="keystone认证结束，返回django 认证流程"];
+		  "def authenticate(self, auth_url=None, \**kwargs) return user(\\openstack_auth\\backend.py)" ->
 		  "def clean forms.ValidationError(\\django\\contrib\\auth\\forms.py)"[label="判断是否获取了用户，如果未获取认证用户，则提示验证失败"];
-          "def authenticate(self, auth_url=None, **kwargs) return user(\\openstack_auth\\backend.py)" -> 
+          "def authenticate(self, auth_url=None, \**kwargs) return user(\\openstack_auth\\backend.py)" -> 
           "self.confirm_login_allowed(self.user_cache)(\\django\\contrib\\auth\\forms.py)"[label="判断是否获取了用户，获取认证用户信息，尝试登录"];
 		  "self.confirm_login_allowed(self.user_cache)(\\django\\contrib\\auth\\forms.py)" -> "判断该用户是否被激活，若没有激活，则体视该用户未被激活，不允许登录";
 		  "self.confirm_login_allowed(self.user_cache)(\\django\\contrib\\auth\\forms.py)" -> 
@@ -1106,13 +1110,13 @@ All right.
 
 
 .. note:: 
-能够读懂代码流程的核心：函数调用关系.
+ 能够读懂代码流程的核心：函数调用关系.
 
 .. note:: 
-能够快速定位代码位置的工具：pycharm
+ 能够快速定位代码位置的工具：pycharm
 
 .. note:: 
-能够快速验证代码参数变化的方法：利用debuglog进行日志跟踪.
+ 能够快速验证代码参数变化的方法：利用debuglog进行日志跟踪.
 
 问题一：在哪里完成user模型传递：
 在 user = _authenticate_with_backend(backend, backend_path, request, credentials)
@@ -1142,14 +1146,14 @@ All right.
 			'inactive': _("This account is inactive."),
 		}
 
-		def __init__(self, request=None, *args, **kwargs):
+		def __init__(self, request=None, \*args, \**kwargs):
 			"""
 			The 'request' parameter is set for custom auth use by subclasses.
 			The form data comes in via the standard 'data' kwarg.
 			"""
 			self.request = request
 			self.user_cache = None
-			super(AuthenticationForm, self).__init__(*args, **kwargs)
+			super(AuthenticationForm, self).__init__(\*args, \**kwargs)
 
 			# Set the label for the "username" field.
 			self.username_field = UserModel._meta.get_field(UserModel.USERNAME_FIELD)
@@ -1173,7 +1177,7 @@ All right.
 
 			return self.cleaned_data
 			
-	def authenticate(request=None, **credentials):
+	def authenticate(request=None, \**credentials):
     """
     If the given credentials are valid, return a User object.
     """
@@ -1224,30 +1228,33 @@ All right.
 至此，一个带keystone认证的系统框架介绍完毕，实际上读起来有些复杂，用到的知识点非常多，不在此一一介绍，如果能读懂该流程，并进行调试，流程的复杂性，使得读起来比较难以理解，建议带着tip，自己调试，自己思考，自己验证效果会更好，本章节只是引导性指南.
 调试完毕后，至少对如下知识点应该会掌握的比较清楚：
 
-# django 框架
-# django 路由
-# django midddlewares 机制
-# django 认证机制
-# django backend机制
-# openstack 认证流程
-# django 转 keystone 认证机制
-# django 对象模型 
-# keystone 认证机制
-# keystone token机制
-# keystone endpoint机制
-# router rest api 路由处理框架
-# wsgi基本框架
-# 密码密文存储机制
-# 密码密文存储匹配机制
-# sqlalchemy框架
-# sqlalchemy 对象模型
-# request 对象
-# keystone 用户模型 角色模型  租户模型 域模型 以及权限模型
-# openstack 前端元素 dashboard  pannel button tab link action等元素，以及其显示与否与权限的关系.
-# 前端框架实际上是从用户端到服务端之间的线路联通，中间的处理过程非常多，除代码流程外，还有很多内容值得思考.
-# 认证其实是很有技术难度的事情，值得深思.
-# 更多的要了解每个技术框架的设计初衷，以帮助自己开拓思路.
+.. code-block:: console
 
+ # django 框架
+ # django 路由
+ # django midddlewares 机制
+ # django 认证机制
+ # django backend机制
+ # openstack 认证流程
+ # django 转 keystone 认证机制
+ # django 对象模型 
+ # keystone 认证机制
+ # keystone token机制
+ # keystone endpoint机制
+ # router rest api 路由处理框架
+ # wsgi基本框架
+ # 密码密文存储机制
+ # 密码密文存储匹配机制
+ # sqlalchemy框架
+ # sqlalchemy 对象模型
+ # request 对象
+ # keystone 用户模型 角色模型  租户模型 域模型 以及权限模型
+ # openstack 前端元素 dashboard  pannel button tab link action等元素，以及其显示与否与权限的关系.
+ # 前端框架实际上是从用户端到服务端之间的线路联通，中间的处理过程非常多，除代码流程外，还有很多内容值得思考.
+ # 认证其实是很有技术难度的事情，值得深思.
+ # 更多的要了解每个技术框架的设计初衷，以帮助自己开拓思路.
+
+.. end
 
 疫情打乱了节奏，使得工作更繁忙，空余时间，完成部分GIFT.
 
@@ -1448,7 +1455,7 @@ Root Controller是整个应用的入口，以ceilometer为例http://localhost:87
 	class MetersController(rest.RestController):
 		"""Works on meters."""
 		@pecan.expose()
-		def _lookup(self, meter_name, *remainder):
+		def _lookup(self, meter_name, \*remainder):
 			return MeterController(meter_name), remainder
 
 	class MeterController(rest.RestController):
@@ -1483,8 +1490,11 @@ Pecan’s Routing Algorithm
 有些时候，标准基于对象的路由选择并不能满足应用的需求，Pecan提供了一种灵活的方式处理某些类型的url请求，主要包含如下三个函数即：
 
 1)	_lookup()
+
 2)	_default()
+
 3)	_route()
+
 在ceilometer中便用到了_lookup()函数，便于灵活的满足应用需求；
 
 看下面一个使用 _lookup()函数的例子，便可以知道其作用；他可以更灵活的处理一些url请求；
@@ -1558,7 +1568,9 @@ Ceilometers.api 中为我们提供了很多很方便的方法，帮助我们封�
 图中可以看到http请求的格式，ceilometer中http请求的询问支持如下三种变量即：
 
 1)	q.op  该查询的操作方法  Enum(lt, le, eq, ne, ge, gt) (小于，小于等于，等于，不等于，大于等于，大于)
+
 2)	q.field 查询字段
+
 3)	q.value 查询字段的名称
 
 .. figure:: image/fy-img/http_pecan_c.png
@@ -1615,10 +1627,15 @@ Models.py的主要作用是为各种数据库的查询结果格式化；即封�
 ----------------------------------------
 
 在ceilometer.api的基础上实现对webapi的扩展需要如下五个步骤：
+
 1)	在ceilometer.api.controller.v2文件下扩展controller
+
 2)	在ceilometer.api.controller.v2编写该controller方法
+
 3)	在ceilometer.api.controller.v2编写返回数据的格式
+
 4)	在ceilometer.storage.impl_mongodb.py中编写数据库查询方法
+
 5)	在ceilometer.storage.model中编写数据库查询结果数据的格式
 
 现在假设我们已经在mongodb数据库的ceilometer数据库中创建了一个students的表，并在其中插入了两条记录如下：
@@ -1796,8 +1813,11 @@ Ceilometer-compute-agent Learning
    :alt: architecture-c.png
 
 上图的红色部分已经在之前的文档中介绍过；ceilometer.api 事实上是提供了数据库与外部系统的接口，而数据库是连接外部系统与ceilimeter核心组件的连接点；ceilometer的核心在于数据的收集；其数据收集的主要方式分成两种：如图所示，ceilometer写入数据库的信息来源只有一个，即：监听消息总线(message bus)上是数据；而获取的消息总线上的数据来源有两种：
+
 1)	通过pollsters机制; 利用插件(agent)获取数据，传输到消息总线中；
+
 2)	通过notification messages；该数据主要来源于openstack中的各个组件比如nova,glance,neutron等；
+
 通过这段时间的调研，ceilometer事实上提供了较为灵活的高可配置的数据获取方式：
 灵活在于其插件容易扩展；如果我们想要获取额外的meter,只需要写获取该meter的插件即可；
 高可配置在于其利用了pipeline机制，该机制可针对每个meter配置其轮询时间，如我们可以通过配置文件配置cpu的轮询时间为10s,也可以配置disk.read.request 的轮询时间为20s；高可配置的另一个原因是其提供的transformer机制仍然是可以配置的，配置之后，自己写相应的transformer函数即可；
@@ -1839,8 +1859,11 @@ Ceilometer模块代码结构及概述
 ------------------------------
 
 Ceilometer 主要组件的代码在ceilometer文件夹中；
+
 ceilometer-2time.egg-info文件对我们扩展插件非常重要
+
 ceilometerclient文件夹之前已经介绍过，用于封装ceilometer api使用
+
 ceilometer核心模块代码结构
 
 
@@ -1885,9 +1908,13 @@ http://pythonhosted.org/setuptools/setuptools.html#dynamic-discovery-of-services
    :alt: c_compute.png
 
 1)	Manager文件为ceilometer-agent-compute的入口函数
+
 2)	Notification为ceilometer监听消息总线数据并格式化过程
+
 3)	Plugin为pollsters各类插件的父类
+
 4)	Pollsters文件夹中包含了每一个pollster,及插件，获取cpu的插件，获取disk的插件，获取instance的插件，获取net的插件，其中的文件util为封装sample数据用；
+
 5)	Virt文件为具体获取数据的代码，其中的inspecotor文件中会读取配置文件中的信息，来获取使用哪种方式获取虚拟数据，默认的选择l利用ibvirt获取数据，同时提供了另一种即利用hyperv获取数据的方式；其中的/ceilometer/compute/virt/libvirt/inspector.py中定义了具体获取虚拟机数据的函数；
 
 每次启动ceilometer-compute 的命令为
@@ -1952,7 +1979,8 @@ Service ceilometer-agent-compute restart
    ceilometer compute 代码中包含虚拟化监测技术的实现流程
    各处理单元均高度抽象及模块化，值得学习借鉴
    内容略粗糙，指引性内容，供参考.
-   Wish You All The Best. Be Happy.
    
 .. end
 
+.. note::
+   Wish You All The Best. Be Happy. Again.
