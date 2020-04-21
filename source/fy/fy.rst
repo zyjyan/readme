@@ -1982,5 +1982,11 @@ Service ceilometer-agent-compute restart
    
 .. end
 
+
+.. figure:: image/fy-img/sparks.png
+   :width: 80%
+   :align: center
+   :alt: sparks
+
 .. note::
    Wish You All The Best. Be Happy. Again.
