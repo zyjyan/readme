@@ -1952,6 +1952,7 @@ Service ceilometer-agent-compute restart
    ceilometer compute 代码中包含虚拟化监测技术的实现流程
    各处理单元均高度抽象及模块化，值得学习借鉴
    内容略粗糙，指引性内容，供参考.
+   Wish You All The Best. Be Happy.
    
 .. end
 
