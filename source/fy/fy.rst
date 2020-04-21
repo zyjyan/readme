@@ -1,6 +1,8 @@
 horizon+keystone+ceilometer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+FYVERSION HBTWY.
+
 为何选择3个框架
 ----------------
 
@@ -8,20 +10,10 @@ horizon+keystone+ceilometer
 
 .. code-block:: console
 
- # 懒
- # 熟悉
- # 还不错
- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
- 一个值得参考的框架。
- 设计较为全面。
- 一个带认证的框架。
- 一个带分布式交互的框架。
- 一个优秀团队撰写的框架。
- 一个用框架较多的框架。
- 一个抽象思维较好的框架。
- 了解它，有利于更好的设计下一个它.
- 总之，也没什么坏处。
- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		前端+认证+后端基本构成.
+		处理流程非常全面.
+		代码规范.
+		代码质量非常高.
  
 .. end
 
@@ -521,7 +513,7 @@ horizon+keystone+ceilometer
    :align: center
    :alt:  first_login_think.png
 
-查看下admin进行用户创建，能做什么操作。
+查看下admin进行用户创建，能做什么操作.
 
 .. figure:: image/fy-img/admin_create_user.png
    :width: 80%
@@ -560,21 +552,21 @@ All right.
 	往往，人在踩坑的时候才会去思考. 
 
 	到目前为止，我们很顺利的搭建了:
-	一个基于django的web应用框架.
-	一个带认证的应用框架. 
-	一个使用keystone作为认证后端的框架.
-	一个基于rest的认证组件.
-	一个采用了多租户模型，多微服务应用管理，多角色管理的认证组件.
-	一个采用了严格api管控的认证组件.
-	一个采用模块化编程的前端框架。
-	一个基于restAPI进行交互的框架.
-	一个可分布式部署的框架.
-	一个可基于可控制dashboard-->pannel-->tab-->table-->button-->form灵活显示的前端框架.
-	一个...
+	基于django的web应用框架.
+	带认证的应用框架. 
+	使用keystone作为认证后端的框架.
+	基于rest的认证组件.
+	采用了多租户模型，多微服务应用管理，多角色管理的认证组件.
+	采用了严格api管控的认证组件.
+	采用模块化编程的前端框架.
+	基于restAPI进行交互的框架.
+	可分布式部署的框架.
+	可基于可控制dashboard-->pannel-->tab-->table-->button-->form灵活显示的前端框架.
+	...
 	我们仅仅搭建了horizon+keystone，却应该先停下来思考几个问题. 在相对简单的情况下想清楚一些问题，
         有助于在面临复杂问题的时候从容面对.
 
-	想明白了1+1. 1+2也不会太难. horizon是整个openstack项目面向用户的门户,构建了一个多租户模型应用,
+	    有了0-1的基础，思考1+1. 1+2也不会太难. horizon是整个openstack项目面向用户的门户,构建了一个多租户模型应用,
         本身并不提供任何功能,所有的功能由 keystone、nova、neutron、cinder、glance、ceilometer等提供，从
         这个角度而言,keytone的地位与其余的项目一致,都作为horizon的能力供应服务. 但也有一些不同，keystone
         不仅提供了hirizon的认证，也提供了 nova、neutron等其余组件对外暴漏API接口的权限认证,从这个角度讲，
@@ -587,7 +579,7 @@ All right.
 	务流程，面向用户，提供云计算服务，所以对产品设计的人而言，非常值得借鉴.
 
 
-	不应该因为顺利停止思考:大概有这几个点需要进行深入的思考。
+	不应该因为顺利停止思考:大概有这几个点需要进行深入的思考.
 	1、django如何部署在apache下？
 	2、我们刚才使用不同的用户为何看到的内容不一致？
 	3、我们刚才登录的两个用户角色范围是什么？他们如何定义？
@@ -622,7 +614,7 @@ All right.
 
 .. end
 
->>>>>>>理解>>>>重构>>>>>>增值>>>>>合适>>>>>>
+>>>>>>>理解>>>>重构>>>>>>增值>>>>>服务>>>>>>
 
 
 >>>>>Get what?>>>>> if..>>>>>>>>>>>>>>>>>>>>
@@ -803,28 +795,28 @@ All right.
 
 	1  HttpRequest.scheme 　     请求的协议，一般为http或者https，字符串格式(以下属性中若无特殊指明，均为字符串格式)
 
-	2  HttpRequest.body  　　    http请求的主体，二进制格式。
+	2  HttpRequest.body  　　    http请求的主体，二进制格式.
 
-	3  HttpRequest.path             所请求页面的完整路径(但不包括协议以及域名)，也就是相对于网站根目录的路径。
+	3  HttpRequest.path             所请求页面的完整路径(但不包括协议以及域名)，也就是相对于网站根目录的路径.
 
-	4  HttpRequest.path_info     获取具有 URL 扩展名的资源的附加路径信息。相对于HttpRequest.path，使用该方法便于移植。
+	4  HttpRequest.path_info     获取具有 URL 扩展名的资源的附加路径信息.相对于HttpRequest.path，使用该方法便于移植.
 
 	5  HttpRequest.method               获取该请求的方法，比如： GET   POST .........
 
-	6  HttpRequest.encoding             获取请求中表单提交数据的编码。
+	6  HttpRequest.encoding             获取请求中表单提交数据的编码.
 
-	7  HttpRequest.content_type      获取请求的MIME类型(从CONTENT_TYPE头部中获取)，django1.10的新特性。
+	7  HttpRequest.content_type      获取请求的MIME类型(从CONTENT_TYPE头部中获取)，django1.10的新特性.
 
-	8  HttpRequest.content_params  获取CONTENT_TYPE中的键值对参数，并以字典的方式表示，django1.10的新特性。
+	8  HttpRequest.content_params  获取CONTENT_TYPE中的键值对参数，并以字典的方式表示，django1.10的新特性.
 
 	9  HttpRequest.GET                    返回一个 querydict 对象(类似于字典)，该对象包含了所有的HTTP GET参数
 
 	10  HttpRequest.POST                返回一个 querydict ，该对象包含了所有的HTTP POST参数，
-                                            通过表单上传的所有字符都会保存在该属性中。
+                                            通过表单上传的所有字符都会保存在该属性中.
 
-	11  HttpRequest.COOKIES  　     返回一个包含了所有cookies的字典。
+	11  HttpRequest.COOKIES  　     返回一个包含了所有cookies的字典.
 
-	12  HttpRequest.FILES  　　       返回一个包含了所有的上传文件的  querydict  对象。通过表单所上传的所有文件都会保存在该属性中。
+	12  HttpRequest.FILES  　　       返回一个包含了所有的上传文件的  querydict  对象.通过表单所上传的所有文件都会保存在该属性中.
 
 	　　                                             key的值是input标签中name属性的值，value的值是一个UploadedFile对象
 
@@ -834,11 +826,11 @@ All right.
 
 	15  HttpRequest.site　　      中间件属性
 
-	16  HttpRequest.user　　     中间件属性，表示当前登录的用户。HttpRequest.user实际上是由一个定义在
-                                     django.contrib.auth.models中的user model类所创建的对象。此模型也可以自己定义.
+	16  HttpRequest.user　　     中间件属性，表示当前登录的用户.HttpRequest.user实际上是由一个定义在
+                                     django.contrib.auth.models中的user model类所创建的对象.此模型也可以自己定义.
 
 	 16.2  属性 
-	　is_authenticated   布尔值，标志着用户是否已认证。在django1.10之前，没有该属性，但有与该属性同名的方法。
+	　is_authenticated   布尔值，标志着用户是否已认证.在django1.10之前，没有该属性，但有与该属性同名的方法.
 
 	 16.3  方法
 
@@ -873,9 +865,9 @@ All right.
          'readline', 'readlines', 'resolver_match', 'scheme', 'sensitive_post_parameters', 
          'upload_handlers', 'xreadlines']
 	 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-	 发现user属性不在了. 可知,Django 使用 sessions 和中间件将身份验证系统挂接到请求对象中。
-         它们在每次请求中都会提供 request.user 属性。如果当前没有用户登录，这个属性将会被设置为 AnonymousUser，
-         否则将会被设置为 User 实例。可以使用 is_authenticated 区分两者.
+	 发现user属性不在了. 可知,Django 使用 sessions 和中间件将身份验证系统挂接到请求对象中.
+         它们在每次请求中都会提供 request.user 属性.如果当前没有用户登录，这个属性将会被设置为 AnonymousUser，
+         否则将会被设置为 User 实例.可以使用 is_authenticated 区分两者.
 	 具体的是通过：
 	     'django.contrib.auth.middleware.AuthenticationMiddleware',
 	 中间件加载的.赋值代码为：
@@ -887,27 +879,380 @@ All right.
 		    "'django.contrib.sessions.middleware.SessionMiddleware' before "
 		    "'django.contrib.auth.middleware.AuthenticationMiddleware'."
 		) % ("_CLASSES" if settings.MIDDLEWARE is None else "")
-		request.user = SimpleLazyObject(lambda: get_user(request))# 重点，在这里创建request 的user属性.
+		request.user = SimpleLazyObject(lambda: get_user(request))# ！！重点，在这里创建request 的user属性. user 初始化模型已经加载.
 	 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..
 	 那么如何加载用户模型？我们看到的request.user已经被赋值,但并没有加载keystone 的user模型.
 
-	 我们登录后查看用户属性.
+	 
 
-代码位置：
- openstack_auth\views.py 
+.. end
+
+.. note:: 突发疫情.我们知道他们在说谎，他们自己也知道自己说谎，他们也知道我们知道他们在说谎，我们也知道他们知道我们知道他们说谎，他们知道我们也知道他们知道我们知道他们说谎，但是他们依然在说谎.   # 真相难寻.看下代码如何看到加载keystone user 模型的真相.
+
+我们登录后查看用户属性.那么如何加载用户模型？我们看到的request.user已经被赋值,但并没有加载keystone user模型.
+ 我们登录后查看用户属性.
+
+.. code-block:: console
+
+  代码位置：
+  openstack_auth\views.py 
+	def login(request, template_name=None, extra_context=None, **kwargs):
+		"""Logs a user in using the :class:`~openstack_auth.forms.Login` form."""
+		Log.info('now this is first login request info=%s' % dir(request))
+		Log.info('now this is first login request.user=%s' % dir(request.user))
+		#2020-04-07 10:07:52,187(INFO)novadebug : request is ajax and the info is :['__class__', '__delattr__', '__dict__', #'__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', #'__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__unicode__', #'__weakref__', '_groups', '_user_permissions', 'check_password', 'delete', 'get_all_permissions', #'get_group_permissions', 'get_username', 'groups', 'has_module_perms', 'has_perm', 'has_perms', 'id', 'is_active', #'is_anonymous', 'is_authenticated', 'is_staff', 'is_superuser', 'pk', 'save', 'set_password', 'user_permissions', #'username']
+
+		Log.info('now this is first login request.ajax=%s' % request.is_ajax)
+		# If the user enabled websso and selects default protocol
+		# from the dropdown, We need to redirect user to the websso url
+		if request.method == 'POST':
+			auth_type = request.POST.get('auth_type', 'credentials')
+			if utils.is_websso_enabled() and auth_type != 'credentials':
+				auth_url = getattr(settings, 'WEBSSO_KEYSTONE_URL',
+								   request.POST.get('region'))
+				url = utils.get_websso_url(request, auth_url, auth_type)
+				Log.info('now the url point to:%s' % url)
+				return shortcuts.redirect(url)
+
+		if not request.is_ajax():
+			# If the user is already authenticated, redirect them to the
+			# dashboard straight away, unless the 'next' parameter is set as it
+			# usually indicates requesting access to a page that requires different
+			# permissions.
+			Log.info('request is ajax and the info is :%s' % dir(request.user))
+			if (request.user.is_authenticated and
+					auth.REDIRECT_FIELD_NAME not in request.GET and
+					auth.REDIRECT_FIELD_NAME not in request.POST):
+				return shortcuts.redirect(settings.LOGIN_REDIRECT_URL)
+
+		# Get our initial region for the form.
+		initial = {}
+		current_region = request.session.get('region_endpoint', None)
+		requested_region = request.GET.get('region', None)
+		regions = dict(getattr(settings, "AVAILABLE_REGIONS", []))
+		if requested_region in regions and requested_region != current_region:
+			initial.update({'region': requested_region})
+
+		if request.method == "POST":
+			form = functional.curry(forms.Login)
+		else:
+			form = functional.curry(forms.Login, initial=initial)
+
+		if extra_context is None:
+			extra_context = {'redirect_field_name': auth.REDIRECT_FIELD_NAME}
+
+		extra_context['csrf_failure'] = request.GET.get('csrf_failure')
+
+		choices = getattr(settings, 'WEBSSO_CHOICES', ())
+		extra_context['show_sso_opts'] = (utils.is_websso_enabled() and
+										  len(choices) > 1)
+
+		if not template_name:
+			if request.is_ajax():
+				template_name = 'auth/_login.html'
+				extra_context['hide'] = True
+			else:
+				template_name = 'auth/login.html'
+			
+		Log.info('before res request is  :%s' % dir(request.user))# ！！重点 
+		#2020-04-07 10:07:43,934(INFO)novadebug : before res request is  :['__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__unicode__', '__weakref__', '_groups', '_user_permissions', 'check_password', 'delete', 'get_all_permissions', 'get_group_permissions', 'get_username', 'groups', 'has_module_perms', 'has_perm', 'has_perms', 'id', 'is_active', 'is_anonymous', 'is_authenticated', 'is_staff', 'is_superuser', 'pk', 'save', 'set_password', 'user_permissions', 'username']
+		res = django_auth_views.login(request,
+									  template_name=template_name,
+									  authentication_form=form,
+									  extra_context=extra_context,
+									  **kwargs)
+		# Save the region in the cookie, this is used as the default
+		# selected region next time the Login form loads.
+		
+		Log.info('after res request is  :%s' % dir(request.user))#！！重点 keystone 用户模型已经加载.
+		# 2020-04-07 10:07:55,809(INFO)novadebug : after res request is  :['DoesNotExist', 'Meta', 'MultipleObjectsReturned', 'REQUIRED_FIELDS', 'USERNAME_FIELD', '__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', u'__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setstate__', '__sizeof__', '__str__', '__subclasshook__', '__unicode__', '__weakref__', '_authorized_tenants', '_check_column_name_clashes', '_check_field_name_clashes', '_check_fields', '_check_id_field', '_check_index_together', '_check_local_fields', '_check_long_column_names', '_check_m2m_through_same_relationship', '_check_managers', '_check_model', '_check_model_name_db_lookup_clashes', '_check_ordering', '_check_swappable', '_check_unique_together', '_do_insert', '_do_update', '_get_FIELD_display', '_get_next_or_previous_by_FIELD', '_get_next_or_previous_in_order', '_get_pk_val', '_get_unique_checks', '_groups', '_meta', '_perform_date_checks', '_perform_unique_checks', '_save_parents', '_save_table', '_services_region', '_set_pk_val', '_user_permissions', 'authorized_tenants', 'available_services_regions', 'backend', 'check', 'check_password', 'clean', 'clean_fields', 'date_error_message', 'delete', 'domain_id', 'domain_name', 'enabled', 'endpoint', 'from_db', 'full_clean', 'get_all_permissions', 'get_deferred_fields', 'get_email_field_name', 'get_full_name', 'get_group_permissions', 'get_session_auth_hash', 'get_short_name', 'get_username', 'groups', 'has_a_matching_perm', 'has_module_perms', 'has_perm', 'has_perms', 'has_usable_password', 'id', 'is_active', 'is_anonymous', 'is_authenticated', 'is_federated', 'is_staff', 'is_superuser', 'is_token_expired', 'keystone_user_id', 'last_login', 'natural_key', 'normalize_username', 'objects', 'password', 'password_expires_at', 'pk', 'prepare_database_save', 'project_id', 'project_name', 'refresh_from_db', 'roles', 'save', 'save_base', 'serializable_value', 'service_catalog', 'services_region', 'set_password', 'set_unusable_password', 'tenant_id', 'tenant_name', 'time_until_expiration', 'token', 'unique_error_message', 'unscoped_token', 'user_domain_id', 'user_domain_name', 'user_permissions', 'username', 'validate_unique']
+		
+		if request.method == "POST":
+			utils.set_response_cookie(res, 'login_region',
+									  request.POST.get('region', ''))
+			utils.set_response_cookie(res, 'login_domain',
+									  request.POST.get('domain', ''))
+
+		# Set the session data here because django's session key rotation
+		# will erase it if we set it earlier.
+		Log.info('request user is  :%s' % dir(request.user))
+
+.. end
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..
+ 
+ 把重点定位到\openstack_auth\views.py 下的def login 下的django_auth_views.login，函数. 是用户加载的关键.其中重要的初始化参数为： authentication_form=form，也就是前台表单用户输入的内容.
+ 看一下函数调用表，把调用流程熟悉，即可知道django如何加载keystone 用户模型，如何加载keystone认证backend，如何实现一次用户登录的认证.
+ 这个过程非常复杂，包含的逻辑判断非常多，非常值得深入代码阅读，去了解一次认证流程.
+ 前部分主要了解django如何进行认证，如何加载keystone认证backend，如何加载keystone user模型.
+ 后半部分可以非常详细的了解到keystone的认证流程.
+
+.. figure:: image/fy-img/login_main.png
+   :width: 80%
+   :align: center
+   :alt:  login_main.png
+   
+   
+上述的代码流反映了一次登录的情况，也是一个系统的核心框架，即一次api调用流程，一次带认证的API调用流程.构成了一个认证系统的核心.每一步都值得思考，逻辑判断的点非常多，整体的流程可归结为：
+
+.. figure:: image/fy-img/opensack_first_login_process.png
+   :width: 80%
+   :align: center
+   :alt:  opensack_first_login_process.png
+   
+一个图片的制作，是比较消耗时间的一个工作，把图片制作代码也贴在此，供参考，图片流程为引导性指南，混杂了调用关系和处理流程：
+
+.. code-block:: console
+
+  digraph openstack_login{
+          node [shape=Mrecord fontname="Inconsolata, Consolas", fontsize=12, penwidth=0.5]
+          "MADE BY OneAndOnly version FY" -> "django_auth_views.login(openstack_auth\\views.py)"[label="开始认证代码流程"];
+          "django_auth_views.login(openstack_auth\\views.py)" -> 
+          "login(django\\contrib\\auth\\views.py)"[label="调用django认证流程"]; 
+          "login(django\\contrib\\auth\\views.py)" -> 
+          "LoginView.as_view(django\\contrib\\auth\\views.py)"[label="调用django认证流程"];
+          "LoginView.as_view(django\\contrib\\auth\\views.py)" -> 
+          "SuccessURLAllowedHostsMixin(django\\contrib\\auth\\views.py)"[label="父类"];
+          "LoginView.as_view(django\\contrib\\auth\\views.py)" -> 
+          "FormView(django\\views\\generic\\edit.py)"[label="LoginView的关键父类"];
+          "FormView(django\\views\\generic\\edit.py)" -> 
+          "TemplateResponseMixin(django\\views\\generic\\base.py)"[label="FormView的父类"];
+          "FormView(django\\views\\generic\\edit.py)" -> 
+          "BaseFormView(django\\views\\generic\\edit.py)"[label="FormView的父类"];
+          "BaseFormView(django\\views\\generic\\edit.py)" -> 
+          "FormMixin(django\\views\\generic\\edit.py)"[label="BaseFormView的父类"];
+          "BaseFormView(django\\views\\generic\\edit.py)" -> 
+          "ProcessFormView(django\\views\\generic\\edit.py)"[label="BaseFormView的父类"];
+          "ProcessFormView(django\\views\\generic\\edit.py)" -> "ProcessFormView.post"[label="由dispatch转到post请求，关键函数"];
+          "ProcessFormView.post" -> "form.is_valid()"[label="关键认证节点"]; 
+          "form.is_valid()" -> "AuthenticationForm(\\django\\contrib\\auth\\forms.py)"[label="form是参数传入，即authentication_form=AuthenticationForm"];
+          "AuthenticationForm(\\django\\contrib\\auth\\forms.py)" -> "Form(\\django\\forms\\forms.py)"[label="AuthenticationForm的父类"];
+          "Form(\\django\\forms\\forms.py)" -> 
+		  "BaseForm def is_valid(\\django\\forms\\forms.py)"[label="Form的父类BaseForm中找到了is_valid函数的具体实现"];
+          "BaseForm def is_valid(\\django\\forms\\forms.py)" -> 
+		  "self.errors(\\django\\forms\\forms.py)"[label="关注最关键的return函数self.errors"];
+          "self.errors(\\django\\forms\\forms.py)" -> "self.full_clean(\\django\\forms\\forms.py)"[label="调用最关键函数self.full_clean"];
+          "self.full_clean(\\django\\forms\\forms.py)" -> "self._clean_form(\\django\\forms\\forms.py)"[label="调用最关键函数self._clean_form"];
+          "self._clean_form(\\django\\forms\\forms.py)" -> 
+		  "AuthenticationForm.clean(\\django\\contrib\\auth\\forms.py)"[label="调用最关键函数self.clean 由AuthenticationForm具体实现"];
+          "AuthenticationForm.clean(\\django\\contrib\\auth\\forms.py)" -> 
+		  "self.user_cache = authenticate(self.request, username=username, password=password)"[label="获取form 用户名密码开始认证流程"];
+          "self.user_cache = authenticate(self.request, username=username, password=password)" -> "authenticate(\\django\\contrib\\auth\\__init__.py)";
+          "authenticate(\\django\\contrib\\auth\\__init__.py)" -> 
+		  "authenticate_with_backend(backend, backend_path, request, credentials)(\\django\\contrib\\auth\\__init__.py)"[label="非常关键的一步，选取认证backend,是从setting文件中读取,实现认证由django默认认证方式，转为openstack认证openstack_auth.backend.KeystoneBackend"];
+		  "authenticate_with_backend(backend, backend_path, request, credentials)(\\django\\contrib\\auth\\__init__.py)" ->
+		  "_authenticate_with_backend(backend, backend_path, request, credentials)(\\django\\contrib\\auth\\__init__.py)";
+          "_authenticate_with_backend(backend, backend_path, request, credentials)(\\django\\contrib\\auth\\__init__.py)" -> "backend.authenticate(*args, **credentials)"[label="非常关键的一步，使用openstack认证openstack_auth.backend.KeystoneBackend 认证"];
+          "backend.authenticate(*args, **credentials)" -> "def authenticate(self, auth_url=None, **kwargs):(\\openstack_auth\\backend.py)"[label="非常关键，正式进入openstack认证流程，从这里开始由openstck_auth转向keystone认证构造过程"];
+          "def authenticate(self, auth_url=None, **kwargs):(\\openstack_auth\\backend.py)" -> "unscoped_auth = plugin.get_plugin(auth_url=auth_url, **kwargs)";
+		  "unscoped_auth = plugin.get_plugin(auth_url=auth_url, **kwargs)" ->  "v3_auth.Password"[label="非常关键，选择keystone API版本，有3或者2，根据setting配置文件选择，后续以3为验证过程，再此完成认证初始化准备"];
+		  "unscoped_auth = plugin.get_plugin(auth_url=auth_url, **kwargs)" ->  "v2_auth.Password"[label="非常关键，选择keystone API版本，有3或者2，根据setting配置文件选择，后续以3为验证过程"];
+		  "v3_auth.Password" -> 
+		  "unscoped_auth_ref = plugin.get_access_info(unscoped_auth)"[label="非常关键，开始keystone认证流程，首先使用username+password换取token，看一下流程如何实现"];
+		  "unscoped_auth_ref = plugin.get_access_info(unscoped_auth)" ->"session";
+		  "unscoped_auth_ref = plugin.get_access_info(unscoped_auth)" -> "unscoped_auth_ref = keystone_auth.get_access(session)(\\openstack_auth\\plugin\\base.py)"[label="unscoped_auth_ref指是该用户还未获得tenant信息"];
+		  "unscoped_auth_ref = keystone_auth.get_access(session)(\\openstack_auth\\plugin\\base.py)" -> "def get_auth_ref(self, session, **kwargs):(\\keystoneauth1\\identity\\v3\\base.py)"[label="开始调用keystoneauth1,是keystone的认证中间件,get_auth_ref是v3_auth.Password父类来实现的，位置在\\keystoneauth1\\identity\\v3\\base.py"];
+		  "def get_auth_ref(self, session, **kwargs):(\\keystoneauth1\\identity\\v3\\base.py)" -> "resp = session.post(token_url, json=body, headers=headers,authenticated=False, log=False, **rkwargs)(\\keystoneauth1\\identity\\v3\\base.py)"[label="构造restapi，post 动作发出，至此dashboard正式通过keystoneauth1开始第一次认证，企图获取认证token"];
+		  "resp = session.post(token_url, json=body, headers=headers,authenticated=False, log=False, **rkwargs)(\\keystoneauth1\\identity\\v3\\base.py)" -> "Routers(wsgi.RoutersBase):( post_action='authenticate_for_token')(\\keystone\\auth\\routers.py)"[label="由keystone开始处理rest请求，用到router wsgi框架处理"];
+		  "Routers(wsgi.RoutersBase):( post_action='authenticate_for_token')(\\keystone\\auth\\routers.py)" -> "Auth(controller.V3Controller).authenticate_for_token(\\keystone\\auth\\controllers.py)"[label="根据路由，选择处理函数为authenticate_for_token"];
+          "Auth(controller.V3Controller).authenticate_for_token(\\keystone\\auth\\controllers.py)" ->  "Auth(controller.V3Controller).authenticate(\\keystone\\auth\\controllers.py)"[label="根据路由，选择处理函数为authenticate_for_token"];
+		  "Auth(controller.V3Controller).authenticate(\\keystone\\auth\\controllers.py)" -> 
+		  "resp = method.authenticate(request,auth_info.get_method_data(method_name))(\\keystone\\auth\\controllers.py)"[label="选择认证方法，method参数为通过rest请求带来的，为password，也是plugin循环中带过来的，第一次认证为password，后续为token"];
+		  "resp = method.authenticate(request,auth_info.get_method_data(method_name))(\\keystone\\auth\\controllers.py)" ->
+		  "Password(base.AuthMethodHandler) authenticate(self, request, auth_payload)(\\keystone\\auth\plugins\\password.py)"[label="选择password 认证方式"];
+		  "Password(base.AuthMethodHandler) authenticate(self, request, auth_payload)(\\keystone\\auth\plugins\\password.py)" ->
+		  "user_info = auth_plugins.UserAuthInfo.create(auth_payload, METHOD_NAME)(\\keystone\\auth\plugins\\password.py)"[label="开始使用初始化参数创建用户信息"];
+		  "user_info = auth_plugins.UserAuthInfo.create(auth_payload, METHOD_NAME)(\\keystone\\auth\plugins\\password.py)" ->
+		  "BaseUserInfo(provider_api.ProviderAPIMixin, object) create()(\\keystone\\auth\\plugins\\core.py)"[label="选择处理方式，由配置处理，可以为sql，可以为ldap"];
+		  "BaseUserInfo(provider_api.ProviderAPIMixin, object) create()(\\keystone\\auth\\plugins\\core.py)" ->
+		  "def _validate_and_normalize_auth_data(self, auth_payload)(\\keystone\\auth\\plugins\\core.py)" [label="非常重要，判断参数是否由user_id or username 选择不同的认证流程，第一次没有id,所以选择name+password方式认证"];
+		  "def _validate_and_normalize_auth_data(self, auth_payload)(\\keystone\\auth\\plugins\\core.py)" ->
+		  "user_ref = PROVIDERS.identity_api.get_user_by_name (\\keystone\\auth\\plugins\\core.py)"[label="非常重要，采用username换取user_id"];
+		  "user_ref = PROVIDERS.identity_api.get_user_by_name (\\keystone\\auth\\plugins\\core.py)" ->
+		  "def get_user_by_name:(\\keystone\\identity\backends\\sql.py)"[label="非常重要，由keystone 路由处理到sql处理"];
+		  "def get_user_by_name:(\\keystone\\identity\backends\\sql.py)" ->                  "PROVIDERS.identity_api.authenticate(\\keystone\\auth\\plugins\\password.py)"[label="获取到user_id，继续认证流程，认证初始化参数为user_id+password"];
+		  "PROVIDERS.identity_api.authenticate(\\keystone\\auth\\plugins\\password.py)" -> 
+		  "def authenticate(self, request, auth_payload)(\\keystone\\auth\plugins\\password.py)"[label="最终认证流程，到数据库中查询判断，其中明文password 采用password_hashing.check_password(password, user_ref.password)函数，转化为hash，以此匹配数据库中的密文password"];
+		  "def authenticate(self, request, auth_payload)(\\keystone\\auth\plugins\\password.py)"-> 
+		  "self.check_auth_expiry(scoped_auth_ref) (\\openstack_auth\\backend.py)"[label="至此，完成第一次rest token 认证,user完成全部信息，开始带token参数访问，不再使用password认证，unscoped开始转化为scoped，开始验证token是否过期"];
+		  "self.check_auth_expiry(scoped_auth_ref) (\\openstack_auth\\backend.py)" -> "token过期，重新申请";
+		  "self.check_auth_expiry(scoped_auth_ref) (\\openstack_auth\\backend.py)" -> 
+		  "scoped_auth, scoped_auth_ref = plugin.get_project_scoped_auth(unscoped_auth, unscoped_auth_ref, recent_project=recent_project)"[label="判断是否该用户在启用的租户中，并获取用户租户认证信息"];
+		  "scoped_auth, scoped_auth_ref = plugin.get_project_scoped_auth(unscoped_auth, unscoped_auth_ref, recent_project=recent_project)" -> 
+		  "id_endpoints = scoped_auth_ref.service_catalog.get_endpoints(service_type='identity')"[label="获取服务的endpoint信息，也就是各个服务的rest api 接入点信息"];
+		  "id_endpoints = scoped_auth_ref.service_catalog.get_endpoints(service_type='identity')" -> 
+		  "user = auth_user.create_user_from_token(request, auth_user.Token(scoped_auth_ref, unscoped_token=unscoped_token),
+           endpoint,services_region=region_name)"[label="真正创建了keystone 定义的用户模型user对象"];
+		  "user = auth_user.create_user_from_token(request, auth_user.Token(scoped_auth_ref, unscoped_token=unscoped_token),
+           endpoint,services_region=region_name)" -> 
+		  "request.user = user"[label="把user对象赋给request，request获得了真正的user对象"];
+		  "request.user = user" -> 
+		  "keystone_client_class = utils.get_keystone_client().Client(\\openstack_auth\\backend.py)"[label="初始化keystoneclient，根据配置选择V2或者V3,至此完成user认证，并获得client及endpoint信息"];
+		  "keystone_client_class = utils.get_keystone_client().Client(\\openstack_auth\\backend.py)" ->
+		  "def authenticate(self, auth_url=None, **kwargs) return user(\\openstack_auth\\backend.py)"[label="keystone认证结束，返回django 认证流程"];
+		  "def authenticate(self, auth_url=None, **kwargs) return user(\\openstack_auth\\backend.py)" ->
+		  "def clean forms.ValidationError(\\django\\contrib\\auth\\forms.py)"[label="判断是否获取了用户，如果未获取认证用户，则提示验证失败"];
+          "def authenticate(self, auth_url=None, **kwargs) return user(\\openstack_auth\\backend.py)" -> 
+          "self.confirm_login_allowed(self.user_cache)(\\django\\contrib\\auth\\forms.py)"[label="判断是否获取了用户，获取认证用户信息，尝试登录"];
+		  "self.confirm_login_allowed(self.user_cache)(\\django\\contrib\\auth\\forms.py)" -> "判断该用户是否被激活，若没有激活，则体视该用户未被激活，不允许登录";
+		  "self.confirm_login_allowed(self.user_cache)(\\django\\contrib\\auth\\forms.py)" -> 
+		  "一路按着原调用流程返回，认证结束，跳转初始化页面，正式进入openstack初次登录首页";
+		    
+		  
+		  }
+
 
 .. end
 
 
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..
- 那么如何加载用户模型？我们看到的request.user已经被赋值,但并没有加载keystone user模型.
- 我们登录后查看用户属性.
+.. note:: 
+能够读懂代码流程的核心：函数调用关系.
 
-.. note:: 突发疫情。我们知道他们在说谎，他们自己也知道自己说谎，他们也知道我们知道他们在说谎，我们也知道他们知道我们知道他们说谎，他们知道我们也知道他们知道我们知道他们说谎，但是他们依然在说谎。   # 真相难寻，可我们依然存在。
+.. note:: 
+能够快速定位代码位置的工具：pycharm
+
+.. note:: 
+能够快速验证代码参数变化的方法：利用debuglog进行日志跟踪.
+
+问题一：在哪里完成user模型传递：
+在 user = _authenticate_with_backend(backend, backend_path, request, credentials)
+
+.. code-block:: console
+
+	class AuthenticationForm(forms.Form):
+		"""
+		Base class for authenticating users. Extend this to get a form that accepts
+		username/password logins.
+		"""
+		username = UsernameField(
+			max_length=254,
+			widget=forms.TextInput(attrs={'autofocus': True}),
+		)
+		password = forms.CharField(
+			label=_("Password"),
+			strip=False,
+			widget=forms.PasswordInput,
+		)
+
+		error_messages = {
+			'invalid_login': _(
+				"Please enter a correct %(username)s and password. Note that both "
+				"fields may be case-sensitive."
+			),
+			'inactive': _("This account is inactive."),
+		}
+
+		def __init__(self, request=None, *args, **kwargs):
+			"""
+			The 'request' parameter is set for custom auth use by subclasses.
+			The form data comes in via the standard 'data' kwarg.
+			"""
+			self.request = request
+			self.user_cache = None
+			super(AuthenticationForm, self).__init__(*args, **kwargs)
+
+			# Set the label for the "username" field.
+			self.username_field = UserModel._meta.get_field(UserModel.USERNAME_FIELD)
+			if self.fields['username'].label is None:
+				self.fields['username'].label = capfirst(self.username_field.verbose_name)
+
+		def clean(self):
+			username = self.cleaned_data.get('username')
+			password = self.cleaned_data.get('password')
+
+			if username is not None and password:
+				self.user_cache = authenticate(self.request, username=username, password=password)# 完成request user 模型转换
+				if self.user_cache is None:
+					raise forms.ValidationError(
+						self.error_messages['invalid_login'],
+						code='invalid_login',
+						params={'username': self.username_field.verbose_name},
+					)
+				else:
+					self.confirm_login_allowed(self.user_cache)
+
+			return self.cleaned_data
+			
+	def authenticate(request=None, **credentials):
+    """
+    If the given credentials are valid, return a User object.
+    """
+    for backend, backend_path in _get_backends(return_tuples=True):
+        try:
+		    # request = 2020-04-09 06:48:15,989(INFO)novadebug : before _authenticate_with_backend=['__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__unicode__', '__weakref__', '_groups', '_user_permissions', 'check_password', 'delete', 'get_all_permissions', 'get_group_permissions', 'get_username', 'groups', 'has_module_perms', 'has_perm', 'has_perms', 'id', 'is_active', 'is_anonymous', 'is_authenticated', 'is_staff', 'is_superuser', 'pk', 'save', 'set_password', 'user_permissions', 'username']
+            user = _authenticate_with_backend(backend, backend_path, request, credentials)
+			# 现在的request.user变为2020-04-09 06:48:30,847(INFO)novadebug : after _authenticate_with_backend=['DoesNotExist', 'Meta', 'MultipleObjectsReturned', 'REQUIRED_FIELDS', 'USERNAME_FIELD', '__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', u'__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setstate__', '__sizeof__', '__str__', '__subclasshook__', '__unicode__', '__weakref__', '_authorized_tenants', '_check_column_name_clashes', '_check_field_name_clashes', '_check_fields', '_check_id_field', '_check_index_together', '_check_local_fields', '_check_long_column_names', '_check_m2m_through_same_relationship', '_check_managers', '_check_model', '_check_model_name_db_lookup_clashes', '_check_ordering', '_check_swappable', '_check_unique_together', '_do_insert', '_do_update', '_get_FIELD_display', '_get_next_or_previous_by_FIELD', '_get_next_or_previous_in_order', '_get_pk_val', '_get_unique_checks', '_groups', '_meta', '_perform_date_checks', '_perform_unique_checks', '_save_parents', '_save_table', '_services_region', '_set_pk_val', '_user_permissions', 'authorized_tenants', 'available_services_regions', 'check', 'check_password', 'clean', 'clean_fields', 'date_error_message', 'delete', 'domain_id', 'domain_name', 'enabled', 'endpoint', 'from_db', 'full_clean', 'get_all_permissions', 'get_deferred_fields', 'get_email_field_name', 'get_full_name', 'get_group_permissions', 'get_session_auth_hash', 'get_short_name', 'get_username', 'groups', 'has_a_matching_perm', 'has_module_perms', 'has_perm', 'has_perms', 'has_usable_password', 'id', 'is_active', 'is_anonymous', 'is_authenticated', 'is_federated', 'is_staff', 'is_superuser', 'is_token_expired', 'keystone_user_id', 'last_login', 'natural_key', 'normalize_username', 'objects', 'password', 'password_expires_at', 'pk', 'prepare_database_save', 'project_id', 'project_name', 'refresh_from_db', 'roles', 'save', 'save_base', 'serializable_value', 'service_catalog', 'services_region', 'set_password', 'set_unusable_password', 'tenant_id', 'tenant_name', 'time_until_expiration', 'token', 'unique_error_message', 'unscoped_token', 'user_domain_id', 'user_domain_name', 'user_permissions', 'username', 'validate_unique']
+        except PermissionDenied:
+            # This backend says to stop in our tracks - this user should not be allowed in at all.
+            break
+        if user is None:
+            continue
+        # Annotate the user object with the path of the backend.
+        user.backend = backend_path
+        return user
+
+    # The credentials supplied are invalid to all backends, fire signal
+    user_login_failed.send(sender=__name__, credentials=_clean_credentials(credentials), request=request)
+ 
+.. end
+
+问题二：backend 从哪里来？
+从配置文件中获取；
 
 
-认证框架
---------
+ 
+.. code-block:: console
+
+	def _get_backends(return_tuples=False):#django\contrib\auth\__init__.py
+		backends = []
+		for backend_path in settings.AUTHENTICATION_BACKENDS:
+			backend = load_backend(backend_path)
+			backends.append((backend, backend_path) if return_tuples else backend)
+		if not backends:
+			raise ImproperlyConfigured(
+				'No authentication backends have been defined. Does '
+				'AUTHENTICATION_BACKENDS contain anything?'
+			)
+		return backends
+
+	AUTHENTICATION_BACKENDS = ('openstack_auth.backend.KeystoneBackend',)# /usr/lib/python2.7/dist-packages/openstack_dashboard/settings.py
+ 
+.. end 
+
+更多的问题，请思考.非常多，不一一点出.
+
+至此，一个带keystone认证的系统框架介绍完毕，实际上读起来有些复杂，用到的知识点非常多，不在此一一介绍，如果能读懂该流程，并进行调试，流程的复杂性，使得读起来比较难以理解，建议带着tip，自己调试，自己思考，自己验证效果会更好，本章节只是引导性指南.
+调试完毕后，至少对如下知识点应该会掌握的比较清楚：
+
+# django 框架
+# django 路由
+# django midddlewares 机制
+# django 认证机制
+# django backend机制
+# openstack 认证流程
+# django 转 keystone 认证机制
+# django 对象模型 
+# keystone 认证机制
+# keystone token机制
+# keystone endpoint机制
+# router rest api 路由处理框架
+# wsgi基本框架
+# 密码密文存储机制
+# 密码密文存储匹配机制
+# sqlalchemy框架
+# sqlalchemy 对象模型
+# request 对象
+# keystone 用户模型 角色模型  租户模型 域模型 以及权限模型
+# openstack 前端元素 dashboard  pannel button tab link action等元素，以及其显示与否与权限的关系.
+# 前端框架实际上是从用户端到服务端之间的线路联通，中间的处理过程非常多，除代码流程外，还有很多内容值得思考.
+# 认证其实是很有技术难度的事情，值得深思.
+# 更多的要了解每个技术框架的设计初衷，以帮助自己开拓思路.
+
+
+疫情打乱了节奏，使得工作更繁忙，空余时间，完成部分GIFT.
+
+	
+
 
 
 
@@ -1023,24 +1368,590 @@ django 如何部署在apache下
    :align: center
    :alt: step-8
 
-2
---
+Pecan&Ceilometer.api学习
+------------------------
+
+前端框架是用户与服务端交互的框架流程，服务端提供各类处理能力.有独立部署的服务端，有分布式部署等多种形态，满足一个系统的计算逻辑.后端往往涉及甚多专业技术，由一个或多个对象（服务器、中间件、数据库、逻辑处理单元、分布式计算、异步同步消息处理等等）构成.专业性技术强，综合技术能力要求广泛.
+
+知识引导型阅读().ceilometer-api是ceilometer的RESTAPI网关，其由pecan容器承载基础，类似于keystone的router. ceilometer VRESION. ICEHOUSE. 可以根据该版本查看最新版本的处理逻辑及代码优化过程.
+
+Pecan是一个轻量级的Python web framework，同django一样，可以处理并响应http请求；在ceilometer.api中使用了该框架，处理ceilometerclient中的http请求并响应.本文主要结合ceilometer.api代码介绍Pecan的使用及基本配置；最后给出了一个ceilometer.api原有的基础上实现对web api的扩展的方法；
+
+Pecan was created to fill a void in the Python web-framework world – a very lightweight framework that provides object-dispatch style routing. Pecan does not aim to be a “full stack” framework, and therefore includes no out of the box support for things like sessions or databases (although tutorials are included for integrating these yourself in just a few lines of code). Pecan instead focuses on HTTP itself.
+
+
+Ceilometer.api架构
+------------------
+
+.. figure:: image/fy-img/accessmodel.png
+   :width: 80%
+   :align: center
+   :alt: accessmodel.png
+   
+上图中红色部分的工作是由horizon以及ceilometer.client完成的，而蓝色部分是由ceilometer.api以及ceilometer.storage完成的；
+
+.. figure:: image/fy-img/ceiloarchitecture.png
+   :width: 80%
+   :align: center
+   :alt: ceiloarchitecture.png
+
+上图中的红色部分是由horizon、ceilometerclient、ceilometer.api ceilometers.storage完成的；
+
+Wsgi的一个小例子
+----------------
+
+具体可参考：http://legacy.python.org/dev/peps/pep-0333/，在此不在赘述.值得深入阅读. 是pecan的主要构成部分.
+
+
+了解pecan,ceilometerapi处理基础
+-------------------------------
+
+Pecan的配置信息存储在一个.py文件中，具体到ceilometer.api其配置信息存储在config.py中.
+Root Controller是整个应用的入口，以ceilometer为例http://localhost:8777的处理请求是由其处理的；在config.py文件中已经指定了Root Controller的路径：
+即：ceilometer/api/controllers/root.py
+
+.. figure:: image/fy-img/root.png
+   :width: 80%
+   :align: center
+   :alt: root.png
+   
+其中 index函数是处理根请求的，如代码所述，如果请求ceilometer的根，并不会得到任何的响应；
+该文件主要的功能是路由指定，可以看到v2 = v2.V2Controller()表示如果接收到/v2的请求，将由v2.V2Controller()函数处理；
+在ceilometer/api/controllers/v2.py中我们可以看到同样的代码结构：
+
+.. figure:: image/fy-img/V2.png
+   :width: 80%
+   :align: center
+   :alt: V2.png
+
+同样的，如果接收到/v2/resources路径，则由ResourcesController()函数处理，/v2/meters函数则由MetersController()函数进行处理，依此类推.
+我们将整个ceilometer的顺成关系梳理如下：
+
+
 
 .. code-block:: console
+
+	import pecan
+	class RootController(object):
+		v2 = v2.V2Controller()
+		@pecan.expose(generic=True, template='index.html')
+		def index(self):
+			# FIXME: Return version information
+			return dict()
+
+	class V2Controller(object):
+		"""Version 2 API controller root."""
+		resources = ResourcesController()
+		meters = MetersController()
+		alarms = AlarmsController()
+
+	class MetersController(rest.RestController):
+		"""Works on meters."""
+		@pecan.expose()
+		def _lookup(self, meter_name, *remainder):
+			return MeterController(meter_name), remainder
+
+	class MeterController(rest.RestController):
+	@wsme_pecan.wsexpose([Statistics], [Query], [unicode], int, [Aggregate])
+		def statistics(self, q=[], groupby=[], period=None, aggregate=[]):{}
+
+
+.. end
+
+这样就可以找到接收到/v2/meter/ statistics的请求的响应函数了；
+如我们在命令行中敲入
+curl -H 'X-Auth-Token: <inserttokenhere>'  http://localhost:8777/v2/meters/instance/statistics，其处理过程就是由def statistics(self, q=[], groupby=[], period=None, aggregate=[]):{}函数处理的；
+ceilometers.api中url路径与Controller的对应关系如下：
+
+
+
+.. code-block:: console
+
+	-- /	                     -- RootController.index
+	-- /v2	                     --V2Controller
+	-- /v2/meters	             -- V2Controller.meters
+	-- /v2/alarms	             -- V2Controller.alarms
+	-- /v2/resources	         -- V2Controller.resources
+	--/v2/meters/statistics	     -- V2Controller.meters.statistics
+
+
+.. end
+
+Pecan’s Routing Algorithm 
+--------------------------
+
+有些时候，标准基于对象的路由选择并不能满足应用的需求，Pecan提供了一种灵活的方式处理某些类型的url请求，主要包含如下三个函数即：
+
+1)	_lookup()
+2)	_default()
+3)	_route()
+在ceilometer中便用到了_lookup()函数，便于灵活的满足应用需求；
+
+看下面一个使用 _lookup()函数的例子，便可以知道其作用；他可以更灵活的处理一些url请求；
+比如我们需要请求、/8/name的请求，利用_lookup函数可以处理如下：
+
+.. figure:: image/fy-img/lookup.png
+   :width: 80%
+   :align: center
+   :alt: lookup.png
+   
+_lookup函数可以接受一个或者多个参数，其参数的来源是根据url获取的，即split on/，以反斜杠之间的信息为参数，该函数为remainder返回一个新的对象；如上代码所述，primar_key接受8这个参数，而*remainder接受“name“参数；该函数为remainder返回StudentController对象；
+在ceilometer中也用到了该函数：
+
+.. figure:: image/fy-img/Mcontroller.png
+   :width: 80%
+   :align: center
+   :alt: Mcontroller.png
+
+其中remainder数值为statistic；为statistic返回MeterController对象；
+Falling Back with_default
+_default()函数的作用是当url的访问请求找不到相应的Controller时，将执行该函数，如下面的例子所示：
+
+.. figure:: image/fy-img/default.png
+   :width: 80%
+   :align: center
+   :alt: default.png
+   
+当请求/spanish时，发现没有相应的controller对其处理，则执行RootController._default()函数；
+
+Writing RESTful Web Services with Pecan
+---------------------------------------
+
+默认的函数与路径的对应关系
+使用RestController可以实现与url变量的交互：默认的函数与url的对应关系如下：
+
+.. figure:: image/fy-img/link.jpg
+   :width: 80%
+   :align: center
+   :alt: link.jpg
+
+一个使用RestController的小例子
+
+.. figure:: image/fy-img/restcontroller.png
+   :width: 80%
+   :align: center
+   :alt: restcontroller.png
+
+上述代码的可以帮助我们实现如下的功能：
+当我们访问/authors/1/books/2时， BooksController.get() 函数可以设置author_id=1, id=2;即实现与url中变量的交互；
+
+Defining Custom Actions—自定义http请求方法
+当我们使用RestController时，可以定义该http请求的方法，在ceilometer.api中也是用了该方法对url的方法进行设置：如/ceilometer/api/controllers/v2文件中的MeterController，设置了该路径下/statistics 请求为GET方法；
+
+.. figure:: image/fy-img/static.png
+   :width: 80%
+   :align: center
+   :alt: static.png
+   
+如何在ceilometer现有的框架下利用http请求实现对mongo数据库的内容的读取
+---------------------------------------------------------------------
+
+
+查询语句的转换过程
+Ceilometers.api 中为我们提供了很多很方便的方法，帮助我们封装url的询问请求，下面是一个带询问的url通过ceilometer.api 过程中的格式转换;
+
+.. figure:: image/fy-img/rest_ask.png
+   :width: 80%
+   :align: center
+   :alt: rest_ask.png
+   
+图中可以看到http请求的格式，ceilometer中http请求的询问支持如下三种变量即：
+
+1)	q.op  该查询的操作方法  Enum(lt, le, eq, ne, ge, gt) (小于，小于等于，等于，不等于，大于等于，大于)
+2)	q.field 查询字段
+3)	q.value 查询字段的名称
+
+.. figure:: image/fy-img/http_pecan_c.png
+   :width: 80%
+   :align: center
+   :alt: http_pecan_c.png
+   
+.. figure:: image/fy-img/wsmeext_pecan.png
+   :width: 80%
+   :align: center
+   :alt: wsmeext_pecan.png
+   
+@wsmeext.pecan.wsexpose()函数是一个装饰器函数，其具体的代码位置在
+/usr/lib/python2.7/dist-packages/wsmeext/pecan.py中，主要实现对q的封装；
+http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/
+上述网页对python装饰器进行了较为详细的介绍.
+
+
+.. figure:: image/fy-img/query_to_kwargs.png
+   :width: 80%
+   :align: center
+   :alt: query_to_kwargs.png
+
+.. figure:: image/fy-img/last_mongo_query.png
+   :width: 80%
+   :align: center
+   :alt: last_mongo_query.png
+   
+通过上述几个函数的转换，便可以将查询语句转换为pymongo识别的查询语句；
+
+Ceilometer.storage 存储处单元介绍
+---------------------------------
+
+.. figure:: image/fy-img/c_storage.png
+   :width: 80%
+   :align: center
+   :alt: c_storage.png
+   
+上图是ceilometer.storage所包含的文件，其中impl_*.py虽然文件名称不同，但是功能上是相同的，即为每种数据库定义了适合该数据库的查询方法；现在支持DB2，mongodb，sql以及hbase; 各个文件中的方法名称完全相同；
+Models.py的主要作用是为各种数据库的查询结果格式化；即封装各类数据库的查询结果；统一将查询结果返回给ceilometer.api；
+
+
+.. code-block:: console
+
+	impl_db2.py	DB2数据库查询
+	impl_mongodb.py	Mongo数据库查询
+	impl_hbase.py	Hbase数据库查询
+	impl_sqlalchemy.py	Sql数据库查询
+	Model.py	负责封装查询结果
+
+.. end
+
+在ceilometer.api基础上实现对webapi的扩展
+----------------------------------------
+
+在ceilometer.api的基础上实现对webapi的扩展需要如下五个步骤：
+1)	在ceilometer.api.controller.v2文件下扩展controller
+2)	在ceilometer.api.controller.v2编写该controller方法
+3)	在ceilometer.api.controller.v2编写返回数据的格式
+4)	在ceilometer.storage.impl_mongodb.py中编写数据库查询方法
+5)	在ceilometer.storage.model中编写数据库查询结果数据的格式
+
+现在假设我们已经在mongodb数据库的ceilometer数据库中创建了一个students的表，并在其中插入了两条记录如下：
+
+.. code-block:: console
+
+	{'group': 'security_info',
+	 'name': 'zhaoyuanjie',
+	 'class_name': 'research',
+	 'age': 26, 
+	'header': u'chenyoulei',
+	'english_level': 6, '_id': ObjectId('533a168f1d41c82c45ea6590')}
+
+	{'group': u'security_info', 
+	'name': u'wangxin',
+	'class_name': u'research', 
+	'age': 27,
+	'header': u'chenyoulei',
+	'english_level': 8, u'_id': ObjectId('533a17e31d41c82c45ea6591')}
+
+
+
+.. end
+
+功能1：通过 http请求curl -H 'X-Auth-Token:3d99ea6d89e64ebbaa0cf857ac26b794'  'http://localhost:8777/v2/students' 获取mongodb中的全部数据图，或者加询问符合查询的结果图
+
+.. figure:: image/fy-img/query_stu.png
+   :width: 80%
+   :align: center
+   :alt: query_stu.png
+
+根据步骤如下：
+
+1)	在ceilometer.api.controller.v2文件下扩展controller
+
+.. figure:: image/fy-img/v2_k.png
+   :width: 80%
+   :align: center
+   :alt: v2_k.png
+
+2)	在ceilometer.api.controller.v2编写该controller方法
+
+.. figure:: image/fy-img/stu_c.png
+   :width: 80%
+   :align: center
+   :alt: stu_c.png
+
+3)	在ceilometer.api.controller.v2编写返回数据的格式
+
+.. figure:: image/fy-img/stu_wt.png
+   :width: 80%
+   :align: center
+   :alt: stu_wt.png
+   
+4)	在ceilometer.storage.impl_mongodb.py中编写数据库查询方法
+
+.. figure:: image/fy-img/mongodb_query.png
+   :width: 80%
+   :align: center
+   :alt: mongodb_query.png
+
+5)	在ceilometer.storage.model中编写数据库查询结果数据的格式
+
+.. figure:: image/fy-img/smodel.png
+   :width: 80%
+   :align: center
+   :alt: smodel.png
+
+添加上述代码到制定的文件便可以达到功能1的需求
+
+Mongo mapreduce 计算 
+--------------------
+
+MongoDB 支持使用使用 Map/Reduce 进行并行 "统计"，以提升计算效率，在ceilometer中的统计信息也是通过使用该方法对数据库中的数据进行统计的；具体代码位置在ceilometer.storage.impl_mongo.py中，使用了大量的map/reduce 函数对数据进行统计；
+Mapreduce 函数返回值类型只接受字符串和字典类型；'out' must be an instance of basestring or dict
+
+.. code-block:: console
+
+	Mapreduce函数参数说明：
+	•mapreduce: 要操作的目标集合.
+	•map: 映射函数 (生成键值对序列，作为 reduce 函数参数).
+	•reduce: 统计函数.
+	•query: 目标记录过滤.
+	•sort: 目标记录排序.
+	•limit: 限制目标记录数量.
+	•out: 统计结果存放集合 (不指定则使用临时集合，在客户端断开后自动删除).
+	•keeptemp: 是否保留临时集合.
+	•finalize: 最终处理函数 (对 reduce 返回结果进行最终整理后存入结果集合).
+	•scope: 向 map、reduce、finalize 导入外部变量.
+	•verbose: 显示详细的时间统计信息.
+
 
 
 .. end
 
 
-3
--------------
+先假设在mongodb库ceilometer数据库中有一张students的表，并有如下数据，现在我们通过简单的mapreduce实例如何统计english_level 大于5 和小于 5 的个数；
+
+.. figure:: image/fy-img/stumap.png
+   :width: 80%
+   :align: center
+   :alt: stumap.png
+
+1 Map 函数：
+Map 函数必须调用 emit(key, value) 返回键值对，使用 this 访问当前待处理的 Document；
+
+.. figure:: image/fy-img/map_f.png
+   :width: 80%
+   :align: center
+   :alt: map_f.png
+
+value 可以使用 JSON Object 传递 (支持多个属性值).如上述的{studentname:this.name}
+
+2 Reduce函数：
+Reduce 函数接收的参数类似 Group 效果，将 Map 返回的键值序列组合成 { key, [value1, value2, value3, value...] } 传递给 reduce.
+
+.. figure:: image/fy-img/reduce.png
+   :width: 80%
+   :align: center
+   :alt: reduce.png
 
 
 .. code-block:: console
 
+	如果map函数的输出为：
+	(1991,1) <--> emit(a,b)
+	(1991,2) <--> emit(a,b)
+	(1990,5) <--> emit(a,b)
+	(1993,3) <--> emit(a,b)
+	(1993,5) <--> emit(a,b)
+	(1991,7) <--> emit(a,b)
+	那么Reduce函数的输入则为：
+	(1991,[1,2,7]) <---> (key,values)
+	(1993,[3,5]) <---> (key,values)
+	(1990,[5]) <---> (key,values)
 
 
 .. end
 
+3 Result
 
+.. figure:: image/fy-img/result.png
+   :width: 80%
+   :align: center
+   :alt: result.png
+
+Mapreduce()将结果暂时保存在myresult临时集合中；
+
+
+4 Finalize
+利用 finalize() 我们可以对 reduce() 的结果做进一步处理.
+
+.. figure:: image/fy-img/final.png
+   :width: 80%
+   :align: center
+   :alt: final.png
+
+5 Options
+更多的选项
+
+.. figure:: image/fy-img/option.png
+   :width: 80%
+   :align: center
+   :alt: option.png
+
+
+Ceilometer-compute-agent Learning 
+---------------------------------
+
+支撑技术：rabbitmq.
+
+.. figure:: image/fy-img/architecture-c.png
+   :width: 80%
+   :align: center
+   :alt: architecture-c.png
+
+上图的红色部分已经在之前的文档中介绍过；ceilometer.api 事实上是提供了数据库与外部系统的接口，而数据库是连接外部系统与ceilimeter核心组件的连接点；ceilometer的核心在于数据的收集；其数据收集的主要方式分成两种：如图所示，ceilometer写入数据库的信息来源只有一个，即：监听消息总线(message bus)上是数据；而获取的消息总线上的数据来源有两种：
+1)	通过pollsters机制; 利用插件(agent)获取数据，传输到消息总线中；
+2)	通过notification messages；该数据主要来源于openstack中的各个组件比如nova,glance,neutron等；
+通过这段时间的调研，ceilometer事实上提供了较为灵活的高可配置的数据获取方式：
+灵活在于其插件容易扩展；如果我们想要获取额外的meter,只需要写获取该meter的插件即可；
+高可配置在于其利用了pipeline机制，该机制可针对每个meter配置其轮询时间，如我们可以通过配置文件配置cpu的轮询时间为10s,也可以配置disk.read.request 的轮询时间为20s；高可配置的另一个原因是其提供的transformer机制仍然是可以配置的，配置之后，自己写相应的transformer函数即可；
+
+.. figure:: image/fy-img/collector_agent.png
+   :width: 80%
+   :align: center
+   :alt: collector_agent.png
+   
+上图展示了collector以及agent从不同的组件中获取数据的流程
+
+.. figure:: image/fy-img/pipline.png
+   :width: 80%
+   :align: center
+   :alt: pipline.png
+
+上图展示了ceilometer中的pipeline机制，Pipeline翻译过来是管道的意思，ceilometer中每一个poll task都可以关联一个管道，如上图所示，这里展现了三个管道，每个任务的数据流在自己的管道中进行，ceilometer也是借用这种机制实现对不同meters实现不同轮询的；我们可以看到在每一个管道中前一 部分是transformer，transformer实现数据转换等功能，transformer可以根据我们的配置文件对获取的sample数据进行数据转换，但是具体的要转换成何种方式，需要我们自己扩展transformer函数.在链尾是publisher，它负责将数据发送到AMQP中 去.
+
+.. figure:: image/fy-img/transformer.png
+   :width: 80%
+   :align: center
+   :alt: transformer.png
+   
+上图展现了ceilometer中transformer的过程，该图可以解释transformer的作用，我们可以看到左侧的sample其meter.name为cpu.time, 该sample经过transformer过程后，其meter.name变为cpu.percentage, 事实上，在现有的ceilometer系统中，通过ceilometer  meter-list命令可以看到关于cpu的meter有cpu 以及 cpu_util两个，前者是描述cpu使用时间的sample,而后者是描述cpu利用率的sample; 事实上，这两个meters是来源于同一个sample; cpu_util就是cpu通过 transformer转换而来的；
+
+通过上图可以看出，transformer的作用将cpu meter转换为target为cpu_util的meter,通过transformer 将单位从ns转换为%，name从cpu转换为cpu_util, 将格式从cumulative转换为gauge，图6是transformer的配置文件，其scale是在transformer函数中利用cpu 使用时间计算cpu利用率所需要的数值；
+
+
+
+Ceilometers各服务安装方式
+-------------------------
+
+在控制节点安装ceilometer-api、ceilometers-collector、ceilometers-agent-central 
+在计算节点安装ceilometer-agent-compute
+由此可以看出，计算节点上代码只有ceilometer.compute.manager开始驱动；
+
+
+Ceilometer模块代码结构及概述
+------------------------------
+
+Ceilometer 主要组件的代码在ceilometer文件夹中；
+ceilometer-2time.egg-info文件对我们扩展插件非常重要
+ceilometerclient文件夹之前已经介绍过，用于封装ceilometer api使用
+ceilometer核心模块代码结构
+
+
+.. code-block:: console
+
+	其中:
+	1)	Agent 为 所有agent的父类，即ceilometer-agent-compute agent的父类以及 ceilometers-central的父类
+	2)	Compute 为ceilometers-agent-compute代码所在位置，负责获取虚拟机数据(nova)
+	3)	Central、image、energy、objectstore、network、volume 为ceilometer-agent-central 代码所在位置，负责获取除nova组件之外的组件信息
+	4)	Transformer 为ceilometer transformer机制所在位置，负责对sample数据进行transformer过程
+	5)	Publisher 为ceilometer Publisher机制所在位置，负责推送sample至amqp中去；
+	6)	Plungin 所有插件的父类
+	7)	Nova_client 从nova中获取相应数据，主要是获取虚拟机信息，即libvirt.xml中的数据
+	8)	Samples sample的父类
+	9)	Pileline ceilometer中pipeline机制实现过程
+	10)	Storage 针对各类数据库读写操作
+	11)	Openstack 该文件中内容非常多，可以将其理解为一个工具集，ceilometer中用到的很多工具如amqp、udp 相关服务等都在这里
+	12)	Api ceilometers-api 路由寻址过程，数据提取查询过程
+	13)	Alarm 告警功能
+
+
+.. end
+
+ceilometer-xx.egg-info 该文件是在ceilometer安装时生成的，ceilometer插件之所以很方便的扩展是因为其利用了一种动态加载模块的机制
+(stevedore->python 动态扩展包)，`http://stevedore.readthedocs.org/en/latest/patterns_enabling.html`
+我们可以看一下其中的entry_points文件:
+
+.. figure:: image/fy-img/endpoint.png
+   :width: 80%
+   :align: center
+   :alt: endpoint.png
+
+
+该文件指明了每一个模块的代码入口，如disk.read.requests = ceilometer.compute.pollsters.disk:ReadRequestsPollster 即说明disk.read.requests的
+pollseter入口为ceilometer.compute.pollsters.disk:ReadRequestsPollster；更详细的介绍可以看
+http://pythonhosted.org/setuptools/setuptools.html#dynamic-discovery-of-services-and-plugins
+
+
+.. figure:: image/fy-img/c_compute.png
+   :width: 80%
+   :align: center
+   :alt: c_compute.png
+
+1)	Manager文件为ceilometer-agent-compute的入口函数
+2)	Notification为ceilometer监听消息总线数据并格式化过程
+3)	Plugin为pollsters各类插件的父类
+4)	Pollsters文件夹中包含了每一个pollster,及插件，获取cpu的插件，获取disk的插件，获取instance的插件，获取net的插件，其中的文件util为封装sample数据用；
+5)	Virt文件为具体获取数据的代码，其中的inspecotor文件中会读取配置文件中的信息，来获取使用哪种方式获取虚拟数据，默认的选择l利用ibvirt获取数据，同时提供了另一种即利用hyperv获取数据的方式；其中的/ceilometer/compute/virt/libvirt/inspector.py中定义了具体获取虚拟机数据的函数；
+
+每次启动ceilometer-compute 的命令为
+Service ceilometer-agent-compute restart
+因此，服务的入口在/usr/bin目录下的ceilometer-agent-compute文件
+
+.. figure:: image/fy-img/compute-start.png
+   :width: 80%
+   :align: center
+   :alt: compute-start.png
+
+从导入的函数中得知，启动函数为compute.manager.agent_compute函数
+查看下/usr/share/pyshared/ceilometer/compute/ manager.py
+文件中的agent_compute函数，便可以知道整个polling的过程
+
+.. figure:: image/fy-img/manager_compute.png
+   :width: 80%
+   :align: center
+   :alt: manager_compute.png
+
+该函数的父类来自ceilometer.agent,
+重点看一下create_polling_task函数：
+
+.. figure:: image/fy-img/polling.png
+   :width: 80%
+   :align: center
+   :alt: polling.png
+   
+该函数继承自ceilometer.agent.Polling函数；
+
+.. figure:: image/fy-img/pollingTASK.png
+   :width: 80%
+   :align: center
+   :alt: pollingTASK.png
+
+其父类函数的polling_and_publish为空，执行本身的函数，自身函数的polling_and_publish中通过nova_client获取了该物理机上的所有虚拟机信息，这便是polling过程所需要的全部信息；其返回函数为poll_and_publish_instances：
+
+
+.. figure:: image/fy-img/ppinstance.png
+   :width: 80%
+   :align: center
+   :alt: ppinstance.png
+   
+看该函数应该清楚ceilometer的数据流程了，polling过程结束后，直接publisher samples,而publisher是由with self.publish_context as publisher而来，事实上，是送入上述的管道，管道就两个过程，一个是transformer过程，另一个便是publish到数据总线；具体过程可以查看ceilometer.pipeline函数，该函数的作用便是构造管道函数；
+
+可以重点考虑下如何实现一个插件? homework.
+
+
+
+后续 
+----
+
+
+.. code-block:: console
+
+   rabbitmq值得去细化了解，了解分布式处理机制，了解消息高可用处理机制
+   了解ceilometer notification 的设计初衷
+   了解消息的封装
+   ceilometer compute给出了不同服务之间消息处理的基本框架
+   ceilometer polling机制给出了一个定时处理任务的框架
+   ceilometer api 给出了后端处理rest api的框架 
+   ceilometer compute 代码中包含虚拟化监测技术的实现流程
+   各处理单元均高度抽象及模块化，值得学习借鉴
+   内容略粗糙，指引性内容，供参考.
+   
+.. end
 
