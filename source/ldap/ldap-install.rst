@@ -399,10 +399,10 @@ UBUNTU16.04 LDAP 安装及使用
 
 2 创建组 Generic: Posix Group
 
-.. figure:: image/create_ou_g.png
+.. figure:: image/create_ou_group.png
    :width: 80%
    :align: center
-   :alt: create_ou_g.png
+   :alt: create_ou_group.png
 
 
 3 在改组下创建一个用户.
