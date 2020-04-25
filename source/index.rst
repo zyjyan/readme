@@ -52,6 +52,7 @@ know oneself.
    index-atlas
    index-cryptography
    index-fy
+   index-ldap
 ..   index-opensatck
 ..   index-docker
 ..   index-logstash
