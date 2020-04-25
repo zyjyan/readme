@@ -599,7 +599,6 @@ Hive集成ldap+ranger完成验证
 
 
 
-参考文献：https://www.itread01.com/content/1532926928.html
 
 
 
