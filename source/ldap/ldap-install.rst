@@ -614,7 +614,7 @@ Hive集成ldap+ranger完成验证
 
 .. figure:: image/ranger_policy.png
    :width: 80%
-   :align: center·
+   :align: center
    :alt: ranger_policy.png
 
 
