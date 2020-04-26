@@ -595,6 +595,45 @@ Hive集成ldap+ranger完成验证
 
 默认的ranger 获取用户是通过user_sync获取操作系统用户，这里hive认证是一系列的内容,导致ranger下发的用户策略用户名与hive认证不一致，导致通过ldap认证的用户，无法匹配ranger策略，主要原因是用户名不一致导致的.
 
+这里有两种解决思路，ranger 使用ranger_user_sync来同步系统用户信息，我们可以使用一套用户管理题系，让ranger采用ldap框架的用户管理题系.这个相对比较统一一些，也是比较统一的一个思路。
+另外一种思路为，我们将ldap user认证的所有信息，作为用户名，在ranger创建，并设置响应的安全策略。
+我们采用思路二验证下想法。
+
+步骤一：
+在ranger 下创建名称为 CN=zhaoyuanjie,OU=people,DC=cecgw,DC=cn的用户.
+
+
+.. figure:: image/ranger_create_user.png
+   :width: 80%
+   :align: center
+   :alt: ranger_create_user.png
+
+步骤二：
+
+给CN=zhaoyuanjie,OU=people,DC=cecgw,DC=cn 赋予权限.
+
+.. figure:: image/ranger_policy.png
+   :width: 80%
+   :align: center
+   :alt: ranger_policy.png
+
+
+步骤三：登录hive,验证.
+
+.. figure:: image/login.png
+   :width: 80%
+   :align: center
+   :alt: login.png
+
+步骤四：查看ranger审计信息.
+
+.. figure:: image/ranger_log.png
+   :width: 80%
+   :align: center
+   :alt: ranger_log.png
+
+通过这种方式，我们可以解决hive用户认证的问题，同时解决ranger授权问题.
+
 
 
 
