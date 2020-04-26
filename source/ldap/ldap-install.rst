@@ -593,6 +593,7 @@ Hive集成ldap完成验证
 Hive集成ldap+ranger完成验证
 ---------------------------
 
+虽然ranger 在访问控制层面提供了用户+用户组的方式，但作为一个恶意攻击者，完全可以以伪装的方式，伪装某个用户登录，从而造成安全问题，比如hadoop用户在登录hive时,通过伪造ubuntu用户登录，在没有认证的情况下，可以获取ubuntu用户权限,显然有安全隐患。
 默认的ranger 获取用户是通过user_sync获取操作系统用户，这里hive认证是一系列的内容,导致ranger下发的用户策略用户名与hive认证不一致，导致通过ldap认证的用户，无法匹配ranger策略，主要原因是用户名不一致导致的.
 
 这里有两种解决思路，ranger 使用ranger_user_sync来同步系统用户信息，我们可以使用一套用户管理题系，让ranger采用ldap框架的用户管理题系.这个相对比较统一一些，也是比较统一的一个思路。
@@ -614,7 +615,7 @@ Hive集成ldap+ranger完成验证
 
 .. figure:: image/ranger_policy.png
    :width: 80%
-   :align: center
+   :align: center·
    :alt: ranger_policy.png
 
 
