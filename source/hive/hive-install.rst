@@ -228,8 +228,126 @@ hive数据库初始化报错：
    :align: center
    :alt: hivewebui
 
+
+
+
+Hive on Spark
+-------------
+
+Hive on Spark.前置条件 hive spark hadoop 正常运行.
+
+HIVE version 2.3.4
+Spark version 2.4.0
+Spark 启动: ./start-all.sh  && ./start-slave.sh spark://ubuntu:7077
+
+HIVE 默认计算引擎为mr,如果修改为spark则按照如下方式配置即可：
+
+1 修改hive-site.xml配置如下：
+
+
+.. code-block:: console
+
+	<property>
+	   <name>spark.home</name>
+	   <value>/opt/spark</value>
+	  </property>
+	  <property>
+	  <name>spark.yarn.jars</name>
+	  <value>hdfs://192.168.121.128:9000/spark-jars/* </value>
+	</property>
+
+	<property>
+	    <name>hive.execution.engine</name>
+	    <value>spark</value>
+	    <description>
+	      Expects one of [mr, tez, spark].
+	      Chooses execution engine. Options are: mr (Map reduce, default), tez, spark. While MR
+	      remains the default engine for historical reasons, it is itself a historical engine
+	      and is deprecated in Hive 2 line. It may be removed without further warning.
+	    </description>
+	  </property>
+
+.. end
+
+2 将spark相关jar包按照配置中spark.yarn.jars信息，传输到hdfs指定目录下.
+
+.. code-block:: console
+
+ # hdfs dfs -mkdir /spark-jars
+ # hdfs dfs -put /opt/spark/jars/* .jar /spark-jars
+ # 
+
+.. end
+
+3 将spark 相关的jar包软链接到hive lib下.
+
+.. code-block:: console
+
+
+   	hadoop@ubuntu:/opt/hive/lib$ history|grep ln
+        1309  ln -s /opt/spark/jars/scala-library-2.12.7.jar .
+        1310  ln -s /opt/spark/jars/spark-core_2.12-2.4.0.jar .
+        1311  ln -s /opt/spark/jars/spark-network-common_2.12-2.4.0.jar .
+
+.. end
+
+4 调整yarn-site.xml文件配置.
+
+
+
+.. code-block:: console
+
+	<property>
+	    <name>yarn.nodemanager.vmem-check-enabled</name>
+		<value>false</value>
+	    <description>Whether virtual memory limits will be enforced for containers</description>
+	    </property>
+	   <property>
+	       <name>yarn.nodemanager.vmem-pmem-ratio</name>
+	    <value>4</value>
+	    <description>Ratio between virtual memory to physical memory when setting memory limits for containers</description>
+	</property>
+
+.. end
+
+5 重启hive,做count运算验证。
+
+.. code-block:: console
+
+	hadoop@ubuntu:/opt/hive/bin$ ./beeline 
+	Beeline version 2.3.4 by Apache Hive
+	beeline> !connect jdbc:hive2://192.168.121.128:10000
+	Transaction isolation: TRANSACTION_REPEATABLE_READ
+	0: jdbc:hive2://192.168.121.128:10000> select count (*) from zhaoyuanjie;
+	+------+
+	| _c0  |
+	+------+
+	| 0    |
+	+------+
+	1 row selected (0.23 seconds)
+	0: jdbc:hive2://192.168.121.128:10000> select count (*) from tongchenginfo;
+	+-------+
+	|  _c0  |
+	+-------+
+	| 3519  |
+	+-------+
+	1 row selected (28.308 seconds)
+
+.. end
+
+通过 http://ip:8088 查看日志信息.
+
+
+.. figure:: image/hive-spark-log.PNG
+   :width: 80%
+   :align: center
+   :alt: hive-spark-log
+
+ 
+.. figure:: image/yarn-task.PNG
+   :width: 80%
+   :align: center
+   :alt: yarn-task
+
 参考文献：https://www.itread01.com/content/1532926928.html
 
-
-
-   
