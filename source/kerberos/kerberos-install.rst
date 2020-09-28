@@ -1092,13 +1092,13 @@ HIVE 配置kerberos
 
 
 Ranger installation in Kerberized Environment
-=============================================
+---------------------------------------------
 
 为了在kerberos环境中使用ranger，需要在ranger所在的节点安装 kerberos客户端.参考`https://cwiki.apache.org/confluence/display/RANGER/Ranger+installation+in+Kerberized++Environment`
 
 
 安装并配置kerberos客户端
--------------------------
+========================
 
 .. code-block:: console
 
@@ -1141,7 +1141,7 @@ Ranger installation in Kerberized Environment
 .. end
 
 在kerberos服务端创建 rangeradmin rangerlookup http服务的密钥文件
-----------------------------------------------------------------
+================================================================
 
 .. code-block:: console
 
@@ -1159,7 +1159,7 @@ Ranger installation in Kerberized Environment
 .. end
 
 ranger server端修改配置文件
----------------------------
+===========================
 
 将密钥拷贝到/etc/security/keytab目录下.
 
@@ -1184,7 +1184,7 @@ ranger server端修改配置文件
 .. end
 
 执行setup.sh
-------------
+============
 
 .. code-block:: console
 
@@ -1193,7 +1193,7 @@ ranger server端修改配置文件
 .. end
 
 重启ranger-admin
----------------
+================
 
 .. code-block:: console
 
@@ -1203,7 +1203,7 @@ ranger server端修改配置文件
 .. end
 
 界面设置hdfs参数
-----------------
+================
 
 .. code-block:: console
 
@@ -1223,7 +1223,7 @@ ranger server端修改配置文件
 .. end
 
 界面设置hive参数
-----------------
+================
 
 .. code-block:: console
 
