@@ -1091,5 +1091,151 @@ HIVE 配置kerberos
    :alt: kerberps-http-hive.jpg
 
 
-ranger with kerberos
-====================
+Ranger installation in Kerberized Environment
+=============================================
+
+为了在kerberos环境中使用ranger，需要在ranger所在的节点安装 kerberos客户端.参考`https://cwiki.apache.org/confluence/display/RANGER/Ranger+installation+in+Kerberized++Environment`
+
+
+安装并配置kerberos客户端
+-------------------------
+
+.. code-block:: console
+
+ apt-get install krb5-user
+
+ vi /etc/krb5.conf
+
+	[libdefaults]
+		default_realm = CECGW.CN
+
+	# The following krb5.conf variables are only for MIT Kerberos.
+		kdc_timesync = 1
+		ccache_type = 4
+		forwardable = true
+		proxiable = true
+
+	# The following encryption type specification will be used by MIT Kerberos
+	# if uncommented.  In general, the defaults in the MIT Kerberos code are
+	# correct and overriding these specifications only serves to disable new
+	# encryption types as they are added, creating interoperability problems.
+	#
+	# The only time when you might need to uncomment these lines and change
+	# the enctypes is if you have local software that will break on ticket
+	# caches containing ticket encryption types it doesn't know about (such as
+	# old versions of Sun Java).
+
+	#       default_tgs_enctypes = des3-hmac-sha1
+	#       default_tkt_enctypes = des3-hmac-sha1
+	#       permitted_enctypes = des3-hmac-sha1
+
+	# The following libdefaults parameters are only for Heimdal Kerberos.
+		fcc-mit-ticketflags = true
+
+	[realms]
+		CECGW.CN = {
+			kdc = ubuntu
+			admin_server = ubuntu
+		  }
+
+.. end
+
+在kerberos服务端创建 rangeradmin rangerlookup http服务的密钥文件
+----------------------------------------------------------------
+
+.. code-block:: console
+
+ 分别创建
+ HTTP/ranger-server@CECGW.CN
+ rangeradmin/ranger-server@CECGW.CN
+ rangerlookup/ranger-server@CECGW.CN
+ 剔除上述用户的Attributes: REQUIRES_PRE_AUTH该属性；
+ kadmin.local: modprinc -requires_preauth HTTP/ranger-server@CECGW.CN
+ kadmin.local: modprinc -requires_preauth rangeradmin/ranger-server@CECGW.CN
+ kadmin.local: modprinc -requires_preauth  rangerlookup/ranger-server@CECGW.CN
+ 导出keytab,拷贝至ranger admin
+ # 创建完后，可在ranger-admin 端验证是否可通过验证.
+
+.. end
+
+ranger server端修改配置文件
+---------------------------
+
+将密钥拷贝到/etc/security/keytab目录下.
+
+.. code-block:: console
+
+
+	#------------ Kerberos Config -----------------
+	spnego_principal=HTTP/ranger-server@CECGW.CN
+	spnego_keytab=/etc/security/keytab/HTTP.keytab
+	token_valid=30
+	cookie_domain=ranger-server
+	cookie_path=/
+	admin_principal=rangeradmin/ranger-server@CECGW.CN
+	admin_keytab=/etc/security/keytab/rangeradmin.keytab
+	lookup_principal=rangerlookup/ranger-server@CECGW.CN
+	#lookup_principal=hadoop/ubuntu@CECGW.CN
+	lookup_keytab=/etc/security/keytab/rangerlookup.keytab
+	#lookup_keytab=/etc/security/keytab/HADOOP.keytab
+	hadoop_conf=/opt/hadoop-2.7.7/etc/hadoop
+	#
+
+.. end
+
+执行setup.sh
+------------
+
+.. code-block:: console
+
+ ./setup.sh
+
+.. end
+
+重启ranger-admin
+---------------
+
+.. code-block:: console
+
+
+ ranger-admin restart
+
+.. end
+
+界面设置hdfs参数
+----------------
+
+.. code-block:: console
+
+
+ username                                  hadoop/ubuntu@CECGW.CN
+ password                                  *****
+ Namenode URL                              hdfs://ubuntu:9000
+ Authorization Enabled                     yes
+ Authentication Type                       kerberos
+ dfs.datanode.kerberos.principal           hadoop/ubuntu@CECGW.CN
+ dfs.namenode.kerberos.principal           hadoop/ubuntu@CECGW.CN
+ dfs.secondary.namenode.kerberos.principal hadoop/ubuntu@CECGW.CN
+ RPC Protection Type                       Authentication
+ tag.download.auth.users                   hadoop
+ policy.download.auth.users                hadoop
+
+.. end
+
+界面设置hive参数
+----------------
+
+.. code-block:: console
+
+
+ username hadoop
+ password xxxx
+ jdbc.driverClassName org.apache.hive.jdbc.HiveDriver
+ jdbc.url *  jdbc:hive2://192.168.121.128:10000/;principal=hadoop/ubuntu@CECGW.CN
+ tag.download.auth.users hadoop
+ policy.download.auth.users hadoop
+
+
+.. end
+
+
