@@ -31,6 +31,7 @@ know oneself.
    index-fy
    index-ldap
    index-kerberos
+   index-security
 ..   index-opensatck
 ..   index-docker
 ..   index-logstash
