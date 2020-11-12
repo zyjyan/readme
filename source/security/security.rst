@@ -285,22 +285,22 @@ IP情报信息数据模型调研及设计
 .. code-block:: console
 
 
-	CDN 	            		CDN 	    该IP可以追溯到特定的内容分发网络
-	University 	        		学校单位 	统一由中国教育和科研计算机网（CERNET）分配到各院校或科研机构的IP
+	CDN 	            		CDN 	        该IP可以追溯到特定的内容分发网络
+	University 	        	学校单位 	统一由中国教育和科研计算机网（CERNET）分配到各院校或科研机构的IP
 	Mobile Network 	    		移动网络 	2/3/4/5G网络使用的基站IP
 	Unused 	            		已路由-未使用 	该IP已经分配给特定的机构且出现在网络路由信息中，但还没有在网络中被使用
-	Unrouted 	        		已分配-未路由 	该IP已经分配给特定的机构，但还没有在网络路由信息中
-	WLAN 	            		WLAN 	该IP被提供商作为商业WIFI的出口使用
-	Anycast 	        		  Anycast 	该IP被应用于特定的互联网任播技术(如Google的8.8.8.8)
-	Infrastructure 	    		 基础设施 	该IP作为网络路由器的接口IP出现在互联网中
-	Internet Exchange   	     交换中心 	该IP可以追溯到特定的交换平台
-	Company 	                 企业专线 	该IP对应到某公司的办公内网，IP地址一般固定，用户群体趋于固定
-	Hosting 	                 数据中心 	该IP可以追溯到特定的数据中心
-	Satellite Communication 	 卫星通信 	该IP可以追溯到特定的卫星通讯机构
-	Residence 	住宅用户 	通过ADSL方式拨号接入互联网的方式，一些小型的公共场所（如快捷酒店、餐馆）也属于这种情况
-	Special Export 	专用出口 	该IP隶属某一IDC，但被分配给二级运营商使用，用户基数非常大
-	Institution 	组织机构 	该IP可以追溯到拥有自有AS号的非运营商机构
-	Cloud Provider 	云厂商 	该IP可以追溯到云厂商
+	Unrouted 	        	已分配-未路由 	该IP已经分配给特定的机构，但还没有在网络路由信息中
+	WLAN 	            		WLAN 	        该IP被提供商作为商业WIFI的出口使用
+	Anycast 	                Anycast 	该IP被应用于特定的互联网任播技术(如Google的8.8.8.8)
+	Infrastructure 	    	       基础设施 	该IP作为网络路由器的接口IP出现在互联网中
+	Internet Exchange   	       交换中心 	该IP可以追溯到特定的交换平台
+	Company 	               企业专线 	该IP对应到某公司的办公内网，IP地址一般固定，用户群体趋于固定
+	Hosting 	               数据中心 	该IP可以追溯到特定的数据中心
+	Satellite Communication        卫星通信 	该IP可以追溯到特定的卫星通讯机构
+	Residence 	               住宅用户         通过ADSL方式拨号接入互联网的方式，一些小型的公共场所（如快捷酒店、餐馆）也属于这种情况
+	Special Export 	               专用出口 	该IP隶属某一IDC，但被分配给二级运营商使用，用户基数非常大
+	Institution 		       组织机构 	该IP可以追溯到拥有自有AS号的非运营商机构
+	Cloud Provider 		       云厂商 	该IP可以追溯到云厂商
 
 .. end
 
@@ -316,18 +316,18 @@ IP情报信息数据模型调研及设计
 
 IP逆向历史域名情况[]
 
-15IP信誉信息
+15 IP信誉信息
 ============
 
 is_malicious 是否为恶意IP。布尔类型，true代表恶意，false代表非恶意。
 
 
-16IP可信度信息
+16 IP可信度信息
 ==============
 
- 通过情报来源及可信度模型判别出来的恶意可信度程度，分"low（低）"，"medium（中）"，"high（高）" 三档来标识。
+ 通过情报来源及可信度模型判别出来的恶意可信度程度，分 "low（低）"，"medium（中）"，"high（高）" 三档来标识。
 
-17严重级别
+17 严重级别
 ============
 
   表示该情报的危害程度，分为"critical（严重）"，"high（高）"，"medium（中）"，"low（低）"，"info（无危胁）"5种程度类型。
