@@ -637,8 +637,31 @@ Hive集成ldap+ranger完成验证
 
 
 
+LDAP 含义
+---------
+
+
+#. 目录树：在一个目录服务系统中，整个目录信息集可以表示为一个目录信息树，树中的每个节点是一个条目。
+
+#. 条目：每个条目就是一条记录，每个条目有自己的唯一可区别的名称（DN）。
+
+#. 对象类：与某个实体类型对应的一组属性，对象类是可以继承的，这样父类的必须属性也会被继承下来。
+
+#. 属性：描述条目的某个方面的信息，一个属性由一个属性类型和一个或多个属性值组成，属性有必须属性和非必须属性。
+
+
+.. code-block:: console
+
+
+ dc      Domain Component        域名的部分，其格式是将完整的域名分成几部分，如域名为example.com变成dc=example,dc=com（一条记录的所属位置）
+ uid     User Id                 用户ID songtao.xu（一条记录的ID）
+ ou      Organization Unit       组织单位，组织单位可以包含其他各种对象（包括其他组织单元），如"oa组"（一条记录的所属组织）
+ cn      Common Name             公共名称，如“Thomas Johansson”（一条记录的名称）
+ sn      Surname                 姓，如"许"
+ dn      Distinguished Name      "uid=songtao.xu,ou=oa组,dc=example,dc=com"，一条记录的位置（唯一）
+ rdn     Relative dn             相对辨别名，类似于文件系统中的相对路径，它是与目录树结构无关的部分，如"uid=tom"或"cn= Thomas Johansson"
 
 
 
+.. end
 
-   
