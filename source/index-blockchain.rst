@@ -11,8 +11,7 @@ Abstract
 
 .. warning::
 
-    操作系统版本为ubuntu.16.04lts hive。
-   关于版本的选择，请充分评估与基于hadoop相关的大数据软件的兼容性。
+    操作系统版本为ubuntu.16.04lts 
 
 Contents
 ~~~~~~~~
@@ -20,7 +19,7 @@ Contents
 .. toctree::
    :maxdepth: 5
 
-   blockchain/Ethereum/Ethereum-install.rst
+   blockchain/Ethereum-install.rst
 .. Pseudo only directive for each distribution used by the build tool.
    This pseudo only directive for toctree only works fine with Tox.
    When you directly build this guide with Sphinx,
