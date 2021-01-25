@@ -505,12 +505,12 @@ Hive集成ldap完成验证
         <name>hive.security.authorization.enabled</name>
         <value>true</value>
         <description>enableor disable the hive clientauthorization</description>
-    </property>
+ </property>
 
-    <property>
-        <name>hive.security.authorization.createtable.owner.grants</name>
-        <value>ALL</value>
-        <description>theprivileges automatically granted to the ownerwhenever a table gets created. Anexample like "select,drop" willgrant select and drop privilege to theowner of the table</description>
+ <property>
+     <name>hive.security.authorization.createtable.owner.grants</name>
+     <value>ALL</value>
+     <description>theprivileges automatically granted to the ownerwhenever a table gets created. Anexample like "select,drop" willgrant select and drop privilege to theowner of the table</description>
     </property>
 
     <property>
