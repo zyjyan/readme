@@ -634,6 +634,47 @@ Hive集成ldap+ranger完成验证
 
 通过这种方式，我们可以解决hive用户认证的问题，同时解决ranger授权问题.
 
+使用短名CN登录
+--------------
+
+如果需要使用短名CN直接登录HIVE，需要添加配置项如下：
+
+.. code-block:: console
+
+  <property>
+    <name>hive.server2.authentication.ldap.baseDN</name>
+    <value>ou=People,dc=cecgw,dc=cn</value>
+    <description>LDAP base DN</description>
+  </property>
+  <property>
+    <name>hive.server2.authentication.ldap.userDNPattern</name>
+    <value>CN=%s,OU=People,DC=cecgw,DC=cn</value>
+    <description>
+      COLON-separated list of patterns to use to find DNs for users in this directory.
+      Use %s where the actual group name is to be substituted for.
+      For example: CN=%s,CN=Users,DC=subdomain,DC=domain,DC=com.
+    </description>
+  </property>
+
+.. end
+
+另外，需要注意：
+
+.. note::
+ For generic LDAP servers, you must use:
+ hive.server2.authentication.ldap.baseDN 
+ hive.server2.authentication.ldap.userDNPattern
+ However, Active Directory (AD) does not require the above two options, they can be replaced by the following property:
+ hive.server2.authentication.ldap.Domain
+
+.. note::
+	By default HiveServer2 performs the query processing as the user who submitted the query. But if the following parameter is set to false, the query will run as the user that the hiveserver2 process runs as.
+	hive.server2.enable.doAs – Impersonate the connected user, default true. SET hive.server2.enable.doAs TO false. 否则执行mr运算报错.
+
+
+
+
+
 
 
 
