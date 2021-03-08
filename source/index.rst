@@ -33,6 +33,7 @@ know oneself.
    index-kerberos
    index-security
    index-blockchain
+   index-zero
 ..   index-opensatck
 ..   index-docker
 ..   index-logstash

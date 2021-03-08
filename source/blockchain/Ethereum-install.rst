@@ -1003,6 +1003,83 @@ enode1是上文创建的文件之一， genesis.json是创世的配置文件
    :width: 80%
    :align: center 
 
+尝试发送新区快
+==============
+
+
+我们通过账户1发送信息到账户2.
+
+账户1：
+
+.. code-block:: console
+
+	root@ubuntu:/home/cecgw/blankchain/enode1# geth attach geth.ipc 
+	Welcome to the Geth JavaScript console!
+
+	instance: Geth/OneAndOnly/v1.9.25-stable-e7872729/linux-amd64/go1.15.6
+	coinbase: 0x7a6b9624770b15e648682bb8877466c8bad80a0a
+	at block: 0 (Thu Nov 28 2019 17:11:26 GMT+0800 (HKT))
+	 datadir: /home/cecgw/blankchain/enode1
+	 modules: admin:1.0 debug:1.0 eth:1.0 ethash:1.0 miner:1.0 net:1.0 personal:1.0 rpc:1.0 txpool:1.0 web3:1.0
+
+	To exit, press ctrl-d
+	> eth.accounts
+	["0x7a6b9624770b15e648682bb8877466c8bad80a0a"]
+	> 
+
+	> eth.getBalance(eth.accounts[0])
+	266000000000000000000
+ # 转账:
+	 
+	> eth.accounts
+	["0x7a6b9624770b15e648682bb8877466c8bad80a0a"]
+	> personal.unlockAccount("0x7a6b9624770b15e648682bb8877466c8bad80a0a")
+
+	Unlock account 0x7a6b9624770b15e648682bb8877466c8bad80a0a
+	Passphrase: 
+	true
+	> eth.sendTransaction({from: "0x7a6b9624770b15e648682bb8877466c8bad80a0a",to: "0xe13f45df47260a9efee74053b52effee00a8a852", value: "7000000000000000",data: "0xe8b5b5e8bf9ce69db0e4bb8ae5a4a9e59ca8e59b9be5ada3e99d92e4b88ae78fad"})
+       "0xef043b442ee00515363cee51b9322f4d38864e4a93e670b0759dae0253503d38" # 获取区块链地址
+       # data 要求 hex形式，在python下可直接获取,
+       >>> content="赵远杰今天在四季青上班"
+       >>> content
+       '\xe8\xb5\xb5\xe8\xbf\x9c\xe6\x9d\xb0\xe4\xbb\x8a\xe5\xa4\xa9\xe5\x9c\xa8\xe5\x9b\x9b\xe5\xad\xa3\xe9\x9d\x92\xe4\xb8\x8a\xe7\x8f\xad' 替换\x,题头增加0x,为 0xef043b442ee00515363cee51b9322f4d38864e4a93e670b0759dae0253503d38。 
+.. end
+
+查看区块交易信息:启动节点挖矿后，可以看到区块信息.
+
+.. figure:: image/shujushanglian.jpg
+   :width: 80%
+   :align: center 
+
+
+账户2:
+
+.. code-block:: console
+
+
+	root@ubuntu:/home/cecgw/blankchain/enode2# geth attach geth.ipc 
+	Welcome to the Geth JavaScript console!
+
+	instance: Geth/OneAndOnly/v1.9.25-stable-e7872729/linux-amd64/go1.15.6
+	coinbase: 0xe13f45df47260a9efee74053b52effee00a8a852
+	at block: 1015 (Thu Jan 07 2021 15:20:28 GMT+0800 (HKT))
+	 datadir: /home/cecgw/blankchain/enode2
+	 modules: admin:1.0 debug:1.0 eth:1.0 ethash:1.0 miner:1.0 net:1.0 personal:1.0 rpc:1.0 txpool:1.0 web3:1.0
+
+	To exit, press ctrl-d
+	> eth.account
+	undefined
+	> eth.accounts
+	["0xe13f45df47260a9efee74053b52effee00a8a852"]	
+	> eth.getBalance(eth.accounts[0])
+	2.03e+21
+
+.. end
+
+现在我们通过账户1，发送信息到账户2.
+
+
 GETH命令参数详解
 ----------------
 
