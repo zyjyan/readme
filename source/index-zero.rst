@@ -5,15 +5,14 @@ Haking On Zero
 Abstract
 ~~~~~~~~
 
-Hadoop `Hadoop project develops open-source software for reliable, scalable, distributed computing.` 
 
 
 
 .. note::
-Zero
+ Zero
 
 .. warning::
-Zero
+ Zero
 
 Contents
 ~~~~~~~~
