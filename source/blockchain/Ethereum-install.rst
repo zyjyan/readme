@@ -1343,17 +1343,5 @@ WHISPER实验选项:
 
 
 
-.. figure:: image/hivewebui.png
-   :width: 80%
-   :align: center
-   :alt: hivewebui
-
-
-
-
-.. figure:: image/hive-spark-log.PNG
-   :width: 80%
-   :align: center
-
 
 FYB
