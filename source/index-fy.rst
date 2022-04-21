@@ -15,6 +15,15 @@ Abstract
  Wish You All The Best. 
  Be Happy.
 
+.. note::
+ Long time no update.
+ 2022.04.22。Just like the wechats code 4 -22 
+ 系统繁忙，请稍后重试（4，-22）
+ 波光粼粼。
+ 偶有清晰。
+ HBTY. Best wishes. May you happy. again.
+ 
+
 Contents
 ~~~~~~~~
 
